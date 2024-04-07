@@ -174,3 +174,11 @@ func TestHtml(t *testing.T) {
 		t.Fatalf(`Html() = %q, want %q`, result, expected)
 	}
 }
+func TestSection(t *testing.T) {
+	e := Section(P("Hello"))
+	result := e.Render()
+	expected := "<section><p>Hello</p></section>"
+	if result != expected {
+		t.Fatalf(`Section() = %q, want %q`, result, expected)
+	}
+}
