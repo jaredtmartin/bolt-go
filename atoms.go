@@ -1,5 +1,7 @@
 package bolt
 
+import "os"
+
 func Div(children ...*Element) *Element {
 	return NewElement("div").Children(children...)
 }
@@ -57,4 +59,17 @@ func Html(content string) *Element {
 }
 func Section(children ...*Element) *Element {
 	return NewElement("section").Children(children...)
+}
+func Template(filename string) *Element {
+	html, err := os.ReadFile(filename + ".html")
+	if err != nil {
+		html, err = os.ReadFile(filename + "tmpl")
+	}
+	if err != nil {
+		html, err = os.ReadFile(filename)
+	}
+	if err != nil {
+		panic(err)
+	}
+	return NewElement("").Text(string(html))
 }
