@@ -55,3 +55,6 @@ func Fragment(children ...*Element) *Element {
 func Html(content string) *Element {
 	return NewElement("").Text(content)
 }
+func Section(children ...*Element) *Element {
+	return NewElement("section").Children(children...)
+}
