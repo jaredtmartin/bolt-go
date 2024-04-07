@@ -15,8 +15,8 @@ func Label(text string) *Element {
 func Input(name string) *Element {
 	return NewElement("input").Name(name)
 }
-func Form(children ...*Element) *Element {
-	return NewElement("form").Children(children...).Attr("method", "post")
+func Form() *Element {
+	return NewElement("form")
 }
 func Span(text string) *Element {
 	return NewElement("span").Text(text)

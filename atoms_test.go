@@ -127,9 +127,9 @@ func TestInput(t *testing.T) {
 
 // Form
 func TestForm(t *testing.T) {
-	e := Form(Input("name"))
+	e := Form().Children(Input("name"))
 	result := e.Render()
-	expected := "<form method=\"post\"><input name=\"name\"/></form>"
+	expected := "<form><input name=\"name\"/></form>"
 	if result != expected {
 		t.Fatalf(`Form() = %q, want %q`, result, expected)
 	}
