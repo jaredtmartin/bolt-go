@@ -260,7 +260,7 @@ func (e *Element) Render() string {
 }
 
 // For Fiber
-func Send(e *Element, c *fiber.Ctx) error {
+func (e *Element) Send(c *fiber.Ctx) error {
 	c.Set(fiber.HeaderContentType, fiber.MIMETextHTML)
 	return c.SendString(e.Render())
 }
