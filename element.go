@@ -4,6 +4,7 @@ import (
 	"regexp"
 	"strings"
 
+	"github.com/gofiber/fiber/v2"
 	"golang.org/x/exp/slices"
 )
 
@@ -256,4 +257,8 @@ func (e *Element) Render() string {
 		return "<" + e.tag + attr + "/>"
 	}
 	return "<" + e.tag + attr + ">" + e.children + "</" + e.tag + ">"
+}
+func Send(e *Element, c *fiber.Ctx) error {
+	c.Set(fiber.HeaderContentType, fiber.MIMETextHTML)
+	return c.SendString(e.Render())
 }
