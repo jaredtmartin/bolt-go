@@ -258,6 +258,8 @@ func (e *Element) Render() string {
 	}
 	return "<" + e.tag + attr + ">" + e.children + "</" + e.tag + ">"
 }
+
+// For Fiber
 func Send(e *Element, c *fiber.Ctx) error {
 	c.Set(fiber.HeaderContentType, fiber.MIMETextHTML)
 	return c.SendString(e.Render())
