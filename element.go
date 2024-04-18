@@ -128,6 +128,10 @@ func (e *Element) Attr(key string, value string) *Element {
 	e.add_attribute(key, value)
 	return e
 }
+func (e *Element) Tag(tag string) *Element {
+	e.tag = tag
+	return e
+}
 func (e *Element) Text(content string) *Element {
 	e.children = content
 	return e
