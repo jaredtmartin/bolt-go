@@ -264,3 +264,7 @@ func (e *Element) Send(c *fiber.Ctx) error {
 	c.Set(fiber.HeaderContentType, fiber.MIMETextHTML)
 	return c.SendString(e.Render())
 }
+func (e *Element) Replace(key string, value string) *Element {
+	html := strings.ReplaceAll(e.children, key, value)
+	return e.Text(html)
+}
