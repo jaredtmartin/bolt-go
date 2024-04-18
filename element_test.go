@@ -2,7 +2,13 @@ package bolt
 
 import (
 	"fmt"
+	"io"
+	"log"
+	"net/http/httptest"
 	"testing"
+
+	"github.com/gofiber/fiber/v2"
+	"github.com/stretchr/testify/assert"
 )
 
 // TestHelloName calls greetings.Hello with a name, checking
@@ -395,4 +401,22 @@ func TestHasClass(t *testing.T) {
 	if result != expected {
 		t.Fatalf(`result = %v, expected %v`, result, expected)
 	}
+}
+func TestSend(t *testing.T) {
+	app := fiber.New()
+	app.Get("/hello", func(c *fiber.Ctx) error {
+		e := NewElement("div").Class("red green blue")
+		return e.Send(c)
+	})
+	req := httptest.NewRequest("GET", "/hello", nil)
+	resp, _ := app.Test(req, -1)
+	assert.Equalf(t, 200, resp.StatusCode, "should get valid response")
+	b, err := io.ReadAll(resp.Body)
+	if err != nil {
+		log.Fatalln(err)
+	}
+
+	body := string(b)
+	assert.Equalf(t, "<div class=\"blue green red\"/>", body, "should get valid body")
+	assert.Equalf(t, "text/html", resp.Header.Get("Content-Type"), "should get html")
 }
