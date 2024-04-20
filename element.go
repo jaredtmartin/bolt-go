@@ -249,6 +249,17 @@ func (e *Element) Children(elements ...*Element) *Element {
 	e.children = strings.Join(renderedStrings, "")
 	return e
 }
+
+var null_elements = [...]string{"area", "base", "br", "col", "embed", "hr", "img", "input", "link", "meta", "param", "source", "track", "wbr"}
+
+func is_null_element(tag string) bool {
+	for _, v := range null_elements {
+		if v == tag {
+			return true
+		}
+	}
+	return false
+}
 func (e *Element) Render() string {
 	if e.tag == "" {
 		return e.children
@@ -257,7 +268,7 @@ func (e *Element) Render() string {
 	if len(attr) > 0 {
 		attr = " " + attr
 	}
-	if e.children == "" {
+	if is_null_element(e.tag) {
 		return "<" + e.tag + attr + "/>"
 	}
 	return "<" + e.tag + attr + ">" + e.children + "</" + e.tag + ">"

@@ -7,7 +7,7 @@ import (
 func TestDiv(t *testing.T) {
 	e := Div()
 	result := e.Render()
-	expected := "<div/>"
+	expected := "<div></div>"
 	if result != expected {
 		t.Fatalf(`Div() = %q, expected %q`, result, expected)
 	}

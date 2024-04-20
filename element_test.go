@@ -1,7 +1,6 @@
 package bolt
 
 import (
-	"fmt"
 	"io"
 	"log"
 	"net/http/httptest"
@@ -17,18 +16,31 @@ func TestClasses(t *testing.T) {
 	e := NewElement("div").Class("red green blue").Class("green yellow")
 
 	result := e.Render()
-	expected := "<div class=\"blue green red yellow\"/>"
-	fmt.Println("result", result)
+	expected := "<div class=\"blue green red yellow\"></div>"
+	// fmt.Println("result", result)
 	if result != expected {
 		t.Fatalf(`result = %q, expected %q`, result, expected)
 	}
 }
-
+func TestRender(t *testing.T) {
+	result := NewElement("script").Render()
+	expected := "<script></script>"
+	if result != expected {
+		t.Fatalf(`result = %q, expected %q`, result, expected)
+	}
+}
+func TestRenderNullElement(t *testing.T) {
+	result := NewElement("img").Render()
+	expected := "<img/>"
+	if result != expected {
+		t.Fatalf(`result = %q, expected %q`, result, expected)
+	}
+}
 func TestRemoveClasses(t *testing.T) {
 	e := NewElement("div").Class("red green blue yellow")
 	e.RemoveClasses("green yellow")
 	result := e.Render()
-	expected := "<div class=\"blue red\"/>"
+	expected := "<div class=\"blue red\"></div>"
 	if result != expected {
 		t.Fatalf(`result = %q, expected %q`, result, expected)
 	}
@@ -38,7 +50,7 @@ func TestAddStyles(t *testing.T) {
 	e.Style("color: red; background: blue; border: 2px sold green")
 	e.Style("color: purple; font-weight: bold")
 	result := e.Render()
-	expected := "<div style=\"background: blue; border: 2px sold green; color: purple; font-weight: bold;\"/>"
+	expected := "<div style=\"background: blue; border: 2px sold green; color: purple; font-weight: bold;\"></div>"
 	if result != expected {
 		t.Fatalf(`Styles() = %q, expected %q`, result, expected)
 	}
@@ -51,7 +63,7 @@ func TestAttributes(t *testing.T) {
 	e.Attr("hx-target", "#target")
 	e.Attr("hx-post", "yep")
 	result := e.Render()
-	expected := "<div hx-post=\"yep\" hx-target=\"#target\" style=\"background: blue; border: 2px sold green; color: red;\" class=\"green yellow\"/>"
+	expected := "<div hx-post=\"yep\" hx-target=\"#target\" style=\"background: blue; border: 2px sold green; color: red;\" class=\"green yellow\"></div>"
 	if result != expected {
 		t.Fatalf(`Attributes() = %q, expected %q`, result, expected)
 	}
@@ -61,7 +73,7 @@ func TestAttributesWithoutClasses(t *testing.T) {
 	e.Attr("style", "color: red; background: blue; border: 2px sold green")
 	e.Attr("hx-post", "nope")
 	result := e.Render()
-	expected := "<div hx-post=\"nope\" style=\"background: blue; border: 2px sold green; color: red;\"/>"
+	expected := "<div hx-post=\"nope\" style=\"background: blue; border: 2px sold green; color: red;\"></div>"
 	if result != expected {
 		t.Fatalf(`Attributes() = %q, expected %q`, result, expected)
 	}
@@ -71,7 +83,7 @@ func TestAttributesWithoutStyles(t *testing.T) {
 	e.Attr("class", "green yellow")
 	e.Attr("hx-post", "nope")
 	result := e.Render()
-	expected := "<div hx-post=\"nope\" class=\"green yellow\"/>"
+	expected := "<div hx-post=\"nope\" class=\"green yellow\"></div>"
 	if result != expected {
 		t.Fatalf(`Attributes() = %q, expected %q`, result, expected)
 	}
@@ -107,7 +119,7 @@ func TestRemoveStyles(t *testing.T) {
 	e := NewElement("div").Style("color: red; background: green;")
 	e.RemoveStyles("color")
 	result := e.Render()
-	expected := "<div style=\"background: green;\"/>"
+	expected := "<div style=\"background: green;\"></div>"
 	if result != expected {
 		t.Fatalf(`result = %q, expected %q`, result, expected)
 	}
@@ -116,7 +128,7 @@ func TestRemoveAttributes(t *testing.T) {
 	e := NewElement("div").Attr("hx-boost", "true").Attr("id", "input")
 	e.RemoveAttributes("hx-boost")
 	result := e.Render()
-	expected := "<div id=\"input\"/>"
+	expected := "<div id=\"input\"></div>"
 	if result != expected {
 		t.Fatalf(`result = %q, expected %q`, result, expected)
 	}
@@ -127,7 +139,7 @@ func TestRemoveAttributes(t *testing.T) {
 func TestPost(t *testing.T) {
 	e := NewElement("div").Post("https://example.com")
 	result := e.Render()
-	expected := "<div hx-post=\"https://example.com\"/>"
+	expected := "<div hx-post=\"https://example.com\"></div>"
 	if result != expected {
 		t.Fatalf(`result = %q, expected %q`, result, expected)
 	}
@@ -138,7 +150,7 @@ func TestPost(t *testing.T) {
 func TestGet(t *testing.T) {
 	e := NewElement("div").Get("https://example.com")
 	result := e.Render()
-	expected := "<div hx-get=\"https://example.com\"/>"
+	expected := "<div hx-get=\"https://example.com\"></div>"
 	if result != expected {
 		t.Fatalf(`result = %q, expected %q`, result, expected)
 	}
@@ -149,7 +161,7 @@ func TestGet(t *testing.T) {
 func TestPut(t *testing.T) {
 	e := NewElement("div").Put("https://example.com")
 	result := e.Render()
-	expected := "<div hx-put=\"https://example.com\"/>"
+	expected := "<div hx-put=\"https://example.com\"></div>"
 	if result != expected {
 		t.Fatalf(`result = %q, expected %q`, result, expected)
 	}
@@ -160,7 +172,7 @@ func TestPut(t *testing.T) {
 func TestPatch(t *testing.T) {
 	e := NewElement("div").Patch("https://example.com")
 	result := e.Render()
-	expected := "<div hx-patch=\"https://example.com\"/>"
+	expected := "<div hx-patch=\"https://example.com\"></div>"
 	if result != expected {
 		t.Fatalf(`result = %q, expected %q`, result, expected)
 	}
@@ -171,7 +183,7 @@ func TestPatch(t *testing.T) {
 func TestDelete(t *testing.T) {
 	e := NewElement("div").Delete("https://example.com")
 	result := e.Render()
-	expected := "<div hx-delete=\"https://example.com\"/>"
+	expected := "<div hx-delete=\"https://example.com\"></div>"
 	if result != expected {
 		t.Fatalf(`result = %q, expected %q`, result, expected)
 	}
@@ -182,7 +194,7 @@ func TestDelete(t *testing.T) {
 func TestConfirm(t *testing.T) {
 	e := NewElement("div").Confirm("Are you sure?")
 	result := e.Render()
-	expected := "<div hx-confirm=\"Are you sure?\"/>"
+	expected := "<div hx-confirm=\"Are you sure?\"></div>"
 	if result != expected {
 		t.Fatalf(`result = %q, expected %q`, result, expected)
 	}
@@ -193,7 +205,7 @@ func TestConfirm(t *testing.T) {
 func TestTarget(t *testing.T) {
 	e := NewElement("div").Target("#target")
 	result := e.Render()
-	expected := "<div hx-target=\"#target\"/>"
+	expected := "<div hx-target=\"#target\"></div>"
 	if result != expected {
 		t.Fatalf(`result = %q, expected %q`, result, expected)
 	}
@@ -204,7 +216,7 @@ func TestTarget(t *testing.T) {
 func TestTrigger(t *testing.T) {
 	e := NewElement("div").Trigger("click")
 	result := e.Render()
-	expected := "<div hx-trigger=\"click\"/>"
+	expected := "<div hx-trigger=\"click\"></div>"
 	if result != expected {
 		t.Fatalf(`result = %q, expected %q`, result, expected)
 	}
@@ -215,7 +227,7 @@ func TestTrigger(t *testing.T) {
 func TestSwap(t *testing.T) {
 	e := NewElement("div").Swap("target")
 	result := e.Render()
-	expected := "<div hx-swap=\"target\"/>"
+	expected := "<div hx-swap=\"target\"></div>"
 	if result != expected {
 		t.Fatalf(`result = %q, expected %q`, result, expected)
 	}
@@ -226,7 +238,7 @@ func TestSwap(t *testing.T) {
 func TestId(t *testing.T) {
 	e := NewElement("div").Id("target")
 	result := e.Render()
-	expected := "<div id=\"target\"/>"
+	expected := "<div id=\"target\"></div>"
 	if result != expected {
 		t.Fatalf(`result = %q, expected %q`, result, expected)
 	}
@@ -237,7 +249,7 @@ func TestId(t *testing.T) {
 func TestName(t *testing.T) {
 	e := NewElement("div").Name("target")
 	result := e.Render()
-	expected := "<div name=\"target\"/>"
+	expected := "<div name=\"target\"></div>"
 	if result != expected {
 		t.Fatalf(`result = %q, expected %q`, result, expected)
 	}
@@ -248,7 +260,7 @@ func TestName(t *testing.T) {
 func TestType(t *testing.T) {
 	e := NewElement("div").Type("target")
 	result := e.Render()
-	expected := "<div type=\"target\"/>"
+	expected := "<div type=\"target\"></div>"
 	if result != expected {
 		t.Fatalf(`result = %q, expected %q`, result, expected)
 	}
@@ -259,7 +271,7 @@ func TestType(t *testing.T) {
 func TestSrc(t *testing.T) {
 	e := NewElement("div").Src("target")
 	result := e.Render()
-	expected := "<div src=\"target\"/>"
+	expected := "<div src=\"target\"></div>"
 	if result != expected {
 		t.Fatalf(`result = %q, expected %q`, result, expected)
 	}
@@ -270,7 +282,7 @@ func TestSrc(t *testing.T) {
 func TestValue(t *testing.T) {
 	e := NewElement("div").Value("target")
 	result := e.Render()
-	expected := "<div value=\"target\"/>"
+	expected := "<div value=\"target\"></div>"
 	if result != expected {
 		t.Fatalf(`result = %q, expected %q`, result, expected)
 	}
@@ -281,7 +293,7 @@ func TestValue(t *testing.T) {
 func TestHref(t *testing.T) {
 	e := NewElement("div").Href("target")
 	result := e.Render()
-	expected := "<div href=\"target\"/>"
+	expected := "<div href=\"target\"></div>"
 	if result != expected {
 		t.Fatalf(`result = %q, expected %q`, result, expected)
 	}
@@ -292,7 +304,7 @@ func TestHref(t *testing.T) {
 func TestPlaceholder(t *testing.T) {
 	e := NewElement("div").Placeholder("target")
 	result := e.Render()
-	expected := "<div placeholder=\"target\"/>"
+	expected := "<div placeholder=\"target\"></div>"
 	if result != expected {
 		t.Fatalf(`result = %q, expected %q`, result, expected)
 	}
@@ -303,7 +315,7 @@ func TestPlaceholder(t *testing.T) {
 func TestOnClick(t *testing.T) {
 	e := NewElement("div").OnClick("target")
 	result := e.Render()
-	expected := "<div onclick=\"target\"/>"
+	expected := "<div onclick=\"target\"></div>"
 	if result != expected {
 		t.Fatalf(`result = %q, expected %q`, result, expected)
 	}
@@ -314,7 +326,7 @@ func TestOnClick(t *testing.T) {
 func TestIndicator(t *testing.T) {
 	e := NewElement("div").Indicator("target")
 	result := e.Render()
-	expected := "<div hx-indicator=\"target\"/>"
+	expected := "<div hx-indicator=\"target\"></div>"
 	if result != expected {
 		t.Fatalf(`result = %q, expected %q`, result, expected)
 	}
@@ -325,7 +337,7 @@ func TestIndicator(t *testing.T) {
 func TestOob(t *testing.T) {
 	e := NewElement("div").Oob("target")
 	result := e.Render()
-	expected := "<div hx-oob=\"target\"/>"
+	expected := "<div hx-oob=\"target\"></div>"
 	if result != expected {
 		t.Fatalf(`result = %q, expected %q`, result, expected)
 	}
@@ -336,7 +348,7 @@ func TestOob(t *testing.T) {
 func TestSwapOob(t *testing.T) {
 	e := NewElement("div").SwapOob("target")
 	result := e.Render()
-	expected := "<div hx-swap-oob=\"target\"/>"
+	expected := "<div hx-swap-oob=\"target\"></div>"
 	if result != expected {
 		t.Fatalf(`result = %q, expected %q`, result, expected)
 	}
@@ -347,19 +359,19 @@ func TestSwapOob(t *testing.T) {
 func TestPushUrl(t *testing.T) {
 	e := NewElement("div").PushUrl()
 	result := e.Render()
-	expected := "<div hx-push-url=\"true\"/>"
+	expected := "<div hx-push-url=\"true\"></div>"
 	if result != expected {
 		t.Fatalf(`result = %q, expected %q`, result, expected)
 	}
 	e.PushUrl(false)
 	result = e.Render()
-	expected = "<div/>"
+	expected = "<div></div>"
 	if result != expected {
 		t.Fatalf(`result = %q, expected %q`, result, expected)
 	}
 	e.PushUrl(true)
 	result = e.Render()
-	expected = "<div hx-push-url=\"true\"/>"
+	expected = "<div hx-push-url=\"true\"></div>"
 	if result != expected {
 		t.Fatalf(`result = %q, expected %q`, result, expected)
 	}
@@ -370,20 +382,20 @@ func TestPushUrl(t *testing.T) {
 func TestBoost(t *testing.T) {
 	e := NewElement("div").Boost()
 	result := e.Render()
-	expected := "<div hx-boost=\"true\"/>"
+	expected := "<div hx-boost=\"true\"></div>"
 	if result != expected {
 		t.Fatalf(`result = %q, expected %q`, result, expected)
 	}
 
 	e.Boost(false)
 	result = e.Render()
-	expected = "<div/>"
+	expected = "<div></div>"
 	if result != expected {
 		t.Fatalf(`result = %q, expected %q`, result, expected)
 	}
 	e.Boost(true)
 	result = e.Render()
-	expected = "<div hx-boost=\"true\"/>"
+	expected = "<div hx-boost=\"true\"></div>"
 	if result != expected {
 		t.Fatalf(`result = %q, expected %q`, result, expected)
 	}
@@ -417,6 +429,6 @@ func TestSend(t *testing.T) {
 	}
 
 	body := string(b)
-	assert.Equalf(t, "<div class=\"blue green red\"/>", body, "should get valid body")
+	assert.Equalf(t, "<div class=\"blue green red\"></div>", body, "should get valid body")
 	assert.Equalf(t, "text/html", resp.Header.Get("Content-Type"), "should get html")
 }
