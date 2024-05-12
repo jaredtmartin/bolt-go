@@ -1,6 +1,10 @@
 package bolt
 
-import "os"
+import (
+	"fmt"
+	"os"
+	"strconv"
+)
 
 func Div(children ...*Element) *Element {
 	return NewElement("div").Children(children...)
@@ -26,7 +30,6 @@ func Span(text string) *Element {
 func P(text string) *Element {
 	return NewElement("p").Text(text)
 }
-
 func H1(text string) *Element {
 	return NewElement("h1").Text(text)
 }
@@ -72,4 +75,30 @@ func Template(filename string) *Element {
 		panic(err)
 	}
 	return NewElement("").Text(string(html))
+}
+func Script(text string) *Element {
+	return NewElement("script").Text(text).Attr("defer", "")
+}
+func Svg(path string, width int, height int, vbX int, vbY int) *Element {
+	viewBox := fmt.Sprintf("0 0 %d %d", vbX, vbY)
+	return NewElement("svg").
+		Attr("viewBox", viewBox).
+		Attr("version", "1.1").
+		Attr("xmlns", "http://www.w3.org/2000/svg").
+		Attr("xmlns:xlink", "http://www.w3.org/1999/xlink").
+		Attr("version", "1.1").
+		Attr("width", strconv.Itoa(width)).
+		Attr("height", strconv.Itoa(height)).
+		Text(path)
+}
+func VideoIframe(title string, width int, height int, src string) *Element {
+	return NewElement("iframe").
+		Attr("width", strconv.Itoa(width)).
+		Attr("height", strconv.Itoa(height)).
+		Attr("frameborder", "0").
+		Attr("allow", "autoplay; fullscreen; picture-in-picture; clipboard-write").
+		Attr("title", title).
+		Attr("data-ready", "true").
+		Class("w-full h-full").
+		Src(src)
 }
