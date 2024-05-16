@@ -194,6 +194,7 @@ func (e *Element) Value(value string) *Element {
 }
 func (e *Element) Href(href string) *Element {
 	e.add_attribute("href", href)
+	e.tag = "a"
 	return e
 }
 func (e *Element) Placeholder(placeholder string) *Element {
