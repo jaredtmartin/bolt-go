@@ -13,13 +13,13 @@ func Img(src string) *Element {
 	return NewElement("img").Src(src)
 }
 func Button(text string) *Element {
-	return NewElement("button").Text(text)
+	return NewElement("button").Type("button").Text(text)
 }
 func Label(text string) *Element {
 	return NewElement("label").Text(text)
 }
 func Input(name string) *Element {
-	return NewElement("input").Name(name)
+	return NewElement("input").Type("text").Name(name)
 }
 func Form() *Element {
 	return NewElement("form")
