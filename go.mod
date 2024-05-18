@@ -4,7 +4,6 @@ go 1.22.2
 
 require (
 	github.com/gofiber/fiber/v2 v2.52.4
-	github.com/gofiber/template/html/v2 v2.1.1
 	golang.org/x/exp v0.0.0-20240404231335-c0f41cb1a7a0
 )
 
