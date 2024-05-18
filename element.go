@@ -157,7 +157,8 @@ func (e *Element) Delete(url string) *Element {
 	return e
 }
 func (e *Element) Confirm(prompt string) *Element {
-	e.add_attribute("hx-confirm", prompt)
+	e.add_attribute("hx-confirm", "true")
+	e.add_attribute("hx-confirm-question", prompt)
 	return e
 }
 func (e *Element) Target(target string) *Element {
