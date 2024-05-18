@@ -1,5 +1,7 @@
 package bolt
 
+import "strconv"
+
 type TextFieldMolecule struct {
 	_id     string
 	label   Element
@@ -105,21 +107,164 @@ func (f *TextFieldMolecule) Currency(is_currency ...bool) *TextFieldMolecule {
 }
 func (f *TextFieldMolecule) Email(is_email ...bool) *TextFieldMolecule {
 	if len(is_email) > 0 && !is_email[0] {
-		f.input = *f.input.RemoveAttributes("email").RemoveAttributes("onblur")
+		f.input = *f.input.RemoveAttributes("email").RemoveAttributes("onblur").Type("text")
 	} else {
-		f.input = *f.input.Attr("email", "true").Attr("onblur", "doFieldValidation(event)")
+		f.input = *f.input.Attr("email", "true").Attr("onblur", "doFieldValidation(event)").Type("email")
 	}
 	return f
 }
-func (f *TextFieldMolecule) Password() *TextFieldMolecule {
-	f.input = *f.input.Type("password")
+func (f *TextFieldMolecule) Pattern(pattern string) *TextFieldMolecule {
+	f.input = *f.input.Attr("pattern", pattern)
+	return f
+}
+func (f *TextFieldMolecule) Accept(accept string) *TextFieldMolecule {
+	f.input = *f.input.Attr("accept", accept)
+	return f
+}
+func (f *TextFieldMolecule) Autocapitalize(autocapitalize string) *TextFieldMolecule {
+	f.input = *f.input.Attr("autocapitalize", autocapitalize)
+	return f
+}
+func (f *TextFieldMolecule) Autocomplete(autocomplete string) *TextFieldMolecule {
+	f.input = *f.input.Attr("autocomplete", autocomplete)
+	return f
+}
+func (f *TextFieldMolecule) Max(max string) *TextFieldMolecule {
+	f.input = *f.input.Attr("max", max)
+	return f
+}
+func (f *TextFieldMolecule) Min(min string) *TextFieldMolecule {
+	f.input = *f.input.Attr("min", min)
+	return f
+}
+func (f *TextFieldMolecule) MaxLength(maxlength string) *TextFieldMolecule {
+	f.input = *f.input.Attr("maxlength", maxlength)
+	return f
+}
+func (f *TextFieldMolecule) MinLength(minlength string) *TextFieldMolecule {
+	f.input = *f.input.Attr("minlength", minlength)
+	return f
+}
+func (f *TextFieldMolecule) Color(is_color ...bool) *TextFieldMolecule {
+	if len(is_color) > 0 && !is_color[0] {
+		f.input = *f.input.Type("text")
+	} else {
+		f.input = *f.input.Type("color")
+	}
+	return f
+}
+func (f *TextFieldMolecule) Date(is_date ...bool) *TextFieldMolecule {
+	if len(is_date) > 0 && !is_date[0] {
+		f.input = *f.input.Type("text")
+	} else {
+		f.input = *f.input.Type("date")
+	}
+	return f
+}
+func (f *TextFieldMolecule) Datetime(is_datetime ...bool) *TextFieldMolecule {
+	if len(is_datetime) > 0 && !is_datetime[0] {
+		f.input = *f.input.Type("text")
+	} else {
+		f.input = *f.input.Type("datetime-local") // datetime is deprecated
+	}
+	return f
+}
+func (f *TextFieldMolecule) File(is_file ...bool) *TextFieldMolecule {
+	if len(is_file) > 0 && !is_file[0] {
+		f.input = *f.input.Type("text")
+	} else {
+		f.input = *f.input.Type("file")
+	}
+	return f
+}
+func (f *TextFieldMolecule) Hidden(is_hidden ...bool) *TextFieldMolecule {
+	if len(is_hidden) > 0 && !is_hidden[0] {
+		f.input = *f.input.Type("text")
+	} else {
+		f.input = *f.input.Type("hidden")
+	}
+	return f
+}
+func (f *TextFieldMolecule) Month(is_month ...bool) *TextFieldMolecule {
+	if len(is_month) > 0 && !is_month[0] {
+		f.input = *f.input.Type("text")
+	} else {
+		f.input = *f.input.Type("month")
+	}
+	return f
+}
+func (f *TextFieldMolecule) Number(is_number ...bool) *TextFieldMolecule {
+	if len(is_number) > 0 && !is_number[0] {
+		f.input = *f.input.Type("text")
+	} else {
+		f.input = *f.input.Type("number")
+	}
+	return f
+}
+func (f *TextFieldMolecule) Tel(is_tel ...bool) *TextFieldMolecule {
+	if len(is_tel) > 0 && !is_tel[0] {
+		f.input = *f.input.Type("text")
+	} else {
+		f.input = *f.input.Type("tel")
+	}
+	return f
+}
+func (f *TextFieldMolecule) Time(is_time ...bool) *TextFieldMolecule {
+	if len(is_time) > 0 && !is_time[0] {
+		f.input = *f.input.Type("text")
+	} else {
+		f.input = *f.input.Type("time")
+	}
+	return f
+}
+func (f *TextFieldMolecule) Url(is_url ...bool) *TextFieldMolecule {
+	if len(is_url) > 0 && !is_url[0] {
+		f.input = *f.input.Type("text")
+	} else {
+		f.input = *f.input.Type("url")
+	}
+	return f
+}
+func (f *TextFieldMolecule) Week(is_week ...bool) *TextFieldMolecule {
+	if len(is_week) > 0 && !is_week[0] {
+		f.input = *f.input.Type("text")
+	} else {
+		f.input = *f.input.Type("week")
+	}
+	return f
+}
+func (f *TextFieldMolecule) Search(is_search ...bool) *TextFieldMolecule {
+	if len(is_search) > 0 && !is_search[0] {
+		f.input = *f.input.Type("text")
+	} else {
+		f.input = *f.input.Type("search")
+	}
+	return f
+}
+func (f *TextFieldMolecule) Password(is_password ...bool) *TextFieldMolecule {
+	if len(is_password) > 0 && !is_password[0] {
+		f.input = *f.input.Type("text")
+	} else {
+		f.input = *f.input.Type("password")
+	}
+	return f
+}
+func (f *TextFieldMolecule) Range(min int, max int) *TextFieldMolecule {
+	f.input = *f.input.Attr("min", strconv.Itoa(min)).Attr("max", strconv.Itoa(max))
+	return f
+}
+func (f *TextFieldMolecule) Placeholder(placeholder string) *TextFieldMolecule {
+	f.input = *f.input.Attr("placeholder", placeholder)
+	return f
+}
+func (f *TextFieldMolecule) Step(step string) *TextFieldMolecule {
+	f.input = *f.input.Attr("step", step)
 	return f
 }
 func (f *TextFieldMolecule) Error(err string) *TextFieldMolecule {
 	f.error = *f.error.Text(err)
 	return f
 }
-
 func (f *TextFieldMolecule) Target(value string) *TextFieldMolecule {
 	f.input = *f.input.Target(value)
 	return f
