@@ -97,19 +97,21 @@ func (f *TextFieldMolecule) Required(required ...bool) *TextFieldMolecule {
 	}
 	return f
 }
-func (f *TextFieldMolecule) Currency(is_currency ...bool) *TextFieldMolecule {
-	if len(is_currency) > 0 && !is_currency[0] {
-		f.input = *f.input.RemoveAttributes("currency").RemoveAttributes("onblur")
-	} else {
-		f.input = *f.input.Attr("currency", "true").Attr("onblur", "doFieldValidation(event)")
-	}
-	return f
-}
+
+// func (f *TextFieldMolecule) Currency(is_currency ...bool) *TextFieldMolecule {
+// 	if len(is_currency) > 0 && !is_currency[0] {
+// 		f.input = *f.input.RemoveAttributes("currency").RemoveAttributes("onblur")
+// 	} else {
+// 		f.input = *f.input.Attr("currency", "true").Attr("onblur", "doFieldValidation(event)")
+// 	}
+// 	return f
+// }
+
 func (f *TextFieldMolecule) Email(is_email ...bool) *TextFieldMolecule {
 	if len(is_email) > 0 && !is_email[0] {
-		f.input = *f.input.RemoveAttributes("email").RemoveAttributes("onblur").Type("text")
+		f.input = *f.input.Type("text")
 	} else {
-		f.input = *f.input.Attr("email", "true").Attr("onblur", "doFieldValidation(event)").Type("email")
+		f.input = *f.input.Type("email")
 	}
 	return f
 }

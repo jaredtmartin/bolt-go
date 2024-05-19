@@ -77,21 +77,23 @@ func TestTextFieldRequiredFalse(t *testing.T) {
 	result := e.Render()
 	assert.Equalf(t, `<div><label for="name-field">Hello</label><input id="name-field" name="name" type="text"/><div id="name-field-error"></div></div>`, result, "should match")
 }
-func TestTextFieldCurrency(t *testing.T) {
-	e := TextField("name", "Hello").Currency()
-	result := e.Render()
-	assert.Equalf(t, `<div><label for="name-field">Hello</label><input currency="true" id="name-field" name="name" onblur="doFieldValidation(event)" type="text"/><div id="name-field-error"></div></div>`, result, "should match")
-}
-func TestTextFieldCurrencyFalse(t *testing.T) {
-	e := TextField("name", "Hello").Currency(true).Currency(false)
-	result := e.Render()
-	assert.Equalf(t, `<div><label for="name-field">Hello</label><input id="name-field" name="name" type="text"/><div id="name-field-error"></div></div>`, result, "should match")
-}
+
+// func TestTextFieldCurrency(t *testing.T) {
+// 	e := TextField("name", "Hello").Currency()
+// 	result := e.Render()
+// 	assert.Equalf(t, `<div><label for="name-field">Hello</label><input currency="true" id="name-field" name="name" onblur="doFieldValidation(event)" type="text"/><div id="name-field-error"></div></div>`, result, "should match")
+// }
+// func TestTextFieldCurrencyFalse(t *testing.T) {
+// 	e := TextField("name", "Hello").Currency(true).Currency(false)
+// 	result := e.Render()
+// 	assert.Equalf(t, `<div><label for="name-field">Hello</label><input id="name-field" name="name" type="text"/><div id="name-field-error"></div></div>`, result, "should match")
+// }
 
 func TestTextFieldEmail(t *testing.T) {
 	e := TextField("name", "Hello").Email()
 	result := e.Render()
-	assert.Equalf(t, `<div><label for="name-field">Hello</label><input email="true" id="name-field" name="name" onblur="doFieldValidation(event)" type="text"/><div id="name-field-error"></div></div>`, result, "should match")
+
+	assert.Equalf(t, `<div><label for="name-field">Hello</label><input id="name-field" name="name" type="email"/><div id="name-field-error"></div></div>`, result, "should match")
 }
 func TestTextFieldEmailFalse(t *testing.T) {
 	e := TextField("name", "Hello").Email(true).Email(false)
