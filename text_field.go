@@ -271,6 +271,10 @@ func (f *TextFieldMolecule) Target(value string) *TextFieldMolecule {
 	f.input = *f.input.Target(value)
 	return f
 }
+func (f *TextFieldMolecule) Trigger(value string) *TextFieldMolecule {
+	f.input = *f.input.Trigger(value)
+	return f
+}
 func (f *TextFieldMolecule) Attr(key string, value string) *TextFieldMolecule {
 	f.input = *f.input.Attr(key, value)
 	return f
