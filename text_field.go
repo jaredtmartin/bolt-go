@@ -275,6 +275,10 @@ func (f *TextFieldMolecule) Trigger(value string) *TextFieldMolecule {
 	f.input = *f.input.Trigger(value)
 	return f
 }
+func (f *TextFieldMolecule) PushUrl(pushUrl ...bool) *TextFieldMolecule {
+	f.input = *f.input.PushUrl(pushUrl...)
+	return f
+}
 func (f *TextFieldMolecule) Attr(key string, value string) *TextFieldMolecule {
 	f.input = *f.input.Attr(key, value)
 	return f
