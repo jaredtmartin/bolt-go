@@ -173,6 +173,10 @@ func (e *Element) Swap(value string) *Element {
 	e.add_attribute("hx-swap", value)
 	return e
 }
+func (e *Element) Select(value string) *Element {
+	e.add_attribute("hx-select", value)
+	return e
+}
 func (e *Element) Id(value string) *Element {
 	e.add_attribute("id", value)
 	return e
