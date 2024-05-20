@@ -206,6 +206,10 @@ func (e *Element) Placeholder(placeholder string) *Element {
 	e.add_attribute("placeholder", placeholder)
 	return e
 }
+func (e *Element) Alt(alt string) *Element {
+	e.add_attribute("alt", alt)
+	return e
+}
 func (e *Element) OnClick(value string) *Element {
 	e.add_attribute("onclick", value)
 	return e
