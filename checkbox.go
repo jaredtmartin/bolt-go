@@ -46,12 +46,8 @@ func (f *CheckboxMolecule) Id(id string) *CheckboxMolecule {
 	f._id = id
 	return f.setId(id)
 }
-func (f *CheckboxMolecule) Value(value bool) *CheckboxMolecule {
-	if value {
-		f.input = *f.input.Attr("checked", "checked")
-	} else {
-		f.input = *f.input.RemoveAttributes("checked")
-	}
+func (f *CheckboxMolecule) Value(value string) *CheckboxMolecule {
+	f.input = *f.input.Value(value)
 	return f
 }
 func (f *CheckboxMolecule) Checked(value ...bool) *CheckboxMolecule {
