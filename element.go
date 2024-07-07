@@ -156,6 +156,7 @@ func (e *Element) Delete(url string) *Element {
 	e.add_attribute("hx-delete", url)
 	return e
 }
+
 func (e *Element) Confirm(prompt string) *Element {
 	e.add_attribute("hx-confirm", "true")
 	e.add_attribute("hx-confirm-question", prompt)
@@ -187,6 +188,10 @@ func (e *Element) Name(name string) *Element {
 }
 func (e *Element) Type(tipe string) *Element {
 	e.add_attribute("type", tipe)
+	return e
+}
+func (e *Element) Submit() *Element {
+	e.add_attribute("type", "submit")
 	return e
 }
 func (e *Element) Src(src string) *Element {
