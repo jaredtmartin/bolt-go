@@ -271,6 +271,10 @@ func (f *TextFieldMolecule) Target(value string) *TextFieldMolecule {
 	f.input = *f.input.Target(value)
 	return f
 }
+func (f *TextFieldMolecule) Select(value string) *TextFieldMolecule {
+	f.input = *f.input.Select(value)
+	return f
+}
 func (f *TextFieldMolecule) Indicator(selector string) *TextFieldMolecule {
 	f.input = *f.input.Indicator(selector)
 	return f

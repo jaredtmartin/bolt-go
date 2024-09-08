@@ -191,7 +191,12 @@ func (e *Element) Type(tipe string) *Element {
 	return e
 }
 func (e *Element) Submit() *Element {
-	e.add_attribute("type", "submit")
+	if e.tag == "input" {
+		e.add_attribute("type", "submit")
+	} else {
+		e.add_attribute("type", "submit")
+	}
+
 	return e
 }
 func (e *Element) Src(src string) *Element {
