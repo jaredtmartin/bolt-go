@@ -106,3 +106,9 @@ func VideoIframe(title string, width int, height int, src string) *Element {
 		Class("w-full h-full").
 		Src(src)
 }
+func Head(children ...*Element) *Element {
+	return NewElement("head").Children(children...)
+}
+func Body(children ...*Element) *Element {
+	return NewElement("body").Children(children...)
+}
