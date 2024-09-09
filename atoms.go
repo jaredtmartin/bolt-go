@@ -76,6 +76,9 @@ func Template(filename string) *Element {
 	}
 	return NewElement("").Text(string(html))
 }
+func Hidden(name string, value string) *Element {
+	return NewElement("input").Type("hidden").Name(name).Value(value)
+}
 func Script(text string) *Element {
 	return NewElement("script").Text(text).Attr("defer", "")
 }
