@@ -1,5 +1,11 @@
 package bolt
 
+const (
+	CheckBoxLabelWrapsInput  = "CheckBoxLabelWrapsInput"
+	CheckBoxLabelBeforeInput = "CheckBoxLabelBeforeInput"
+	CheckBoxLabelAfterInput  = "CheckBoxLabelAfterInput"
+)
+
 type CheckboxMolecule struct {
 	_id     string
 	label   Element
@@ -7,6 +13,7 @@ type CheckboxMolecule struct {
 	error   Element
 	check   Element
 	wrapper Element
+	layout  string
 }
 
 func Checkbox(name string, label string) *CheckboxMolecule {
@@ -17,6 +24,7 @@ func Checkbox(name string, label string) *CheckboxMolecule {
 		error:   *Div(),
 		check:   *NewElement("span"),
 		wrapper: *Div(),
+		layout:  CheckBoxLabelAfterInput,
 	}
 	return cb.Type("checkbox").setId(name + "-field")
 }
@@ -59,7 +67,15 @@ func (f *CheckboxMolecule) Checked(value ...bool) *CheckboxMolecule {
 	return f
 }
 func (f *CheckboxMolecule) Element() *Element {
-	f.wrapper.Children(&f.label, &f.input, &f.error)
+	switch f.layout {
+	case CheckBoxLabelWrapsInput:
+		f.label.Children(&f.input)
+		f.wrapper.Children(&f.label, &f.error)
+	case CheckBoxLabelBeforeInput:
+		f.wrapper.Children(&f.label, &f.input, &f.error)
+	default:
+		f.wrapper.Children(&f.input, &f.label, &f.error)
+	}
 	return &f.wrapper
 }
 func (f *CheckboxMolecule) Render() string {
@@ -131,5 +147,17 @@ func (f *CheckboxMolecule) Delete(value string) *CheckboxMolecule {
 }
 func (f *CheckboxMolecule) Swap(value string) *CheckboxMolecule {
 	f.input = *f.input.Swap(value)
+	return f
+}
+func (f *CheckboxMolecule) LabelBeforeInput() *CheckboxMolecule {
+	f.layout = CheckBoxLabelBeforeInput
+	return f
+}
+func (f *CheckboxMolecule) LabelWrapsInput() *CheckboxMolecule {
+	f.layout = CheckBoxLabelWrapsInput
+	return f
+}
+func (f *CheckboxMolecule) LabelAfterInput() *CheckboxMolecule {
+	f.layout = CheckBoxLabelAfterInput
 	return f
 }
