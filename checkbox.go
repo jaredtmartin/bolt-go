@@ -7,13 +7,14 @@ const (
 )
 
 type CheckboxMolecule struct {
-	_id     string
-	label   Element
-	input   Element
-	error   Element
-	check   Element
-	wrapper Element
-	layout  string
+	_id             string
+	label           Element
+	input           Element
+	error           Element
+	check           Element
+	wrapper         Element
+	layout          string
+	customCheckmark bool
 }
 
 func Checkbox(name string, label string) *CheckboxMolecule {
@@ -67,14 +68,17 @@ func (f *CheckboxMolecule) Checked(value ...bool) *CheckboxMolecule {
 	return f
 }
 func (f *CheckboxMolecule) Element() *Element {
+	if !f.customCheckmark {
+		f.check = *NewElement("")
+	}
 	switch f.layout {
 	case CheckBoxLabelWrapsInput:
 		f.label.Children(&f.input)
-		f.wrapper.Children(&f.label, &f.error)
+		f.wrapper.Children(&f.label, &f.check, &f.error)
 	case CheckBoxLabelBeforeInput:
-		f.wrapper.Children(&f.label, &f.input, &f.error)
+		f.wrapper.Children(&f.label, &f.input, &f.check, &f.error)
 	default:
-		f.wrapper.Children(&f.input, &f.label, &f.error)
+		f.wrapper.Children(&f.input, &f.label, &f.check, &f.error)
 	}
 	return &f.wrapper
 }
@@ -111,6 +115,14 @@ func (f *CheckboxMolecule) ErrorStyle(style string) *CheckboxMolecule {
 }
 func (f *CheckboxMolecule) WrapperStyle(style string) *CheckboxMolecule {
 	f.wrapper = *f.wrapper.Style(style)
+	return f
+}
+func (f *CheckboxMolecule) CheckStyle(style string) *CheckboxMolecule {
+	f.check = *f.check.Style(style)
+	return f
+}
+func (f *CheckboxMolecule) CheckClass(class string) *CheckboxMolecule {
+	f.check = *f.check.Class(class)
 	return f
 }
 func (f *CheckboxMolecule) Error(err string) *CheckboxMolecule {
@@ -159,5 +171,13 @@ func (f *CheckboxMolecule) LabelWrapsInput() *CheckboxMolecule {
 }
 func (f *CheckboxMolecule) LabelAfterInput() *CheckboxMolecule {
 	f.layout = CheckBoxLabelAfterInput
+	return f
+}
+func (f *CheckboxMolecule) CustomCheckmark(value ...bool) *CheckboxMolecule {
+	if len(value) > 0 && !value[0] {
+		f.customCheckmark = false
+	} else {
+		f.customCheckmark = true
+	}
 	return f
 }
