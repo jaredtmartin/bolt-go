@@ -1,6 +1,7 @@
 package bolt
 
 import (
+	"net/http"
 	"regexp"
 	"strings"
 
@@ -293,6 +294,10 @@ func (e *Element) Render() string {
 func (e *Element) Send(c *fiber.Ctx) error {
 	c.Set(fiber.HeaderContentType, fiber.MIMETextHTML)
 	return c.SendString(e.Render())
+}
+func (e *Element) Respond(w http.ResponseWriter) {
+	w.Header().Set("Content-Type", "text/html; charset=utf-8")
+	w.Write([]byte(e.Render()))
 }
 func (e *Element) Replace(key string, value string) *Element {
 	html := strings.ReplaceAll(e.children, key, value)
