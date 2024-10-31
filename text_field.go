@@ -315,3 +315,7 @@ func (f *TextFieldMolecule) Swap(value string) *TextFieldMolecule {
 	f.input = *f.input.Swap(value)
 	return f
 }
+func (f *TextFieldMolecule) Textarea() *TextFieldMolecule {
+	f.input = *f.input.Tag("textarea")
+	return f
+}
