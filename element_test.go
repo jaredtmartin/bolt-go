@@ -342,7 +342,7 @@ func TestOob(t *testing.T) {
 func TestVals(t *testing.T) {
 	e := NewElement("div").Vals(`{ "name": "Fred" }`)
 	result := e.Render()
-	expected := "<div hx-vals=\"{ \"name\": \"Fred\" }\"></div>"
+	expected := "<div hx-vals='{ \"name\": \"Fred\" }'></div>"
 	if result != expected {
 		t.Fatalf(`result = %q, expected %q`, result, expected)
 	}

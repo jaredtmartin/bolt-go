@@ -76,7 +76,11 @@ func (e *Element) add_attribute(key string, value string) {
 func (e *Element) get_attributes() string {
 	var attributes []string
 	for key, value := range e.attributes {
-		attributes = append(attributes, key+"=\""+value+"\"")
+		if key == "hx-vals" {
+			attributes = append(attributes, key+"='"+value+"'")
+		} else {
+			attributes = append(attributes, key+"=\""+value+"\"")
+		}
 	}
 	slices.Sort(attributes)
 	if len(e.styles) > 0 {
