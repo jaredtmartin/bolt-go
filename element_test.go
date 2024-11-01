@@ -337,6 +337,17 @@ func TestOob(t *testing.T) {
 	}
 }
 
+// Vals
+
+func TestVals(t *testing.T) {
+	e := NewElement("div").Vals(`{ "name": "Fred" }`)
+	result := e.Render()
+	expected := "<div hx-vals=\"{ \"name\": \"Fred\" }\"></div>"
+	if result != expected {
+		t.Fatalf(`result = %q, expected %q`, result, expected)
+	}
+}
+
 // SwapOob
 
 func TestSwapOob(t *testing.T) {

@@ -232,6 +232,10 @@ func (e *Element) SwapOob(oob string) *Element {
 	e.add_attribute("hx-swap-oob", oob)
 	return e
 }
+func (e *Element) Vals(json string) *Element {
+	e.add_attribute("hx-vals", json)
+	return e
+}
 func (e *Element) PushUrl(pushUrl ...bool) *Element {
 	if len(pushUrl) > 0 {
 		if pushUrl[0] {
