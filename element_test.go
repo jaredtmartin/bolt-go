@@ -188,7 +188,7 @@ func TestDelete(t *testing.T) {
 func TestConfirm(t *testing.T) {
 	e := NewElement("div").Confirm("Are you sure?")
 	result := e.Render()
-	expected := "<div hx-confirm=\"Are you sure?\"></div>"
+	expected := "<div hx-confirm-question=\"Are you sure?\" hx-confirm=\"true\"></div>"
 	if result != expected {
 		t.Fatalf(`result = %q, expected %q`, result, expected)
 	}
@@ -287,7 +287,7 @@ func TestValue(t *testing.T) {
 func TestHref(t *testing.T) {
 	e := NewElement("div").Href("target")
 	result := e.Render()
-	expected := "<div href=\"target\"></div>"
+	expected := "<a href=\"target\"></a>"
 	if result != expected {
 		t.Fatalf(`result = %q, expected %q`, result, expected)
 	}
