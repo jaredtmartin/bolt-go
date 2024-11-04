@@ -51,7 +51,15 @@ func (f *FieldMolecule) Value(value string) *FieldMolecule {
 	return f
 }
 func (f *FieldMolecule) Element() *Element {
+	if f.input.attributes["type"] == "textarea" {
+		value := f.input.attributes["value"]
+		f.input = *f.input.Text(value)
+		f.input = *f.input.Value("")
+	}
 	f.wrapper.Children(&f.label, &f.input, &f.error)
+	if f.label.children == "" {
+		f.wrapper.Children(&f.input, &f.error)
+	}
 	return &f.wrapper
 }
 func (f *FieldMolecule) Render() string {
