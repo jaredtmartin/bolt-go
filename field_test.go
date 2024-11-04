@@ -187,3 +187,13 @@ func TestFieldWrapperStyle(t *testing.T) {
 	result := e.Render()
 	assert.Equalf(t, `<div style="color: red;"><label for="name-field">Hello</label><input id="name-field" name="name" type="text"/><div id="name-field-error"></div></div>`, result, "should match")
 }
+func TestFieldTextarea(t *testing.T) {
+	e := Field("name", "Hello").Value("red\ngreen").Textarea()
+	result := e.Render()
+	assert.Equalf(t, `<div><label for="name-field">Hello</label><textarea id="name-field" name="name" type="text">red`+"\n"+`green</textarea><div id="name-field-error"></div></div>`, result, "should match")
+}
+func TestFieldWithoutLabel(t *testing.T) {
+	e := Field("name", "")
+	result := e.Render()
+	assert.Equalf(t, `<div><input id="name-field" name="name" type="text"/><div id="name-field-error"></div></div>`, result, "should match")
+}

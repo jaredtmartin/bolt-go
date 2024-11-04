@@ -1,6 +1,8 @@
 package bolt
 
-import "strconv"
+import (
+	"strconv"
+)
 
 type FieldMolecule struct {
 	_id     string
@@ -51,10 +53,10 @@ func (f *FieldMolecule) Value(value string) *FieldMolecule {
 	return f
 }
 func (f *FieldMolecule) Element() *Element {
-	if f.input.attributes["type"] == "textarea" {
+	if f.input.tag == "textarea" {
 		value := f.input.attributes["value"]
 		f.input = *f.input.Text(value)
-		f.input = *f.input.Value("")
+		f.input = *f.input.RemoveAttributes("value")
 	}
 	f.wrapper.Children(&f.label, &f.input, &f.error)
 	if f.label.children == "" {

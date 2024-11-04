@@ -1,16 +1,14 @@
 package bolt
 
+import "fmt"
+
 type ListMolecule struct {
 	wrapper   Element
 	renderRow func(interface{}) *Element
 }
 
 func defaultRow(item interface{}) *Element {
-	s, ok := item.(string)
-	if !ok {
-		s = ""
-	}
-	return P(s).Class("w-full")
+	return P(fmt.Sprintf("%v", item))
 }
 func List() *ListMolecule {
 	return &ListMolecule{
@@ -18,7 +16,7 @@ func List() *ListMolecule {
 		renderRow: defaultRow,
 	}
 }
-func (f *ListMolecule) Element(data []interface{}) *Element {
+func (f *ListMolecule) Element(data ...interface{}) *Element {
 	items := []*Element{}
 	for i := 0; i < len(data); i++ {
 		items = append(items, f.renderRow(data[i]))
@@ -26,6 +24,6 @@ func (f *ListMolecule) Element(data []interface{}) *Element {
 	f.wrapper.Children(items...)
 	return &f.wrapper
 }
-func (f *ListMolecule) Render(data []interface{}) string {
-	return f.Element(data).Render()
+func (f *ListMolecule) Render(data ...interface{}) string {
+	return f.Element(data...).Render()
 }
