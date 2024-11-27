@@ -100,7 +100,7 @@ func (f *FieldElement) SetError(e Element) *FieldElement {
 	f.children[FieldError] = e
 	return f
 }
-func (f *FieldElement) Type(tipe string) *FieldElement {
+func (f *FieldElement) Type(tipe string) Element {
 	f.GetInput().Type(tipe)
 	return f
 }
@@ -112,7 +112,7 @@ func (f *FieldElement) Type(tipe string) *FieldElement {
 // 	return f
 // }
 
-func (f *FieldElement) Id(id string) *FieldElement {
+func (f *FieldElement) Id(id string) Element {
 	f.GetInput().Id(id)
 	label := f.GetLabel()
 	if label != nil {
@@ -121,7 +121,7 @@ func (f *FieldElement) Id(id string) *FieldElement {
 	f.GetError().Id(id + "-error")
 	return f
 }
-func (f *FieldElement) Name(name string) *FieldElement {
+func (f *FieldElement) Name(name string) Element {
 	input := f.GetInput()
 	oldName := input.GetAttr("name")
 	log.Printf("oldName: %v\n", oldName)
@@ -135,7 +135,7 @@ func (f *FieldElement) Name(name string) *FieldElement {
 	}
 	return f
 }
-func (f *FieldElement) Value(value string) *FieldElement {
+func (f *FieldElement) Value(value string) Element {
 	f.GetInput().Value(value)
 	return f
 }
@@ -352,7 +352,10 @@ func (f *FieldElement) Error(err string) *FieldElement {
 	f.GetError().Text(err)
 	return f
 }
-func (f *FieldElement) Target(value string) *FieldElement {
+func (f *FieldElement) GetWrapper() Element {
+	return f
+}
+func (f *FieldElement) Target(value string) Element {
 	f.GetInput().Target(value)
 	return f
 }
@@ -376,35 +379,35 @@ func (f *FieldElement) Target(value string) *FieldElement {
 //		f.input = *f.input.PushUrl(pushUrl...)
 //		return f
 //	}
-func (f *FieldElement) Attr(key string, value string) *FieldElement {
-	f.GetInput().Attr(key, value)
-	return f
-}
+// func (f *FieldElement) Attr(key string, value string) *FieldElement {
+// 	f.GetInput().Attr(key, value)
+// 	return f
+// }
 
-func (f *FieldElement) Post(value string) *FieldElement {
+func (f *FieldElement) Post(value string) Element {
 	f.GetInput().Post(value)
 	return f
 }
-func (f *FieldElement) Get(value string) *FieldElement {
+func (f *FieldElement) Get(value string) Element {
 	f.GetInput().Get(value)
 	return f
 }
 
-func (f *FieldElement) Put(value string) *FieldElement {
+func (f *FieldElement) Put(value string) Element {
 	f.GetInput().Put(value)
 	return f
 }
 
-func (f *FieldElement) Patch(value string) *FieldElement {
+func (f *FieldElement) Patch(value string) Element {
 	f.GetInput().Patch(value)
 	return f
 }
 
-func (f *FieldElement) Delete(value string) *FieldElement {
+func (f *FieldElement) Delete(value string) Element {
 	f.GetInput().Delete(value)
 	return f
 }
-func (f *FieldElement) Swap(value string) *FieldElement {
+func (f *FieldElement) Swap(value string) Element {
 	f.GetInput().Swap(value)
 	return f
 }
