@@ -100,17 +100,19 @@ func (f *FieldElement) SetError(e Element) *FieldElement {
 	f.children[FieldError] = e
 	return f
 }
-func (f *FieldElement) Type(tipe string) Element {
+func (f *FieldElement) Type(tipe string) *FieldElement {
 	f.GetInput().Type(tipe)
 	return f
 }
+
+// func (f *FieldElement) Class
 
 // func (f *FieldElement) Label(label string) Element {
 // 	f.label = *f.label.Text(label)
 // 	return f
 // }
 
-func (f *FieldElement) Id(id string) Element {
+func (f *FieldElement) Id(id string) *FieldElement {
 	f.GetInput().Id(id)
 	label := f.GetLabel()
 	if label != nil {
@@ -119,7 +121,7 @@ func (f *FieldElement) Id(id string) Element {
 	f.GetError().Id(id + "-error")
 	return f
 }
-func (f *FieldElement) Name(name string) Element {
+func (f *FieldElement) Name(name string) *FieldElement {
 	input := f.GetInput()
 	oldName := input.GetAttr("name")
 	log.Printf("oldName: %v\n", oldName)
@@ -133,11 +135,11 @@ func (f *FieldElement) Name(name string) Element {
 	}
 	return f
 }
-func (f *FieldElement) Value(value string) Element {
+func (f *FieldElement) Value(value string) *FieldElement {
 	f.GetInput().Value(value)
 	return f
 }
-func (f *FieldElement) Required(required ...bool) Element {
+func (f *FieldElement) Required(required ...bool) *FieldElement {
 	if len(required) > 0 && !required[0] {
 		f.GetInput().RemoveAttr("required").RemoveAttr("onblur")
 	} else {
@@ -145,7 +147,7 @@ func (f *FieldElement) Required(required ...bool) Element {
 	}
 	return f
 }
-func (f *FieldElement) Email(is_email ...bool) Element {
+func (f *FieldElement) Email(is_email ...bool) *FieldElement {
 	if len(is_email) > 0 && !is_email[0] {
 		f.GetInput().Type("text")
 	} else {
@@ -346,11 +348,11 @@ func (f *FieldElement) Email(is_email ...bool) Element {
 //		f.input = *f.input.Attr("step", step)
 //		return f
 //	}
-func (f *FieldElement) Error(err string) Element {
+func (f *FieldElement) Error(err string) *FieldElement {
 	f.GetError().Text(err)
 	return f
 }
-func (f *FieldElement) Target(value string) Element {
+func (f *FieldElement) Target(value string) *FieldElement {
 	f.GetInput().Target(value)
 	return f
 }
@@ -374,35 +376,35 @@ func (f *FieldElement) Target(value string) Element {
 //		f.input = *f.input.PushUrl(pushUrl...)
 //		return f
 //	}
-func (f *FieldElement) Attr(key string, value string) Element {
+func (f *FieldElement) Attr(key string, value string) *FieldElement {
 	f.GetInput().Attr(key, value)
 	return f
 }
 
-func (f *FieldElement) Post(value string) Element {
+func (f *FieldElement) Post(value string) *FieldElement {
 	f.GetInput().Post(value)
 	return f
 }
-func (f *FieldElement) Get(value string) Element {
+func (f *FieldElement) Get(value string) *FieldElement {
 	f.GetInput().Get(value)
 	return f
 }
 
-func (f *FieldElement) Put(value string) Element {
+func (f *FieldElement) Put(value string) *FieldElement {
 	f.GetInput().Put(value)
 	return f
 }
 
-func (f *FieldElement) Patch(value string) Element {
+func (f *FieldElement) Patch(value string) *FieldElement {
 	f.GetInput().Patch(value)
 	return f
 }
 
-func (f *FieldElement) Delete(value string) Element {
+func (f *FieldElement) Delete(value string) *FieldElement {
 	f.GetInput().Delete(value)
 	return f
 }
-func (f *FieldElement) Swap(value string) Element {
+func (f *FieldElement) Swap(value string) *FieldElement {
 	f.GetInput().Swap(value)
 	return f
 }
