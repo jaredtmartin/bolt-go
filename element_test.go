@@ -32,7 +32,7 @@ func TestRenderNullElement(t *testing.T) {
 }
 func TestRemoveClasses(t *testing.T) {
 	e := NewElement("div").Class("red green blue yellow")
-	e.RemoveClasses("green yellow")
+	e.RemoveClass("green yellow")
 	result := e.Render()
 	expected := "<div class=\"blue red\"></div>"
 	if result != expected {
@@ -109,18 +109,18 @@ func TestPuttingItAllTogether(t *testing.T) {
 		t.Fatalf(`Text() = %q, expected %q`, result, expected)
 	}
 }
-func TestRemoveStyles(t *testing.T) {
+func TestRemoveStyle(t *testing.T) {
 	e := NewElement("div").Style("color: red; background: green;")
-	e.RemoveStyles("color")
+	e.RemoveStyle("color")
 	result := e.Render()
 	expected := "<div style=\"background: green;\"></div>"
 	if result != expected {
 		t.Fatalf(`result = %q, expected %q`, result, expected)
 	}
 }
-func TestRemoveAttributes(t *testing.T) {
+func TestRemoveAttr(t *testing.T) {
 	e := NewElement("div").Attr("hx-boost", "true").Attr("id", "input")
-	e.RemoveAttributes("hx-boost")
+	e.RemoveAttr("hx-boost")
 	result := e.Render()
 	expected := "<div id=\"input\"></div>"
 	if result != expected {
