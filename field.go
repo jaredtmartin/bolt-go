@@ -21,6 +21,15 @@ const (
 	FieldOptions
 )
 
+func GetOptionLabel(value string, options []Option) string {
+	for _, v := range options {
+		if v.Value == value {
+			return v.Label
+		}
+	}
+	return ""
+}
+
 type Option struct {
 	Label string
 	Value string
