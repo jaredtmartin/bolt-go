@@ -1,6 +1,8 @@
 package bolt
 
-import "log"
+import (
+	"log"
+)
 
 //	type FieldElement struct {
 //		_id     string
@@ -16,8 +18,13 @@ const (
 	FieldInput
 	FieldError
 	FieldCheck
+	FieldOptions
 )
 
+type Option struct {
+	Label string
+	Value string
+}
 type FieldElement struct {
 	DefaultElement
 }
@@ -46,6 +53,23 @@ func Checkbox(name string, label string) *FieldElement {
 	field := Field(name, label)
 	field.GetInput().Type("checkbox")
 	field.children[FieldCheck] = Span("")
+	return field
+}
+func defaultRenderOption(opt Option) Element {
+	return NewElement("option").Value(opt.Value).Text(opt.Label)
+}
+func Select(name string, label string, options []Option, renderOption ...func(Option) Element) *FieldElement {
+	var renderOpt func(Option) Element
+	if len(renderOption) == 0 {
+		renderOpt = defaultRenderOption
+	} else {
+		renderOpt = renderOption[0]
+	}
+	field := Field(name, label)
+	input := field.GetInput().Tag("select").RemoveAttr("type")
+	for i := 0; i < len(options); i++ {
+		input.AddChild(renderOpt(options[i]))
+	}
 	return field
 }
 func (f *FieldElement) Checked(value ...bool) *FieldElement {
