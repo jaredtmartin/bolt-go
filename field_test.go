@@ -189,7 +189,30 @@ func TestSelectWithDefaultOptionRenderer(t *testing.T) {
 		{Label: "Green", Value: "green"},
 		{Label: "Blue", Value: "blue"},
 	}
-	field := Select("color", "Color", opts)
+	field := Select("color", "Color", "red", opts)
+	result := field.Render()
+	assert.Equalf(t, `<div><label for="color-field">Color</label><select id="color-field" name="color"><option selected="true" value="red">Red</option><option value="green">Green</option><option value="blue">Blue</option></select><div id="color-field-error"></div></div>`, result, "should match")
+}
+func TestSelectWithCustomOptionRenderer(t *testing.T) {
+	opts := []Option{
+		{Label: "Red", Value: "red"},
+		{Label: "Green", Value: "green"},
+		{Label: "Blue", Value: "blue"},
+	}
+	renderOpt := func(opt Option, value string) Element {
+		return Div().Text(opt.Label)
+	}
+	field := Select("color", "Color", "red", opts, renderOpt)
+	result := field.Render()
+	assert.Equalf(t, `<div><label for="color-field">Color</label><select id="color-field" name="color"><div>Red</div><div>Green</div><div>Blue</div></select><div id="color-field-error"></div></div>`, result, "should match")
+}
+func TestSelectWithNoValue(t *testing.T) {
+	opts := []Option{
+		{Label: "Red", Value: "red"},
+		{Label: "Green", Value: "green"},
+		{Label: "Blue", Value: "blue"},
+	}
+	field := Select("color", "Color", "", opts)
 	result := field.Render()
 	assert.Equalf(t, `<div><label for="color-field">Color</label><select id="color-field" name="color"><option value="red">Red</option><option value="green">Green</option><option value="blue">Blue</option></select><div id="color-field-error"></div></div>`, result, "should match")
 }

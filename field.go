@@ -55,11 +55,15 @@ func Checkbox(name string, label string) *FieldElement {
 	field.children[FieldCheck] = Span("")
 	return field
 }
-func defaultRenderOption(opt Option) Element {
-	return NewElement("option").Value(opt.Value).Text(opt.Label)
+func defaultRenderOption(opt Option, value string) Element {
+	item := NewElement("option").Value(opt.Value).Text(opt.Label)
+	if value == opt.Value {
+		item.Attr("selected", "true")
+	}
+	return item
 }
-func Select(name string, label string, options []Option, renderOption ...func(Option) Element) *FieldElement {
-	var renderOpt func(Option) Element
+func Select(name string, label string, value string, options []Option, renderOption ...func(Option, string) Element) *FieldElement {
+	var renderOpt func(Option, string) Element
 	if len(renderOption) == 0 {
 		renderOpt = defaultRenderOption
 	} else {
@@ -68,7 +72,7 @@ func Select(name string, label string, options []Option, renderOption ...func(Op
 	field := Field(name, label)
 	input := field.GetInput().Tag("select").RemoveAttr("type")
 	for i := 0; i < len(options); i++ {
-		input.AddChild(renderOpt(options[i]))
+		input.AddChild(renderOpt(options[i], value))
 	}
 	return field
 }
