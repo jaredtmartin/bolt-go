@@ -15,7 +15,7 @@ func TestNewList(t *testing.T) {
 	assert.Equalf(t, `<div><p>apple</p><p>bear</p><p>coffee</p></div>`, result, "should match")
 }
 func TestNewListWithRenderRow(t *testing.T) {
-	renderRow := func(item string) Element {
+	renderRow := func(item string, idx int) Element {
 		return Div().Text(fmt.Sprintf("%v", item))
 	}
 	l := List([]string{"apple", "bear", "coffee"}, renderRow)
