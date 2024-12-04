@@ -128,35 +128,37 @@ func TestFieldId(t *testing.T) {
 // 	assert.Equalf(t, `<div><label for="name-field">Hello</label><input id="name-field" name="name" type="text"/><div id="name-field-error"></div></div>`, result, "should match")
 // }
 
-// func TestFieldEmail(t *testing.T) {
-// 	e := Field("name", "Hello").Email()
-// 	result := e.Render()
+func TestFieldEmail(t *testing.T) {
+	e := Field("name", "Hello", "").Email()
+	result := e.Render()
 
-// 	assert.Equalf(t, `<div><label for="name-field">Hello</label><input id="name-field" name="name" type="email"/><div id="name-field-error"></div></div>`, result, "should match")
-// }
-// func TestFieldEmailFalse(t *testing.T) {
-// 	e := Field("name", "Hello").Email(true).Email(false)
-// 	result := e.Render()
-// 	assert.Equalf(t, `<div><label for="name-field">Hello</label><input id="name-field" name="name" type="text"/><div id="name-field-error"></div></div>`, result, "should match")
-// }
+	assert.Equalf(t, `<div><label for="name-field">Hello</label><input id="name-field" name="name" type="email"/><div id="name-field-error"></div></div>`, result, "should match")
+}
 
-// func TestFieldPassword(t *testing.T) {
-// 	e := Field("name", "Hello").Password()
-// 	result := e.Render()
-// 	assert.Equalf(t, `<div><label for="name-field">Hello</label><input id="name-field" name="name" type="password"/><div id="name-field-error"></div></div>`, result, "should match")
-// }
+func TestFieldEmailFalse(t *testing.T) {
+	e := Field("name", "Hello", "").Email(true).Email(false)
+	result := e.Render()
+	assert.Equalf(t, `<div><label for="name-field">Hello</label><input id="name-field" name="name" type="text"/><div id="name-field-error"></div></div>`, result, "should match")
+}
 
-// func TestFieldError(t *testing.T) {
-// 	e := Field("name", "Hello").Error("hello")
-// 	result := e.Render()
-// 	assert.Equalf(t, `<div><label for="name-field">Hello</label><input id="name-field" name="name" type="text"/><div id="name-field-error">hello</div></div>`, result, "should match")
-// }
+func TestFieldPassword(t *testing.T) {
+	e := Field("name", "Hello", "").Password()
+	result := e.Render()
+	assert.Equalf(t, `<div><label for="name-field">Hello</label><input id="name-field" name="name" type="password"/><div id="name-field-error"></div></div>`, result, "should match")
+}
+
+func TestFieldError(t *testing.T) {
+	e := Field("name", "Hello", "").Error("hello")
+	result := e.Render()
+	assert.Equalf(t, `<div><label for="name-field">Hello</label><input id="name-field" name="name" type="text"/><div id="name-field-error">hello</div></div>`, result, "should match")
+}
 
 // func TestFieldPost(t *testing.T) {
-// 	e := Field("name", "Hello").Post("/url")
+// 	e := Field("name", "Hello", "").Post("/url")
 // 	result := e.Render()
 // 	assert.Equalf(t, `<div><label for="name-field">Hello</label><input hx-post="/url" id="name-field" name="name" type="text"/><div id="name-field-error"></div></div>`, result, "should match")
 // }
+
 // func TestFieldLabel(t *testing.T) {
 // 	e := Field("name", "Hello").Label("hello")
 // 	result := e.Render()

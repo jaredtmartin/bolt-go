@@ -194,6 +194,14 @@ func (f *FieldElement) Email(is_email ...bool) *FieldElement {
 	}
 	return f
 }
+func (f *FieldElement) Password(is_password ...bool) *FieldElement {
+	if len(is_password) > 0 && !is_password[0] {
+		f.GetInput().Type("text")
+	} else {
+		f.GetInput().Type("password")
+	}
+	return f
+}
 
 // func (e *DefaultElement) Debug(prefix ...string) *FieldElement {
 // 	s := ""
