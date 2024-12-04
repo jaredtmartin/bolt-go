@@ -72,10 +72,8 @@ func defaultRenderOption(opt Option, value string) Element {
 	return item
 }
 func Select(name string, label string, value string, options []Option, renderOption ...func(Option, string) Element) *FieldElement {
-	var renderOpt func(Option, string) Element
-	if len(renderOption) == 0 {
-		renderOpt = defaultRenderOption
-	} else {
+	renderOpt := defaultRenderOption
+	if len(renderOption) > 0 {
 		renderOpt = renderOption[0]
 	}
 	field := Field(name, label)

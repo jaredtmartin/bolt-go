@@ -1,6 +1,7 @@
 package bolt
 
 import (
+	"fmt"
 	"log"
 	"net/http"
 	"regexp"
@@ -64,6 +65,7 @@ type Element interface {
 	Vals(json string) Element
 	PushUrl(pushUrl ...bool) Element
 	Boost(boost ...bool) Element
+	On(event string, value string) Element
 
 	Respond(w http.ResponseWriter)
 	Debug(prefix ...string) Element
@@ -399,6 +401,10 @@ func (e *DefaultElement) Boost(boost ...bool) Element {
 	} else {
 		e.add_attribute("hx-boost", "true")
 	}
+	return e
+}
+func (e *DefaultElement) On(event string, script string) Element {
+	e.add_attribute(fmt.Sprintf("hx-on:%s", event), script)
 	return e
 }
 

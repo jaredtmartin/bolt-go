@@ -336,6 +336,14 @@ func TestOob(t *testing.T) {
 		t.Fatalf(`result = %q, expected %q`, result, expected)
 	}
 }
+func TestOn(t *testing.T) {
+	e := NewElement("div").On("click", `console.log('Hello')`)
+	result := e.Render()
+	expected := `<div hx-on:click="console.log('Hello')"></div>`
+	if result != expected {
+		t.Fatalf(`result = %q, expected %q`, result, expected)
+	}
+}
 
 // Vals
 
