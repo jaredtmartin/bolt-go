@@ -41,7 +41,7 @@ type FieldElement struct {
 func createLabelElement(label string, id string) Element {
 	return Label(label).Attr("for", id)
 }
-func Field(name string, label string) *FieldElement {
+func Field(name string, label string, value string) *FieldElement {
 	id := name + "-field"
 	field := &FieldElement{DefaultElement: NewDefaultElement("div")}
 	var labelElement Element
@@ -50,16 +50,20 @@ func Field(name string, label string) *FieldElement {
 	if label != "" {
 		labelElement = createLabelElement(label, id)
 	}
+	inputElement := Input(name).Type("text").Id(id)
+	if value != "" {
+		inputElement.Value(value)
+	}
 	field.Children(
 		labelElement,
-		Input(name).Type("text").Id(id),
+		inputElement,
 		Div().Id(id+"-error"),
 		checkElement,
 	)
 	return field
 }
 func Checkbox(name string, label string) *FieldElement {
-	field := Field(name, label)
+	field := Field(name, label, "")
 	field.GetInput().Type("checkbox")
 	field.children[FieldCheck] = Span("")
 	return field
@@ -76,7 +80,7 @@ func Select(name string, label string, value string, options []Option, renderOpt
 	if len(renderOption) > 0 {
 		renderOpt = renderOption[0]
 	}
-	field := Field(name, label)
+	field := Field(name, label, "")
 	input := field.GetInput().Tag("select").RemoveAttr("type")
 	for i := 0; i < len(options); i++ {
 		input.AddChild(renderOpt(options[i], value))

@@ -9,18 +9,18 @@ import (
 // TestHelloName calls greetings.Hello with a name, checking
 // for a valid return value.
 func TestNewField(t *testing.T) {
-	e := Field("name", "Hello")
+	e := Field("name", "Hello", "")
 	result := e.Render()
 	assert.Equalf(t, `<div><label for="name-field">Hello</label><input id="name-field" name="name" type="text"/><div id="name-field-error"></div></div>`, result, "should match")
 }
 func TestNewFieldWithoutLabel(t *testing.T) {
-	e := Field("name", "")
+	e := Field("name", "", "")
 	result := e.Render()
 	assert.Equalf(t, `<div><input id="name-field" name="name" type="text"/><div id="name-field-error"></div></div>`, result, "should match")
 }
 
 func TestAddLabelToFieldLater(t *testing.T) {
-	e := Field("name", "")
+	e := Field("name", "", "")
 	result := e.Render()
 	assert.Equalf(t, `<div><input id="name-field" name="name" type="text"/><div id="name-field-error"></div></div>`, result, "should match")
 	e.Label("Blue")
@@ -30,7 +30,7 @@ func TestAddLabelToFieldLater(t *testing.T) {
 	assert.Equalf(t, `<div><label for="name-field">Blue</label><input id="name-field" name="name" type="text"/><div id="name-field-error"></div></div>`, result, "should match")
 }
 func TestRemoveLabelFromFieldLater(t *testing.T) {
-	e := Field("name", "Blue")
+	e := Field("name", "Blue", "")
 	result := e.Render()
 	assert.Equalf(t, `<div><label for="name-field">Blue</label><input id="name-field" name="name" type="text"/><div id="name-field-error"></div></div>`, result, "should match")
 	e.Label("")
@@ -40,48 +40,51 @@ func TestRemoveLabelFromFieldLater(t *testing.T) {
 	assert.Equalf(t, `<div><input id="name-field" name="name" type="text"/><div id="name-field-error"></div></div>`, result, "should match")
 }
 func TestFieldAttr(t *testing.T) {
-	e := Field("name", "Hello")
+	e := Field("name", "Hello", "")
 	e.GetInput().Attr("hx-post", "/url")
 	result := e.Render()
 	assert.Equalf(t, `<div><label for="name-field">Hello</label><input hx-post="/url" id="name-field" name="name" type="text"/><div id="name-field-error"></div></div>`, result, "should match")
 }
 func TestFieldValue(t *testing.T) {
-	e := Field("name", "Hello").Value("hello")
+	e := Field("name", "Hello", "first")
 	result := e.Render()
+	assert.Equalf(t, `<div><label for="name-field">Hello</label><input id="name-field" name="name" type="text" value="first"/><div id="name-field-error"></div></div>`, result, "should match")
+	e.Value("hello")
+	result = e.Render()
 	assert.Equalf(t, `<div><label for="name-field">Hello</label><input id="name-field" name="name" type="text" value="hello"/><div id="name-field-error"></div></div>`, result, "should match")
 }
 func TestFieldTarget(t *testing.T) {
-	e := Field("name", "Hello").Target("hello")
+	e := Field("name", "Hello", "").Target("hello")
 	result := e.Render()
 	assert.Equalf(t, `<div><label for="name-field">Hello</label><input hx-target="hello" id="name-field" name="name" type="text"/><div id="name-field-error"></div></div>`, result, "should match")
 }
 func TestFieldSwap(t *testing.T) {
-	e := Field("name", "Hello").Swap("hello")
+	e := Field("name", "Hello", "").Swap("hello")
 	result := e.Render()
 	assert.Equalf(t, `<div><label for="name-field">Hello</label><input hx-swap="hello" id="name-field" name="name" type="text"/><div id="name-field-error"></div></div>`, result, "should match")
 }
 func TestFieldType(t *testing.T) {
-	e := Field("name", "Hello").Type("email")
+	e := Field("name", "Hello", "").Type("email")
 	result := e.Render()
 	assert.Equalf(t, `<div><label for="name-field">Hello</label><input id="name-field" name="name" type="email"/><div id="name-field-error"></div></div>`, result, "should match")
 }
 func TestFieldName(t *testing.T) {
-	e := Field("name", "Hello").Name("name")
+	e := Field("name", "Hello", "").Name("name")
 	result := e.Render()
 	assert.Equalf(t, `<div><label for="name-field">Hello</label><input id="name-field" name="name" type="text"/><div id="name-field-error"></div></div>`, result, "should match")
 }
 func TestFieldNameExistingId(t *testing.T) {
-	e := Field("name", "Hello").Id("sup").Name("name")
+	e := Field("name", "Hello", "").Id("sup").Name("name")
 	result := e.Render()
 	assert.Equalf(t, `<div><label for="sup">Hello</label><input id="sup" name="name" type="text"/><div id="sup-error"></div></div>`, result, "should match")
 }
 func TestFieldLabel(t *testing.T) {
-	e := Field("name", "Hello").Label("Green")
+	e := Field("name", "Hello", "").Label("Green")
 	result := e.Render()
 	assert.Equalf(t, `<div><label for="name-field">Green</label><input id="name-field" name="name" type="text"/><div id="name-field-error"></div></div>`, result, "should match")
 }
 func TestFieldId(t *testing.T) {
-	e := Field("name", "Hello").Id("name")
+	e := Field("name", "Hello", "").Id("name")
 	result := e.Render()
 	assert.Equalf(t, `<div><label for="name">Hello</label><input id="name" name="name" type="text"/><div id="name-error"></div></div>`, result, "should match")
 }
@@ -161,25 +164,25 @@ func TestFieldId(t *testing.T) {
 // }
 
 func TestFieldGet(t *testing.T) {
-	e := Field("name", "Hello").Get("/url")
+	e := Field("name", "Hello", "").Get("/url")
 	result := e.Render()
 	assert.Equalf(t, `<div><label for="name-field">Hello</label><input hx-get="/url" id="name-field" name="name" type="text"/><div id="name-field-error"></div></div>`, result, "should match")
 }
 
 func TestFieldPut(t *testing.T) {
-	e := Field("name", "Hello").Put("/url")
+	e := Field("name", "Hello", "").Put("/url")
 	result := e.Render()
 	assert.Equalf(t, `<div><label for="name-field">Hello</label><input hx-put="/url" id="name-field" name="name" type="text"/><div id="name-field-error"></div></div>`, result, "should match")
 }
 
 func TestFieldPatch(t *testing.T) {
-	e := Field("name", "Hello").Patch("/url")
+	e := Field("name", "Hello", "").Patch("/url")
 	result := e.Render()
 	assert.Equalf(t, `<div><label for="name-field">Hello</label><input hx-patch="/url" id="name-field" name="name" type="text"/><div id="name-field-error"></div></div>`, result, "should match")
 }
 
 func TestFieldDelete(t *testing.T) {
-	e := Field("name", "Hello").Delete("/url")
+	e := Field("name", "Hello", "").Delete("/url")
 	result := e.Render()
 	assert.Equalf(t, `<div><label for="name-field">Hello</label><input hx-delete="/url" id="name-field" name="name" type="text"/><div id="name-field-error"></div></div>`, result, "should match")
 }
