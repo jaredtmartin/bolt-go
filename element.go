@@ -67,7 +67,7 @@ type Element interface {
 	Boost(boost ...bool) Element
 	On(event string, value string) Element
 
-	Respond(w http.ResponseWriter)
+	Send(w http.ResponseWriter)
 	Debug(prefix ...string) Element
 }
 
@@ -440,7 +440,7 @@ func (e *DefaultElement) Render() string {
 //		c.Set(fiber.HeaderContentType, fiber.MIMETextHTML)
 //		return c.SendString(e.Render())
 //	}
-func (e *DefaultElement) Respond(w http.ResponseWriter) {
+func (e *DefaultElement) Send(w http.ResponseWriter) {
 	w.Header().Set("Content-Type", "text/html; charset=utf-8")
 	w.Write([]byte(e.Render()))
 }
