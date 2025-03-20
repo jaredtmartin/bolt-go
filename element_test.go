@@ -25,7 +25,14 @@ func TestRender(t *testing.T) {
 }
 func TestRenderNullElement(t *testing.T) {
 	result := NewElement("img").Render()
-	expected := "<img/>"
+	expected := "<img>"
+	if result != expected {
+		t.Fatalf(`result = %q, expected %q`, result, expected)
+	}
+}
+func TestLink(t *testing.T) {
+	result := NewElement("link").Render()
+	expected := "<link>"
 	if result != expected {
 		t.Fatalf(`result = %q, expected %q`, result, expected)
 	}
@@ -242,6 +249,17 @@ func TestId(t *testing.T) {
 
 func TestName(t *testing.T) {
 	e := NewElement("div").Name("target")
+	result := e.Render()
+	expected := "<div name=\"target\"></div>"
+	if result != expected {
+		t.Fatalf(`result = %q, expected %q`, result, expected)
+	}
+}
+
+// For
+
+func TestFor(t *testing.T) {
+	e := NewElement("div").For("target")
 	result := e.Render()
 	expected := "<div name=\"target\"></div>"
 	if result != expected {

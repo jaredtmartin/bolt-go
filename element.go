@@ -51,6 +51,7 @@ type Element interface {
 	Select(value string) Element
 	Id(value string) Element
 	Name(name string) Element
+	For(name string) Element
 	Type(tipe string) Element
 	Submit() Element
 	Src(src string) Element
@@ -68,6 +69,7 @@ type Element interface {
 	On(event string, value string) Element
 
 	Send(w http.ResponseWriter)
+	Redirect(url string, w http.ResponseWriter)
 	Debug(prefix ...string) Element
 }
 
@@ -330,6 +332,10 @@ func (e *DefaultElement) Name(name string) Element {
 	e.add_attribute("name", name)
 	return e
 }
+func (e *DefaultElement) For(value string) Element {
+	e.add_attribute("for", value)
+	return e
+}
 func (e *DefaultElement) Type(tipe string) Element {
 	e.add_attribute("type", tipe)
 	return e
@@ -429,7 +435,7 @@ func (e *DefaultElement) Render() string {
 		attr = " " + attr
 	}
 	if is_null_element(e.tag) {
-		return "<" + e.tag + attr + "/>"
+		return "<" + e.tag + attr + ">"
 	}
 	return "<" + e.tag + attr + ">" + children + "</" + e.tag + ">"
 }
@@ -442,6 +448,11 @@ func (e *DefaultElement) Render() string {
 //	}
 func (e *DefaultElement) Send(w http.ResponseWriter) {
 	w.Header().Set("Content-Type", "text/html; charset=utf-8")
+	w.Write([]byte(e.Render()))
+}
+func (e *DefaultElement) Redirect(url string, w http.ResponseWriter) {
+	w.Header().Set("Content-Type", "text/html; charset=utf-8")
+	w.Header().Set("HX-Location", url)
 	w.Write([]byte(e.Render()))
 }
 
