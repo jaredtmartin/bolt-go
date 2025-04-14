@@ -6,8 +6,12 @@ import (
 	"strconv"
 )
 
-func Div(children ...Element) Element {
-	return NewElement("div").Children(children...)
+func Div(class string, children ...Element) Element {
+	e := NewElement("div").Children(children...)
+	if class != "" {
+		e.Class(class)
+	}
+	return e
 }
 func Img(src string) Element {
 	return NewElement("img").Src(src)

@@ -57,7 +57,7 @@ func Field(name string, label string, value string) *FieldElement {
 	field.Children(
 		labelElement,
 		inputElement,
-		Div().Id(id+"-error"),
+		Div("").Id(id+"-error"),
 		checkElement,
 	)
 	return field

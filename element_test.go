@@ -261,7 +261,7 @@ func TestName(t *testing.T) {
 func TestFor(t *testing.T) {
 	e := NewElement("div").For("target")
 	result := e.Render()
-	expected := "<div name=\"target\"></div>"
+	expected := "<div for=\"target\"></div>"
 	if result != expected {
 		t.Fatalf(`result = %q, expected %q`, result, expected)
 	}

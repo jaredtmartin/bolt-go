@@ -12,7 +12,7 @@ func List[T any](data []T, rowFunc ...func(T, int) Element) Element {
 	} else {
 		row = rowFunc[0]
 	}
-	list := Div()
+	list := Div("")
 	for i := 0; i < len(data); i++ {
 		list.AddChild(row(data[i], i))
 	}

@@ -16,7 +16,7 @@ func TestNewList(t *testing.T) {
 }
 func TestNewListWithRenderRow(t *testing.T) {
 	renderRow := func(item string, idx int) Element {
-		return Div().Text(fmt.Sprintf("%v", item))
+		return Div("").Text(fmt.Sprintf("%v", item))
 	}
 	l := List([]string{"apple", "bear", "coffee"}, renderRow)
 	result := l.Render()
