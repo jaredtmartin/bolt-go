@@ -13,7 +13,7 @@ func TestNewCheckbox(t *testing.T) {
 	e := Checkbox("name", "Hello")
 	log.Printf("e: %v\n", e)
 	result := e.Render()
-	assert.Equalf(t, `<div><label for="name-field">Hello</label><input id="name-field" name="name" type="checkbox"/><div id="name-field-error"></div><span></span></div>`, result, "should match")
+	assert.Equalf(t, `<div><label for="name-field">Hello</label><input id="name-field" name="name" type="checkbox"><div id="name-field-error"></div><span></span></div>`, result, "should match")
 }
 func TestCheckboxAttr(t *testing.T) {
 	e := Checkbox("name", "Hello")

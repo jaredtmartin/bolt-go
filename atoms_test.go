@@ -89,7 +89,7 @@ func TestH6(t *testing.T) {
 func TestImg(t *testing.T) {
 	e := Img("src")
 	result := e.Render()
-	expected := "<img src=\"src\"/>"
+	expected := "<img src=\"src\">"
 	if result != expected {
 		t.Fatalf(`Img() = %q, expected %q`, result, expected)
 	}
@@ -119,7 +119,7 @@ func TestLabel(t *testing.T) {
 func TestInput(t *testing.T) {
 	e := Input("first_name")
 	result := e.Render()
-	expected := "<input name=\"first_name\" type=\"text\"/>"
+	expected := "<input name=\"first_name\" type=\"text\">"
 	if result != expected {
 		t.Fatalf(`Input() = %q, expected %q`, result, expected)
 	}
@@ -129,7 +129,7 @@ func TestInput(t *testing.T) {
 func TestForm(t *testing.T) {
 	e := Form().Children(Input("name"))
 	result := e.Render()
-	expected := "<form><input name=\"name\" type=\"text\"/></form>"
+	expected := "<form><input name=\"name\" type=\"text\"></form>"
 	if result != expected {
 		t.Fatalf(`Form() = %q, expected %q`, result, expected)
 	}

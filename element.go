@@ -69,7 +69,7 @@ type Element interface {
 	On(event string, value string) Element
 
 	Send(w http.ResponseWriter)
-	Redirect(url string, w http.ResponseWriter)
+	// Redirect(w http.ResponseWriter, url string)
 	Debug(prefix ...string) Element
 }
 
@@ -448,11 +448,6 @@ func (e *DefaultElement) Render() string {
 //	}
 func (e *DefaultElement) Send(w http.ResponseWriter) {
 	w.Header().Set("Content-Type", "text/html; charset=utf-8")
-	w.Write([]byte(e.Render()))
-}
-func (e *DefaultElement) Redirect(url string, w http.ResponseWriter) {
-	w.Header().Set("Content-Type", "text/html; charset=utf-8")
-	w.Header().Set("HX-Location", url)
 	w.Write([]byte(e.Render()))
 }
 
