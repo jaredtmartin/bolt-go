@@ -166,7 +166,7 @@ func TestFragment(t *testing.T) {
 }
 
 // Html
-func TestHtml(t *testing.T) {
+func TestUnsafeHtmlElement(t *testing.T) {
 	e := Html("<div>Hello</div>")
 	result := e.Render()
 	expected := "<div>Hello</div>"

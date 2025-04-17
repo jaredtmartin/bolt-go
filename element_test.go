@@ -22,6 +22,12 @@ func TestRender(t *testing.T) {
 	if result != expected {
 		t.Fatalf(`result = %q, expected %q`, result, expected)
 	}
+	// Make sure unsafe HTML characters are escaped
+	result = NewElement("script").Text("<script>alert('hello')</script>").Render()
+	expected = "<script>&lt;script&gt;alert('hello')&lt;/script&gt;</script>"
+	if result != expected {
+		t.Fatalf(`result = %q, expected %q`, result, expected)
+	}
 }
 func TestRenderNullElement(t *testing.T) {
 	result := NewElement("img").Render()
@@ -368,7 +374,7 @@ func TestOn(t *testing.T) {
 func TestVals(t *testing.T) {
 	e := NewElement("div").Vals(`{ "name": "Fred" }`)
 	result := e.Render()
-	expected := "<div hx-vals='{ \"name\": \"Fred\" }'></div>"
+	expected := "<div hx-vals=\"{ &quot;name&quot;: &quot;Fred&quot; }\"></div>"
 	if result != expected {
 		t.Fatalf(`result = %q, expected %q`, result, expected)
 	}
@@ -460,7 +466,110 @@ func TestHasClass(t *testing.T) {
 // 		log.Fatalln(err)
 // 	}
 
-// 	body := string(b)
-// 	assert.Equalf(t, "<div class=\"blue green red\"></div>", body, "should get valid body")
-// 	assert.Equalf(t, "text/html", resp.Header.Get("Content-Type"), "should get html")
-// }
+//		body := string(b)
+//		assert.Equalf(t, "<div class=\"blue green red\"></div>", body, "should get valid body")
+//		assert.Equalf(t, "text/html", resp.Header.Get("Content-Type"), "should get html")
+//	}
+func TestXData(t *testing.T) {
+	e := NewElement("div").XData("{count: 0}")
+	result := e.Render()
+	expected := "<div x-data=\"{count: 0}\"></div>"
+	if result != expected {
+		t.Fatalf(`result = %q, expected %q`, result, expected)
+	}
+}
+func TestClick(t *testing.T) {
+	e := NewElement("div").Click("increment()")
+	result := e.Render()
+	expected := "<div @click=\"increment()\"></div>"
+	if result != expected {
+		t.Fatalf(`result = %q, expected %q`, result, expected)
+	}
+}
+func TestXBind(t *testing.T) {
+	e := NewElement("div").XBind("class", "isActive ? 'active' : ''")
+	result := e.Render()
+	expected := "<div x-bind:class=\"isActive ? 'active' : ''\"></div>"
+	if result != expected {
+		t.Fatalf(`result = %q, expected %q`, result, expected)
+	}
+}
+func TestXOn(t *testing.T) {
+	e := NewElement("div").XOn("click", "handleClick()")
+	result := e.Render()
+	expected := "<div x-on:click=\"handleClick()\"></div>"
+	if result != expected {
+		t.Fatalf(`result = %q, expected %q`, result, expected)
+	}
+}
+func TestXText(t *testing.T) {
+	e := NewElement("div").XText("count")
+	result := e.Render()
+	expected := "<div x-text=\"count\"></div>"
+	if result != expected {
+		t.Fatalf(`result = %q, expected %q`, result, expected)
+	}
+}
+func TestXHtml(t *testing.T) {
+	e := NewElement("div").XHtml("count")
+	result := e.Render()
+	expected := "<div x-html=\"count\"></div>"
+	if result != expected {
+		t.Fatalf(`result = %q, expected %q`, result, expected)
+	}
+}
+func TestXModel(t *testing.T) {
+	e := NewElement("input").XModel("user.name")
+	result := e.Render()
+	expected := "<input x-model=\"user.name\">"
+	if result != expected {
+		t.Fatalf(`result = %q, expected %q`, result, expected)
+	}
+}
+func TestXShow(t *testing.T) {
+	e := NewElement("div").XShow("isVisible")
+	result := e.Render()
+	expected := "<div x-show=\"isVisible\"></div>"
+	if result != expected {
+		t.Fatalf(`result = %q, expected %q`, result, expected)
+	}
+}
+func TestXInit(t *testing.T) {
+	e := NewElement("div").XInit("setup()")
+	result := e.Render()
+	expected := "<div x-init=\"setup()\"></div>"
+	if result != expected {
+		t.Fatalf(`result = %q, expected %q`, result, expected)
+	}
+}
+func TestXCloak(t *testing.T) {
+	e := NewElement("div").XCloak()
+	result := e.Render()
+	expected := "<div x-cloak></div>"
+	if result != expected {
+		t.Fatalf(`result = %q, expected %q`, result, expected)
+	}
+}
+func TestUnsafeHtml(t *testing.T) {
+	e := NewElement("div").UnsafeHtml("<p>Hello <strong>World</strong></p>")
+	result := e.Render()
+	expected := "<div><p>Hello <strong>World</strong></p></div>"
+	if result != expected {
+		t.Fatalf(`result = %q, expected %q`, result, expected)
+	}
+
+	e = NewElement("div").UnsafeHtml("<script>alert('xss')</script>")
+	result = e.Render()
+	expected = "<div><script>alert('xss')</script></div>"
+	if result != expected {
+		t.Fatalf(`result = %q, expected %q`, result, expected)
+	}
+
+	e = NewElement("div").UnsafeHtml("Multiple\nLines\nOf\nContent")
+	result = e.Render()
+	expected = "<div>Multiple\nLines\nOf\nContent</div>"
+	if result != expected {
+		t.Fatalf(`result = %q, expected %q`, result, expected)
+	}
+
+}

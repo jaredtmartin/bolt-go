@@ -39,6 +39,7 @@ type Element interface {
 
 	// Common attrs
 	Text(content string) Element
+	UnsafeHtml(content string) Element
 	Post(url string) Element
 	Get(url string) Element
 	Put(url string) Element
@@ -65,8 +66,29 @@ type Element interface {
 	SwapOob(oob string) Element
 	Vals(json string) Element
 	PushUrl(pushUrl ...bool) Element
-	Boost(boost ...bool) Element
+	// Sets hx-on attribute for htmx
 	On(event string, value string) Element
+	Boost(boost ...bool) Element
+	// Sets x-data attribute for alpine.js
+	XData(data string) Element
+	// Sets @click attribute for alpine.js
+	Click(handler string) Element
+	// Sets x-bind attribute for alpine.js
+	XBind(attr string, value string) Element
+	// Sets x-on attribute for alpine.js
+	XOn(event string, value string) Element
+	// Sets x-text attribute for alpine.js
+	XText(value string) Element
+	// Sets x-html attribute for alpine.js
+	XHtml(value string) Element
+	// Sets x-model attribute for alpine.js
+	XModel(value string) Element
+	//  Sets x-show attribute for alpine.js
+	XShow(condition string) Element
+	// Sets x-init attribute for alpine.js
+	XInit(value string) Element
+	// Sets x-cloak attribute for alpine.js
+	XCloak() Element
 
 	Send(w http.ResponseWriter)
 	// Redirect(w http.ResponseWriter, url string)
@@ -91,18 +113,28 @@ type DefaultElement struct {
 // 	text       string
 // }
 
-// type ElementBuilder interface {
-// 	HasClass(class string) bool
-// 	AddClass(class string)
-// 	RemoveClass(class string)
-// 	Classes() []string
-// }
+//	type ElementBuilder interface {
+//		HasClass(class string) bool
+//		AddClass(class string)
+//		RemoveClass(class string)
+//		Classes() []string
+//	}
+var htmlEscaper = strings.NewReplacer(
+	`&`, "&amp;",
+	// `'`, "&#39;", // "&#39;" is shorter than "&apos;" and apos was not in HTML until HTML5.
+	`<`, "&lt;",
+	`>`, "&gt;",
+	`"`, "&quot;", // "&#34;" is shorter than "&quot;".
+)
 
+func EscapeString(s string) string {
+	return htmlEscaper.Replace(s)
+}
 func (e *DefaultElement) GetTag() string {
 	return e.tag
 }
 func (e *DefaultElement) Tag(tag string) Element {
-	e.tag = tag
+	e.tag = EscapeString(tag)
 	return e
 }
 func (e *DefaultElement) add_classes(class string) {
@@ -186,18 +218,19 @@ func (e *DefaultElement) add_attribute(key string, value string) {
 func (e *DefaultElement) render_attributes() string {
 	var attributes []string
 	for key, value := range e.attributes {
-		if key == "hx-vals" {
-			attributes = append(attributes, key+"='"+value+"'")
-		} else {
-			attributes = append(attributes, key+"=\""+value+"\"")
+		// attributes = append(attributes, key+"='"+value+"'")
+		if value == "" {
+			attributes = append(attributes, key)
+			continue
 		}
+		attributes = append(attributes, EscapeString(key)+"=\""+EscapeString(value)+"\"")
 	}
 	slices.Sort(attributes)
 	if len(e.styles) > 0 {
-		attributes = append(attributes, "style=\""+e.render_styles()+"\"")
+		attributes = append(attributes, "style=\""+EscapeString(e.render_styles())+"\"")
 	}
 	if len(e.classes) > 0 {
-		attributes = append(attributes, "class=\""+e.render_classes()+"\"")
+		attributes = append(attributes, "class=\""+EscapeString(e.render_classes())+"\"")
 	}
 	return strings.Join(attributes, " ")
 }
@@ -280,6 +313,10 @@ func NewDefaultElement(tag string) DefaultElement {
 	}
 }
 func (e *DefaultElement) Text(content string) Element {
+	e.text = EscapeString(content)
+	return e
+}
+func (e *DefaultElement) UnsafeHtml(content string) Element {
 	e.text = content
 	return e
 }
@@ -411,6 +448,47 @@ func (e *DefaultElement) Boost(boost ...bool) Element {
 }
 func (e *DefaultElement) On(event string, script string) Element {
 	e.add_attribute(fmt.Sprintf("hx-on:%s", event), script)
+	return e
+}
+
+func (e *DefaultElement) XData(data string) Element {
+	e.add_attribute("x-data", data)
+	return e
+}
+func (e *DefaultElement) Click(handler string) Element {
+	e.add_attribute("@click", handler)
+	return e
+}
+func (e *DefaultElement) XBind(attr string, value string) Element {
+	e.add_attribute(fmt.Sprintf("x-bind:%s", attr), value)
+	return e
+}
+func (e *DefaultElement) XOn(event string, value string) Element {
+	e.add_attribute(fmt.Sprintf("x-on:%s", event), value)
+	return e
+}
+func (e *DefaultElement) XText(value string) Element {
+	e.add_attribute("x-text", value)
+	return e
+}
+func (e *DefaultElement) XHtml(value string) Element {
+	e.add_attribute("x-html", value)
+	return e
+}
+func (e *DefaultElement) XModel(value string) Element {
+	e.add_attribute("x-model", value)
+	return e
+}
+func (e *DefaultElement) XShow(condition string) Element {
+	e.add_attribute("x-show", condition)
+	return e
+}
+func (e *DefaultElement) XInit(value string) Element {
+	e.add_attribute("x-init", value)
+	return e
+}
+func (e *DefaultElement) XCloak() Element {
+	e.add_attribute("x-cloak", "")
 	return e
 }
 

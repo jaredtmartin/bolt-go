@@ -62,7 +62,7 @@ func Fragment(children ...Element) Element {
 	return NewElement("").Children(children...)
 }
 func Html(content string) Element {
-	return NewElement("").Text(content)
+	return NewElement("").UnsafeHtml(content)
 }
 func Section(children ...Element) Element {
 	return NewElement("section").Children(children...)
@@ -78,7 +78,7 @@ func Template(filename string) Element {
 	if err != nil {
 		panic(err)
 	}
-	return NewElement("").Text(string(html))
+	return NewElement("").UnsafeHtml(string(html))
 }
 func Script(text string) Element {
 	return NewElement("script").Text(text).Attr("defer", "")
