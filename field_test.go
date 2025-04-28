@@ -68,6 +68,11 @@ func TestFieldType(t *testing.T) {
 	result := e.Render()
 	assert.Equalf(t, `<div><label for="name-field">Hello</label><input id="name-field" name="name" type="email"><div id="name-field-error"></div></div>`, result, "should match")
 }
+func TestFieldText(t *testing.T) {
+	e := Field("name", "Hello", "").Text("hello")
+	result := e.Render()
+	assert.Equalf(t, `<div><label for="name-field">Hello</label><input id="name-field" name="name" type="text"><div id="name-field-error"></div>hello</div>`, result, "should match")
+}
 func TestFieldName(t *testing.T) {
 	e := Field("name", "Hello", "").Name("name")
 	result := e.Render()
@@ -220,6 +225,16 @@ func TestSelectWithNoValue(t *testing.T) {
 	field := Select("color", "Color", "", opts)
 	result := field.Render()
 	assert.Equalf(t, `<div><label for="color-field">Color</label><select id="color-field" name="color"><option value="red">Red</option><option value="green">Green</option><option value="blue">Blue</option></select><div id="color-field-error"></div></div>`, result, "should match")
+}
+func TestCustomFieldRendering(t *testing.T) {
+	e := Field("name", "Hello", "").Template("{input}{error}{label}")
+	result := e.Render()
+	assert.Equalf(t, `<div><input id="name-field" name="name" type="text"><div id="name-field-error"></div><label for="name-field">Hello</label></div>`, result, "should match")
+}
+func TestCustomFieldRenderingWithoutError(t *testing.T) {
+	e := Field("name", "Hello", "").Template("{input}{label}")
+	result := e.Render()
+	assert.Equalf(t, `<div><input id="name-field" name="name" type="text"><label for="name-field">Hello</label></div>`, result, "should match")
 }
 
 //	func TestFieldInputClass(t *testing.T) {

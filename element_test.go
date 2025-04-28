@@ -587,3 +587,114 @@ func TestUnsafeHtml(t *testing.T) {
 	}
 
 }
+func TestGetChildren(t *testing.T) {
+	// Test empty children
+	e := NewElement("div")
+	children := e.GetChildren()
+	if len(children) != 0 {
+		t.Fatalf("Expected 0 children, got %d", len(children))
+	}
+
+	// Test single child
+	child := NewElement("p").Text("hello")
+	e.Children(child)
+	children = e.GetChildren()
+	if len(children) != 1 {
+		t.Fatalf("Expected 1 child, got %d", len(children))
+	}
+	if children[0].Render() != "<p>hello</p>" {
+		t.Fatalf("Expected child to render as <p>hello</p>, got %s", children[0].Render())
+	}
+
+	// Test multiple children
+	e = NewElement("div")
+	child1 := NewElement("p").Text("first")
+	child2 := NewElement("span").Text("second")
+	child3 := NewElement("div").Text("third")
+	e.Children(child1, child2, child3)
+	children = e.GetChildren()
+	if len(children) != 3 {
+		t.Fatalf("Expected 3 children, got %d", len(children))
+	}
+	expected := []string{
+		"<p>first</p>",
+		"<span>second</span>",
+		"<div>third</div>",
+	}
+	for i, child := range children {
+		if child.Render() != expected[i] {
+			t.Fatalf("Child %d: expected %s, got %s", i, expected[i], child.Render())
+		}
+	}
+
+	// Test nested children
+	e = NewElement("div")
+	nested := NewElement("div").Children(
+		NewElement("p").Text("nested"),
+		NewElement("span").Text("content"),
+	)
+	e.Children(nested)
+	children = e.GetChildren()
+	if len(children) != 1 {
+		t.Fatalf("Expected 1 child, got %d", len(children))
+	}
+	expectedNested := "<div><p>nested</p><span>content</span></div>"
+	if children[0].Render() != expectedNested {
+		t.Fatalf("Expected nested children to render as %s, got %s", expectedNested, children[0].Render())
+	}
+}
+func TestGetChild(t *testing.T) {
+	// Test getting child at valid index
+	e := NewElement("div")
+	child1 := NewElement("p").Text("first")
+	child2 := NewElement("span").Text("second")
+	e.Children(child1, child2)
+
+	result, ok := e.GetChild(0)
+	if !ok {
+		t.Fatal("Expected to get child at index 0")
+	}
+	if result.Render() != "<p>first</p>" {
+		t.Fatalf("Expected first child to render as <p>first</p>, got %s", result.Render())
+	}
+
+	result, ok = e.GetChild(1)
+	if !ok {
+		t.Fatal("Expected to get child at index 1")
+	}
+	if result.Render() != "<span>second</span>" {
+		t.Fatalf("Expected second child to render as <span>second</span>, got %s", result.Render())
+	}
+
+	// Test getting child at invalid index
+	_, ok = e.GetChild(-1)
+	if ok {
+		t.Fatal("Expected false when getting child at negative index")
+	}
+
+	_, ok = e.GetChild(2)
+	if ok {
+		t.Fatal("Expected false when getting child at out of bounds index")
+	}
+
+	// Test getting child from empty element
+	empty := NewElement("div")
+	_, ok = empty.GetChild(0)
+	if ok {
+		t.Fatal("Expected false when getting child from empty element")
+	}
+
+	// Test getting child from element with nested children
+	nested := NewElement("div").Children(
+		NewElement("div").Children(
+			NewElement("p").Text("nested"),
+		),
+	)
+	result, ok = nested.GetChild(0)
+	if !ok {
+		t.Fatal("Expected to get nested child")
+	}
+	if result.Render() != "<div><p>nested</p></div>" {
+		t.Fatalf("Expected nested child to render as <div><p>nested</p></div>, got %s", result.Render())
+	}
+}

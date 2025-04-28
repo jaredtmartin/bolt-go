@@ -30,6 +30,7 @@ type Element interface {
 	RemoveAttr(key ...string) Element
 
 	GetChildren() []Element
+	GetChild(idx int) (Element, bool)
 	AddChild(child Element) Element
 	PrependChild(child Element) Element
 	Children(children ...Element) Element
@@ -284,6 +285,12 @@ func (e *DefaultElement) Debug(prefix ...string) Element {
 }
 func (e *DefaultElement) GetChildren() []Element {
 	return e.children
+}
+func (e *DefaultElement) GetChild(idx int) (Element, bool) {
+	if idx < 0 || idx >= len(e.children) {
+		return nil, false
+	}
+	return e.children[idx], true
 }
 func (e *DefaultElement) renderChildren() string {
 	var renderedStrings []string

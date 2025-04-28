@@ -2,6 +2,7 @@ package bolt
 
 import (
 	"log"
+	"strings"
 )
 
 //	type FieldElement struct {
@@ -36,6 +37,7 @@ type Option struct {
 }
 type FieldElement struct {
 	DefaultElement
+	template string
 }
 
 func createLabelElement(label string, id string) Element {
@@ -43,7 +45,7 @@ func createLabelElement(label string, id string) Element {
 }
 func Field(name string, label string, value string) *FieldElement {
 	id := name + "-field"
-	field := &FieldElement{DefaultElement: NewDefaultElement("div")}
+	field := &FieldElement{DefaultElement: NewDefaultElement("div"), template: "{label}{input}{error}{children}{text}"}
 	var labelElement Element
 	// Only used for checkboxes
 	var checkElement Element
@@ -95,6 +97,10 @@ func (f *FieldElement) Checked(value ...bool) *FieldElement {
 	}
 	return f
 }
+func (f *FieldElement) Template(template string) *FieldElement {
+	f.template = template
+	return f
+}
 func (f *FieldElement) GetInput() Element {
 	return f.children[FieldInput]
 }
@@ -142,6 +148,45 @@ func (f *FieldElement) SetError(e Element) *FieldElement {
 func (f *FieldElement) Type(tipe string) Element {
 	f.GetInput().Type(tipe)
 	return f
+}
+func (f *FieldElement) Render() string {
+	content := f.template
+	// stash the children and the text
+	originalText := f.text
+	originalChildren := f.children
+	label := f.GetLabel()
+	if label != nil {
+		content = strings.ReplaceAll(content, "{label}", label.Render())
+	} else {
+		content = strings.ReplaceAll(content, "{label}", "")
+	}
+	input := f.GetInput()
+	if input != nil {
+		// render the input into the place provided in the template
+		content = strings.ReplaceAll(content, "{input}", input.Render())
+	} else {
+		content = strings.ReplaceAll(content, "{input}", "")
+	}
+	errorElement := f.GetError()
+	if errorElement != nil {
+		content = strings.ReplaceAll(content, "{error}", errorElement.Render())
+	} else {
+		content = strings.ReplaceAll(content, "{error}", "")
+	}
+	// Render other children and place them in the template
+	renderedChildrenContent := NewElement("").Children(f.children[3:]...).Render()
+	content = strings.ReplaceAll(content, "{children}", renderedChildrenContent)
+	// place text into the template
+	content = strings.ReplaceAll(content, "{text}", f.text)
+	// render the wrapper with rendered child content
+	f.children = []Element{}
+	f.text = content
+	result := f.DefaultElement.Render()
+	// place the content from the rendered template into the result
+	// restore the children and text
+	f.text = originalText
+	f.children = originalChildren
+	return result
 }
 
 // func (f *FieldElement) Class
