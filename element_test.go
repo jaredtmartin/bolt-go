@@ -36,6 +36,20 @@ func TestRenderNullElement(t *testing.T) {
 		t.Fatalf(`result = %q, expected %q`, result, expected)
 	}
 }
+func TestRenderNullElementWithText(t *testing.T) {
+	result := NewElement("img").Text("Hello").Render()
+	expected := "<img>Hello</img>"
+	if result != expected {
+		t.Fatalf(`result = %q, expected %q`, result, expected)
+	}
+}
+func TestRenderNullElementWithChildren(t *testing.T) {
+	result := NewElement("img").Children(NewElement("p").Text("Hello")).Render()
+	expected := "<img><p>Hello</p></img>"
+	if result != expected {
+		t.Fatalf(`result = %q, expected %q`, result, expected)
+	}
+}
 func TestLink(t *testing.T) {
 	result := NewElement("link").Render()
 	expected := "<link>"

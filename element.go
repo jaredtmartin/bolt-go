@@ -512,7 +512,7 @@ func (e *DefaultElement) Render() string {
 	if len(attr) > 0 {
 		attr = " " + attr
 	}
-	if is_null_element(e.tag) {
+	if is_null_element(e.tag) && len(children) == 0 && len(e.text) == 0 {
 		return "<" + e.tag + attr + ">"
 	}
 	return "<" + e.tag + attr + ">" + children + "</" + e.tag + ">"
