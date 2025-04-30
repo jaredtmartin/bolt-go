@@ -292,18 +292,18 @@ func (e *DefaultElement) GetChild(idx int) (Element, bool) {
 	}
 	return e.children[idx], true
 }
-func (e *DefaultElement) renderChildren() string {
+func (e *DefaultElement) Content() string {
+	return renderElements(e.children...) + e.text
+}
+func renderElements(elements ...Element) string {
 	var renderedStrings []string
-	for _, element := range e.children {
+	for _, element := range elements {
 		if element == nil {
 			continue
 		}
 		renderedStrings = append(renderedStrings, element.Render())
 	}
 	return strings.Join(renderedStrings, "")
-}
-func (e *DefaultElement) Content() string {
-	return e.renderChildren() + e.text
 }
 func NewElement(tag string) Element {
 	element := NewDefaultElement(tag)
@@ -501,6 +501,7 @@ func (e *DefaultElement) XCloak() Element {
 
 var null_elements = [...]string{"area", "base", "br", "col", "embed", "hr", "img", "input", "link", "meta", "param", "source", "track", "wbr"}
 
+// Returns true if the element is a null element.
 func is_null_element(tag string) bool {
 	for _, v := range null_elements {
 		if v == tag {
@@ -510,19 +511,23 @@ func is_null_element(tag string) bool {
 	return false
 }
 
-func (e *DefaultElement) Render() string {
-	children := e.renderChildren() + e.text
+// Renders the element with the children first and text at the end.
+func (e *DefaultElement) RenderWithContent(text string, children ...Element) string {
+	content := renderElements(children...) + text
 	if e.tag == "" {
-		return children
+		return content
 	}
 	attr := e.render_attributes()
 	if len(attr) > 0 {
 		attr = " " + attr
 	}
-	if is_null_element(e.tag) && len(children) == 0 && len(e.text) == 0 {
+	if is_null_element(e.tag) && len(content) == 0 && len(e.text) == 0 {
 		return "<" + e.tag + attr + ">"
 	}
-	return "<" + e.tag + attr + ">" + children + "</" + e.tag + ">"
+	return "<" + e.tag + attr + ">" + content + "</" + e.tag + ">"
+}
+func (e *DefaultElement) Render() string {
+	return e.RenderWithContent(e.text, e.children...)
 }
 
 // For Fiber

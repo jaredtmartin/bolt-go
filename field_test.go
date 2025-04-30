@@ -226,15 +226,16 @@ func TestSelectWithNoValue(t *testing.T) {
 	result := field.Render()
 	assert.Equalf(t, `<div><label for="color-field">Color</label><select id="color-field" name="color"><option value="red">Red</option><option value="green">Green</option><option value="blue">Blue</option></select><div id="color-field-error"></div></div>`, result, "should match")
 }
+
 func TestCustomFieldRendering(t *testing.T) {
-	e := Field("name", "Hello", "").Template("{input}{error}{label}")
+	e := Field("name", "Hello", "")
+	e.Renderer = func(e *FieldElement) string {
+		renderedLabel := e.GetLabel()
+		renderedInput := e.GetInput()
+		return e.RenderWithContent("blah", renderedInput, renderedLabel)
+	}
 	result := e.Render()
-	assert.Equalf(t, `<div><input id="name-field" name="name" type="text"><div id="name-field-error"></div><label for="name-field">Hello</label></div>`, result, "should match")
-}
-func TestCustomFieldRenderingWithoutError(t *testing.T) {
-	e := Field("name", "Hello", "").Template("{input}{label}")
-	result := e.Render()
-	assert.Equalf(t, `<div><input id="name-field" name="name" type="text"><label for="name-field">Hello</label></div>`, result, "should match")
+	assert.Equalf(t, `<div><input id="name-field" name="name" type="text"><label for="name-field">Hello</label>blah</div>`, result, "should match")
 }
 
 //	func TestFieldInputClass(t *testing.T) {
