@@ -7,10 +7,7 @@ import (
 )
 
 func Div(class string, children ...Element) Element {
-	e := NewElement("div").Children(children...)
-	if class != "" {
-		e.Class(class)
-	}
+	e := NewElement("div").Children(children...).Class(class)
 	return e
 }
 func Img(src string) Element {

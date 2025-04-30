@@ -28,6 +28,13 @@ func TestRender(t *testing.T) {
 	if result != expected {
 		t.Fatalf(`result = %q, expected %q`, result, expected)
 	}
+
+	// Make sure it doesnt add the class attr if there are no classes
+	result = NewElement("div").Render()
+	expected = "<div></div>"
+	if result != expected {
+		t.Fatalf(`result = %q, expected %q`, result, expected)
+	}
 }
 func TestRenderNullElement(t *testing.T) {
 	result := NewElement("img").Render()
@@ -696,5 +703,371 @@ func TestGetChild(t *testing.T) {
 	}
 	if result.Render() != "<div><p>nested</p></div>" {
 		t.Fatalf("Expected nested child to render as <div><p>nested</p></div>, got %s", result.Render())
+	}
+}
+func TestChildWithId(t *testing.T) {
+	e := NewElement("div").Id("parent").Children(
+		NewElement("span").Id("child"),
+		NewElement("div").Children(
+			NewElement("inner").Id("deep"),
+		),
+	)
+
+	result, ok := e.ChildWithId("child")
+	if !ok {
+		t.Fatal("Expected to find child with id 'child'")
+	}
+	if result.GetId() != "child" {
+		t.Fatalf("Expected child id to be 'child', got %s", result.GetId())
+	}
+
+	result, ok = e.ChildWithId("deep")
+	if !ok {
+		t.Fatal("Expected to find child with id 'deep'")
+	}
+	if result.GetId() != "deep" {
+		t.Fatalf("Expected child id to be 'child', got %s", result.GetId())
+	}
+	if result.GetTag() != "inner" {
+		t.Fatalf("Expected child tag to be 'inner', got %s", result.GetTag())
+	}
+
+	_, ok = e.ChildWithId("nonexistent")
+	if ok {
+		t.Fatal("Expected false when searching for nonexistent child id")
+	}
+}
+
+func TestChildrenWithClass(t *testing.T) {
+	e := NewElement("div")
+	child1 := NewElement("p").Class("highlight")
+	child2 := NewElement("span").Class("highlight bold")
+	child3 := NewElement("div").Class("normal")
+	e.Children(child1, child2, child3)
+
+	results := e.ChildrenWithClass("highlight")
+	if len(results) != 2 {
+		t.Fatalf("Expected 2 children with class 'highlight', got %d", len(results))
+	}
+
+	results = e.ChildrenWithClass("nonexistent")
+	if len(results) != 0 {
+		t.Fatal("Expected empty slice for nonexistent class")
+	}
+}
+
+func TestFirstChildWithClass(t *testing.T) {
+	e := NewElement("div")
+	child0 := NewElement("span").Class("green")
+	child1 := NewElement("p").Class("highlight")
+	child2 := NewElement("span").Class("highlight")
+	e.Children(child0, child1, child2)
+
+	result, ok := e.FirstChildWithClass("highlight")
+	if !ok {
+		t.Fatal("Expected to find first child with class 'highlight'")
+	}
+	if result.GetTag() != "p" {
+		t.Fatalf("Expected first child to be 'p', got %s", result.GetTag())
+	}
+
+	_, ok = e.FirstChildWithClass("nonexistent")
+	if ok {
+		t.Fatal("Expected false when searching for nonexistent class")
+	}
+}
+
+func TestNthChildWithClass(t *testing.T) {
+	e := NewElement("div").Children(
+		NewElement("first").Class("green"),
+		NewElement("second").Class("highlight"),
+		NewElement("third").Class("green"),
+		NewElement("fourth").Class("highlight"),
+		NewElement("fifth").Class("highlight"),
+		NewElement("parent").Children(
+			NewElement("child-first").Class("green"),
+			NewElement("child-second").Class("highlight"),
+			NewElement("child-third").Class("green"),
+			NewElement("child-fourth").Class("highlight"),
+		),
+	)
+	result, ok := e.NthChildWithClass("highlight", 1)
+	if !ok {
+		t.Fatal("Expected to find first child with class 'highlight'")
+	}
+	if result.GetTag() != "second" {
+		t.Fatalf("Expected first child to be 'second', got %s", result.GetTag())
+	}
+
+	result, ok = e.NthChildWithClass("highlight", 3)
+	if !ok {
+		t.Fatal("Expected to find third child with class 'highlight'")
+	}
+	if result.GetTag() != "fifth" {
+		t.Fatalf("Expected third child to be 'fifth', got %s", result.GetTag())
+	}
+
+	result, ok = e.NthChildWithClass("highlight", 4)
+	if !ok {
+		t.Fatal("Expected to find deeper child with class 'highlight'")
+	}
+	if result.GetTag() != "child-second" {
+		t.Fatalf("Expected deeper child to be 'child-second', got %s", result.GetTag())
+	}
+
+	_, ok = e.NthChildWithClass("highlight", 6)
+	if ok {
+		t.Fatal("Expected false when index out of bounds")
+	}
+	_, ok = e.NthChildWithClass("highlight", -5)
+	if ok {
+		t.Fatal("Expected false when index is negative")
+	}
+
+	_, ok = e.NthChildWithClass("nonexistent", 0)
+	if ok {
+		t.Fatal("Expected false when searching for nonexistent class")
+	}
+}
+
+func TestPrependChild(t *testing.T) {
+	e := NewElement("div")
+	child1 := NewElement("p").Text("first")
+	child2 := NewElement("span").Text("second")
+
+	e.Children(child1)
+	e.PrependChild(child2)
+
+	result := e.Render()
+	expected := "<div><span>second</span><p>first</p></div>"
+	if result != expected {
+		t.Fatalf(`result = %q, expected %q`, result, expected)
+	}
+}
+
+func TestAddChild(t *testing.T) {
+	e := NewElement("div")
+	child1 := NewElement("p").Text("first")
+	child2 := NewElement("span").Text("second")
+
+	e.AddChild(child1)
+	e.AddChild(child2)
+
+	result := e.Render()
+	expected := "<div><p>first</p><span>second</span></div>"
+	if result != expected {
+		t.Fatalf(`result = %q, expected %q`, result, expected)
+	}
+}
+
+func TestGetTag(t *testing.T) {
+	e := NewElement("div")
+	if e.GetTag() != "div" {
+		t.Fatalf("Expected tag 'div', got %s", e.GetTag())
+	}
+
+	e.Tag("span")
+	if e.GetTag() != "span" {
+		t.Fatalf("Expected tag 'span', got %s", e.GetTag())
+	}
+}
+
+func TestGetStyle(t *testing.T) {
+	e := NewElement("div").Style("color: red; font-size: 12px")
+
+	if e.GetStyle("color") != "red" {
+		t.Fatalf("Expected style 'color' to be 'red', got %s", e.GetStyle("color"))
+	}
+
+	if e.GetStyle("nonexistent") != "" {
+		t.Fatal("Expected empty string for nonexistent style")
+	}
+}
+
+func TestSelect(t *testing.T) {
+	e := NewElement("div").Select("#target")
+	result := e.Render()
+	expected := "<div hx-select=\"#target\"></div>"
+	if result != expected {
+		t.Fatalf(`result = %q, expected %q`, result, expected)
+	}
+}
+
+func TestSubmit(t *testing.T) {
+	e := NewElement("button").Submit()
+	result := e.Render()
+	expected := "<button type=\"submit\"></button>"
+	if result != expected {
+		t.Fatalf(`result = %q, expected %q`, result, expected)
+	}
+}
+
+func TestAlt(t *testing.T) {
+	e := NewElement("img").Alt("description")
+	result := e.Render()
+	expected := "<img alt=\"description\">"
+	if result != expected {
+		t.Fatalf(`result = %q, expected %q`, result, expected)
+	}
+}
+
+func TestContent(t *testing.T) {
+	e := NewElement("div").Text("Hello World")
+	if e.Content() != "Hello World" {
+		t.Fatalf("Expected content 'Hello World', got %s", e.Content())
+	}
+
+	e = NewElement("div")
+	if e.Content() != "" {
+		t.Fatalf("Expected empty content, got %s", e.Content())
+	}
+}
+func TestGetId(t *testing.T) {
+	// Test with explicitly set ID
+	e := NewElement("div").Id("test-id")
+	result := e.GetId()
+	if result != "test-id" {
+		t.Fatalf(`GetId() = %q, expected "test-id"`, result)
+	}
+
+	// Test with no ID set
+	e = NewElement("div")
+	result = e.GetId()
+	if result != "" {
+		t.Fatalf(`GetId() = %q, expected empty string`, result)
+	}
+
+	// Test after removing ID
+	e = NewElement("div").Id("test-id")
+	e.RemoveAttr("id")
+	result = e.GetId()
+	if result != "" {
+		t.Fatalf(`GetId() = %q, expected empty string after removal`, result)
+	}
+
+}
+func TestGetStyles(t *testing.T) {
+	// Test empty styles
+	e := NewElement("div")
+	styles := e.GetStyles()
+	if len(styles) != 0 {
+		t.Fatalf("Expected empty styles map, got %d styles", len(styles))
+	}
+
+	// Test single style
+	e = NewElement("div").Style("color: red")
+	styles = e.GetStyles()
+	if len(styles) != 1 {
+		t.Fatalf("Expected 1 style, got %d", len(styles))
+	}
+	if styles["color"] != "red" {
+		t.Fatalf("Expected color:red, got color:%s", styles["color"])
+	}
+
+	// Test multiple styles
+	e = NewElement("div").Style("color: red; font-size: 12px; margin: 5px")
+	styles = e.GetStyles()
+	if len(styles) != 3 {
+		t.Fatalf("Expected 3 styles, got %d", len(styles))
+	}
+	expectedStyles := map[string]string{
+		"color":     "red",
+		"font-size": "12px",
+		"margin":    "5px",
+	}
+	for key, value := range expectedStyles {
+		if styles[key] != value {
+			t.Fatalf("Expected %s:%s, got %s:%s", key, value, key, styles[key])
+		}
+	}
+
+	// Test overwriting styles
+	e = NewElement("div").Style("color: red").Style("color: blue")
+	styles = e.GetStyles()
+	if len(styles) != 1 {
+		t.Fatalf("Expected 1 style after overwrite, got %d", len(styles))
+	}
+	if styles["color"] != "blue" {
+		t.Fatalf("Expected color:blue after overwrite, got color:%s", styles["color"])
+	}
+
+	// Test after removing style
+	e = NewElement("div").Style("color: red; font-size: 12px")
+	e.RemoveStyle("color")
+	styles = e.GetStyles()
+	if len(styles) != 1 {
+		t.Fatalf("Expected 1 style after removal, got %d", len(styles))
+	}
+	if _, exists := styles["color"]; exists {
+		t.Fatal("Style 'color' should not exist after removal")
+	}
+	if styles["font-size"] != "12px" {
+		t.Fatalf("Expected font-size:12px to remain, got font-size:%s", styles["font-size"])
+	}
+}
+func TestGetAttrs(t *testing.T) {
+	// Test empty attributes
+	e := NewElement("div")
+	attrs := e.GetAttrs()
+	if len(attrs) != 0 {
+		t.Fatalf("Expected empty attributes map, got %d attributes", len(attrs))
+	}
+
+	// Test single attribute
+	e = NewElement("div").Attr("data-test", "value")
+	attrs = e.GetAttrs()
+	if len(attrs) != 1 {
+		t.Fatalf("Expected 1 attribute, got %d", len(attrs))
+	}
+	if attrs["data-test"] != "value" {
+		t.Fatalf("Expected data-test:value, got data-test:%s", attrs["data-test"])
+	}
+
+	// Test multiple attributes
+	e = NewElement("div").
+		Attr("data-test", "value").
+		Attr("aria-label", "label").
+		Attr("role", "button")
+	attrs = e.GetAttrs()
+	if len(attrs) != 3 {
+		t.Fatalf("Expected 3 attributes, got %d", len(attrs))
+	}
+	expectedAttrs := map[string]string{
+		"data-test":  "value",
+		"aria-label": "label",
+		"role":       "button",
+	}
+	for key, value := range expectedAttrs {
+		if attrs[key] != value {
+			t.Fatalf("Expected %s:%s, got %s:%s", key, value, key, attrs[key])
+		}
+	}
+
+	// Test overwriting attributes
+	e = NewElement("div").
+		Attr("data-test", "first").
+		Attr("data-test", "second")
+	attrs = e.GetAttrs()
+	if len(attrs) != 1 {
+		t.Fatalf("Expected 1 attribute after overwrite, got %d", len(attrs))
+	}
+	if attrs["data-test"] != "second" {
+		t.Fatalf("Expected data-test:second after overwrite, got data-test:%s", attrs["data-test"])
+	}
+
+	// Test after removing attribute
+	e = NewElement("div").
+		Attr("data-test", "value").
+		Attr("aria-label", "label")
+	e.RemoveAttr("data-test")
+	attrs = e.GetAttrs()
+	if len(attrs) != 1 {
+		t.Fatalf("Expected 1 attribute after removal, got %d", len(attrs))
+	}
+	if _, exists := attrs["data-test"]; exists {
+		t.Fatal("Attribute 'data-test' should not exist after removal")
+	}
+	if attrs["aria-label"] != "label" {
+		t.Fatalf("Expected aria-label:label to remain, got aria-label:%s", attrs["aria-label"])
 	}
 }

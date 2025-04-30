@@ -36,7 +36,6 @@ type Option struct {
 }
 type FieldElement struct {
 	DefaultElement
-	template string
 	Renderer func(f *FieldElement) string
 }
 
@@ -98,10 +97,6 @@ func (f *FieldElement) Checked(value ...bool) *FieldElement {
 	} else {
 		f.GetInput().Attr("checked", "checked")
 	}
-	return f
-}
-func (f *FieldElement) Template(template string) *FieldElement {
-	f.template = template
 	return f
 }
 func (f *FieldElement) GetInput() Element {

@@ -2,7 +2,6 @@ package bolt
 
 import (
 	"fmt"
-	"log"
 	"net/http"
 	"regexp"
 	"strings"
@@ -13,6 +12,9 @@ import (
 type Element interface {
 	GetTag() string
 	Tag(tag string) Element
+
+	GetId() string
+	ChildWithId(id string) (Element, bool)
 
 	GetClasses() []string
 	HasClass(class string) bool
@@ -34,6 +36,9 @@ type Element interface {
 	AddChild(child Element) Element
 	PrependChild(child Element) Element
 	Children(children ...Element) Element
+	ChildrenWithClass(class string) []Element
+	FirstChildWithClass(class string) (Element, bool)
+	NthChildWithClass(class string, n int) (Element, bool)
 	Content() string
 
 	Render() string
@@ -93,7 +98,7 @@ type Element interface {
 
 	Send(w http.ResponseWriter)
 	// Redirect(w http.ResponseWriter, url string)
-	Debug(prefix ...string) Element
+	// Debug(prefix ...string) Element
 }
 
 type DefaultElement struct {
@@ -141,6 +146,9 @@ func (e *DefaultElement) Tag(tag string) Element {
 func (e *DefaultElement) add_classes(class string) {
 	// split string by space
 	for _, c := range strings.Split(class, " ") {
+		if c == "" {
+			continue
+		}
 		e.classes[c] = true
 	}
 }
@@ -158,6 +166,9 @@ func (e *DefaultElement) HasClass(class string) bool {
 func (e *DefaultElement) Class(classes ...string) Element {
 	e.add_classes(strings.Join(classes, " "))
 	return e
+}
+func (e *DefaultElement) GetId() string {
+	return e.attributes["id"]
 }
 func (e *DefaultElement) RemoveClass(classes ...string) Element {
 	for _, c := range classes {
@@ -177,7 +188,7 @@ func (e *DefaultElement) add_styles(styles string) {
 	for _, style := range styles_split {
 		matched := re.FindStringSubmatch(strings.Trim(style, " "))
 		if len(matched) == 3 {
-			e.styles[matched[1]] = matched[2]
+			e.styles[matched[1]] = strings.Trim(matched[2], " ")
 		}
 	}
 }
@@ -200,7 +211,7 @@ func (e *DefaultElement) RemoveStyle(styles ...string) Element {
 func (e *DefaultElement) render_styles() string {
 	var styles []string
 	for key, value := range e.styles {
-		styles = append(styles, key+":"+value+";")
+		styles = append(styles, key+": "+value+";")
 	}
 	slices.Sort(styles)
 	return strings.Trim(strings.Join(styles, " "), " ")
@@ -263,26 +274,80 @@ func (e *DefaultElement) PrependChild(child Element) Element {
 	e.children = append([]Element{child}, e.children...)
 	return e
 }
-func (e *DefaultElement) Debug(prefix ...string) Element {
-	s := ""
-	if len(prefix) > 0 {
-		s = prefix[0]
-	}
-	log.Printf("%s%s: c:%v s:%v a:%v text: %s\n", s, e.tag, e.classes, e.styles, e.attributes, e.text)
-	// log.Printf("%sclasses: %v\n", s, e.classes)
-	// log.Printf("%sstyles: %v\n", s, e.styles)
-	// log.Printf("%sattributes: %v\n", s, e.attributes)
-	// log.Printf("%schildren: \n", s)
-	for _, child := range e.children {
-		if child != nil {
-			child.Debug(s + "  ")
-		} else {
-			log.Printf("%s  nil\n", s)
-		}
 
+func (e *DefaultElement) ChildrenWithClass(class string) []Element {
+	results := make([]Element, 0)
+	for _, child := range e.children {
+		if child.HasClass(class) {
+			results = append(results, child)
+		}
+		results = append(results, child.ChildrenWithClass(class)...)
 	}
-	return e
+	return results
 }
+
+func (e *DefaultElement) NthChildWithClass(class string, n int) (Element, bool) {
+	if n < 1 {
+		return nil, false
+	}
+	results := make([]Element, 0)
+	for _, child := range e.children {
+		if child.HasClass(class) {
+			results = append(results, child)
+		}
+		if len(results) >= n {
+			return results[n-1], true
+		}
+		results = append(results, child.ChildrenWithClass(class)...)
+		if len(results) >= n {
+			return results[n-1], true
+		}
+	}
+	return nil, false
+}
+func (e *DefaultElement) FirstChildWithClass(class string) (Element, bool) {
+	return e.NthChildWithClass(class, 1)
+}
+func (e *DefaultElement) ChildWithId(id string) (Element, bool) {
+	for _, child := range e.children {
+		if child.GetId() == id {
+			return child, true
+		}
+		res, exists := child.ChildWithId(id)
+		if exists {
+			return res, true
+		}
+	}
+	return nil, false
+}
+
+//	func (e *DefaultElement) ChildrenWithId(id string) []Element {
+//		return
+//	}
+//
+//	func (e *DefaultElement) FirstChildWithId(id string) Element {
+//		return
+//	}
+// func (e *DefaultElement) Debug(prefix ...string) Element {
+// 	s := ""
+// 	if len(prefix) > 0 {
+// 		s = prefix[0]
+// 	}
+// 	log.Printf("%s%s: c:%v s:%v a:%v text: %s\n", s, e.tag, e.classes, e.styles, e.attributes, e.text)
+// 	// log.Printf("%sclasses: %v\n", s, e.classes)
+// 	// log.Printf("%sstyles: %v\n", s, e.styles)
+// 	// log.Printf("%sattributes: %v\n", s, e.attributes)
+// 	// log.Printf("%schildren: \n", s)
+// 	for _, child := range e.children {
+// 		if child != nil {
+// 			child.Debug(s + "  ")
+// 		} else {
+// 			log.Printf("%s  nil\n", s)
+// 		}
+
+//		}
+//		return e
+//	}
 func (e *DefaultElement) GetChildren() []Element {
 	return e.children
 }

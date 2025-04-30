@@ -199,3 +199,19 @@ func TestTemplate(t *testing.T) {
 		t.Fatalf(`Template("sample.tmpl") = %q, expected %q`, result, expected)
 	}
 }
+func TestSvg(t *testing.T) {
+	e := Svg("M10 10 H 90 V 90 H 10 Z", 100, 100, 100, 100)
+	result := e.Render()
+	expected := `<svg height="100" version="1.1" viewBox="0 0 100 100" width="100" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg" class="fill-current">M10 10 H 90 V 90 H 10 Z</svg>`
+	if result != expected {
+		t.Fatalf(`Svg() = %q, expected %q`, result, expected)
+	}
+}
+func TestVideoIframe(t *testing.T) {
+	e := VideoIframe("Hello", 23, 25, "https://www.youtube.com/embed/dQw4w9WgXcQ")
+	result := e.Render()
+	expected := `<iframe allow="autoplay; fullscreen; picture-in-picture; clipboard-write" data-ready="true" frameborder="0" height="25" src="https://www.youtube.com/embed/dQw4w9WgXcQ" title="Hello" width="23" class="h-full w-full"></iframe>`
+	if result != expected {
+		t.Fatalf(`Svg() = %q, expected %q`, result, expected)
+	}
+}
