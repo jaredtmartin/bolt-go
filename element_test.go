@@ -165,7 +165,7 @@ func TestRemoveAttr(t *testing.T) {
 // Post
 
 func TestPost(t *testing.T) {
-	e := NewElement("div").Post("https://example.com")
+	e := NewElement("div").HXPost("https://example.com")
 	result := e.Render()
 	expected := "<div hx-post=\"https://example.com\"></div>"
 	if result != expected {
@@ -176,7 +176,7 @@ func TestPost(t *testing.T) {
 // Get
 
 func TestGet(t *testing.T) {
-	e := NewElement("div").Get("https://example.com")
+	e := NewElement("div").HXGet("https://example.com")
 	result := e.Render()
 	expected := "<div hx-get=\"https://example.com\"></div>"
 	if result != expected {
@@ -187,7 +187,7 @@ func TestGet(t *testing.T) {
 // Put
 
 func TestPut(t *testing.T) {
-	e := NewElement("div").Put("https://example.com")
+	e := NewElement("div").HXPut("https://example.com")
 	result := e.Render()
 	expected := "<div hx-put=\"https://example.com\"></div>"
 	if result != expected {
@@ -198,7 +198,7 @@ func TestPut(t *testing.T) {
 // Patch
 
 func TestPatch(t *testing.T) {
-	e := NewElement("div").Patch("https://example.com")
+	e := NewElement("div").HXPatch("https://example.com")
 	result := e.Render()
 	expected := "<div hx-patch=\"https://example.com\"></div>"
 	if result != expected {
@@ -209,7 +209,7 @@ func TestPatch(t *testing.T) {
 // Delete
 
 func TestDelete(t *testing.T) {
-	e := NewElement("div").Delete("https://example.com")
+	e := NewElement("div").HXDelete("https://example.com")
 	result := e.Render()
 	expected := "<div hx-delete=\"https://example.com\"></div>"
 	if result != expected {
@@ -220,7 +220,7 @@ func TestDelete(t *testing.T) {
 // Confirm
 
 func TestConfirm(t *testing.T) {
-	e := NewElement("div").Confirm("Are you sure?")
+	e := NewElement("div").HXConfirm("Are you sure?")
 	result := e.Render()
 	expected := "<div hx-confirm-question=\"Are you sure?\" hx-confirm=\"true\"></div>"
 	if result != expected {
@@ -231,7 +231,7 @@ func TestConfirm(t *testing.T) {
 // Target
 
 func TestTarget(t *testing.T) {
-	e := NewElement("div").Target("#target")
+	e := NewElement("div").HXTarget("#target")
 	result := e.Render()
 	expected := "<div hx-target=\"#target\"></div>"
 	if result != expected {
@@ -242,7 +242,7 @@ func TestTarget(t *testing.T) {
 // Trigger
 
 func TestTrigger(t *testing.T) {
-	e := NewElement("div").Trigger("click")
+	e := NewElement("div").HXTrigger("click")
 	result := e.Render()
 	expected := "<div hx-trigger=\"click\"></div>"
 	if result != expected {
@@ -253,7 +253,7 @@ func TestTrigger(t *testing.T) {
 // Swap
 
 func TestSwap(t *testing.T) {
-	e := NewElement("div").Swap("target")
+	e := NewElement("div").HXSwap("target")
 	result := e.Render()
 	expected := "<div hx-swap=\"target\"></div>"
 	if result != expected {
@@ -363,7 +363,7 @@ func TestOnClick(t *testing.T) {
 // Indicator
 
 func TestIndicator(t *testing.T) {
-	e := NewElement("div").Indicator("target")
+	e := NewElement("div").HXIndicator("target")
 	result := e.Render()
 	expected := "<div hx-indicator=\"target\"></div>"
 	if result != expected {
@@ -374,7 +374,7 @@ func TestIndicator(t *testing.T) {
 // Oob
 
 func TestOob(t *testing.T) {
-	e := NewElement("div").Oob("target")
+	e := NewElement("div").HXOob("target")
 	result := e.Render()
 	expected := "<div hx-oob=\"target\"></div>"
 	if result != expected {
@@ -382,7 +382,7 @@ func TestOob(t *testing.T) {
 	}
 }
 func TestOn(t *testing.T) {
-	e := NewElement("div").On("click", `console.log('Hello')`)
+	e := NewElement("div").HXOn("click", `console.log('Hello')`)
 	result := e.Render()
 	expected := `<div hx-on:click="console.log('Hello')"></div>`
 	if result != expected {
@@ -393,7 +393,7 @@ func TestOn(t *testing.T) {
 // Vals
 
 func TestVals(t *testing.T) {
-	e := NewElement("div").Vals(`{ "name": "Fred" }`)
+	e := NewElement("div").HXVals(`{ "name": "Fred" }`)
 	result := e.Render()
 	expected := "<div hx-vals=\"{ &quot;name&quot;: &quot;Fred&quot; }\"></div>"
 	if result != expected {
@@ -404,7 +404,7 @@ func TestVals(t *testing.T) {
 // SwapOob
 
 func TestSwapOob(t *testing.T) {
-	e := NewElement("div").SwapOob("target")
+	e := NewElement("div").HXSwapOob("target")
 	result := e.Render()
 	expected := "<div hx-swap-oob=\"target\"></div>"
 	if result != expected {
@@ -415,19 +415,19 @@ func TestSwapOob(t *testing.T) {
 // PushUrl
 
 func TestPushUrl(t *testing.T) {
-	e := NewElement("div").PushUrl()
+	e := NewElement("div").HXPushUrl()
 	result := e.Render()
 	expected := "<div hx-push-url=\"true\"></div>"
 	if result != expected {
 		t.Fatalf(`result = %q, expected %q`, result, expected)
 	}
-	e.PushUrl(false)
+	e.HXPushUrl(false)
 	result = e.Render()
 	expected = "<div></div>"
 	if result != expected {
 		t.Fatalf(`result = %q, expected %q`, result, expected)
 	}
-	e.PushUrl(true)
+	e.HXPushUrl(true)
 	result = e.Render()
 	expected = "<div hx-push-url=\"true\"></div>"
 	if result != expected {
@@ -438,20 +438,20 @@ func TestPushUrl(t *testing.T) {
 // Boost
 
 func TestBoost(t *testing.T) {
-	e := NewElement("div").Boost()
+	e := NewElement("div").HXBoost()
 	result := e.Render()
 	expected := "<div hx-boost=\"true\"></div>"
 	if result != expected {
 		t.Fatalf(`result = %q, expected %q`, result, expected)
 	}
 
-	e.Boost(false)
+	e.HXBoost(false)
 	result = e.Render()
 	expected = "<div></div>"
 	if result != expected {
 		t.Fatalf(`result = %q, expected %q`, result, expected)
 	}
-	e.Boost(true)
+	e.HXBoost(true)
 	result = e.Render()
 	expected = "<div hx-boost=\"true\"></div>"
 	if result != expected {
@@ -500,7 +500,7 @@ func TestXData(t *testing.T) {
 	}
 }
 func TestClick(t *testing.T) {
-	e := NewElement("div").Click("increment()")
+	e := NewElement("div").AtClick("increment()")
 	result := e.Render()
 	expected := "<div @click=\"increment()\"></div>"
 	if result != expected {
@@ -745,12 +745,12 @@ func TestChildrenWithClass(t *testing.T) {
 	child3 := NewElement("div").Class("normal")
 	e.Children(child1, child2, child3)
 
-	results := e.ChildrenWithClass("highlight")
+	results := e.GetChildrenWithClass("highlight")
 	if len(results) != 2 {
 		t.Fatalf("Expected 2 children with class 'highlight', got %d", len(results))
 	}
 
-	results = e.ChildrenWithClass("nonexistent")
+	results = e.GetChildrenWithClass("nonexistent")
 	if len(results) != 0 {
 		t.Fatal("Expected empty slice for nonexistent class")
 	}
@@ -763,7 +763,7 @@ func TestFirstChildWithClass(t *testing.T) {
 	child2 := NewElement("span").Class("highlight")
 	e.Children(child0, child1, child2)
 
-	result, ok := e.FirstChildWithClass("highlight")
+	result, ok := e.GetFirstChildWithClass("highlight")
 	if !ok {
 		t.Fatal("Expected to find first child with class 'highlight'")
 	}
@@ -771,7 +771,7 @@ func TestFirstChildWithClass(t *testing.T) {
 		t.Fatalf("Expected first child to be 'p', got %s", result.GetTag())
 	}
 
-	_, ok = e.FirstChildWithClass("nonexistent")
+	_, ok = e.GetFirstChildWithClass("nonexistent")
 	if ok {
 		t.Fatal("Expected false when searching for nonexistent class")
 	}
@@ -791,7 +791,7 @@ func TestNthChildWithClass(t *testing.T) {
 			NewElement("child-fourth").Class("highlight"),
 		),
 	)
-	result, ok := e.NthChildWithClass("highlight", 1)
+	result, ok := e.GetNthChildWithClass("highlight", 1)
 	if !ok {
 		t.Fatal("Expected to find first child with class 'highlight'")
 	}
@@ -799,7 +799,7 @@ func TestNthChildWithClass(t *testing.T) {
 		t.Fatalf("Expected first child to be 'second', got %s", result.GetTag())
 	}
 
-	result, ok = e.NthChildWithClass("highlight", 3)
+	result, ok = e.GetNthChildWithClass("highlight", 3)
 	if !ok {
 		t.Fatal("Expected to find third child with class 'highlight'")
 	}
@@ -807,7 +807,7 @@ func TestNthChildWithClass(t *testing.T) {
 		t.Fatalf("Expected third child to be 'fifth', got %s", result.GetTag())
 	}
 
-	result, ok = e.NthChildWithClass("highlight", 4)
+	result, ok = e.GetNthChildWithClass("highlight", 4)
 	if !ok {
 		t.Fatal("Expected to find deeper child with class 'highlight'")
 	}
@@ -815,16 +815,16 @@ func TestNthChildWithClass(t *testing.T) {
 		t.Fatalf("Expected deeper child to be 'child-second', got %s", result.GetTag())
 	}
 
-	_, ok = e.NthChildWithClass("highlight", 6)
+	_, ok = e.GetNthChildWithClass("highlight", 6)
 	if ok {
 		t.Fatal("Expected false when index out of bounds")
 	}
-	_, ok = e.NthChildWithClass("highlight", -5)
+	_, ok = e.GetNthChildWithClass("highlight", -5)
 	if ok {
 		t.Fatal("Expected false when index is negative")
 	}
 
-	_, ok = e.NthChildWithClass("nonexistent", 0)
+	_, ok = e.GetNthChildWithClass("nonexistent", 0)
 	if ok {
 		t.Fatal("Expected false when searching for nonexistent class")
 	}
@@ -885,7 +885,7 @@ func TestGetStyle(t *testing.T) {
 }
 
 func TestSelect(t *testing.T) {
-	e := NewElement("div").Select("#target")
+	e := NewElement("div").HXSelect("#target")
 	result := e.Render()
 	expected := "<div hx-select=\"#target\"></div>"
 	if result != expected {
@@ -913,13 +913,13 @@ func TestAlt(t *testing.T) {
 
 func TestContent(t *testing.T) {
 	e := NewElement("div").Text("Hello World")
-	if e.Content() != "Hello World" {
-		t.Fatalf("Expected content 'Hello World', got %s", e.Content())
+	if e.GetContent() != "Hello World" {
+		t.Fatalf("Expected content 'Hello World', got %s", e.GetContent())
 	}
 
 	e = NewElement("div")
-	if e.Content() != "" {
-		t.Fatalf("Expected empty content, got %s", e.Content())
+	if e.GetContent() != "" {
+		t.Fatalf("Expected empty content, got %s", e.GetContent())
 	}
 }
 func TestGetId(t *testing.T) {

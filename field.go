@@ -1,9 +1,5 @@
 package bolt
 
-import (
-	"log"
-)
-
 //	type FieldElement struct {
 //		_id     string
 //		label   Element
@@ -21,6 +17,7 @@ const (
 	FieldOptions
 )
 
+// Returns the label for a given value in a list of options
 func GetOptionLabel(value string, options []Option) string {
 	for _, v := range options {
 		if v.Value == value {
@@ -30,18 +27,24 @@ func GetOptionLabel(value string, options []Option) string {
 	return ""
 }
 
+// Option is a struct that represents an option in a select element.
 type Option struct {
 	Label string
 	Value string
 }
+
+// FieldElement is a struct that represents a field element in a form.
 type FieldElement struct {
 	DefaultElement
 	Renderer func(f *FieldElement) string
 }
 
+// Returns a label element with the given label and a for attribute set to the id of the input element
 func createLabelElement(label string, id string) Element {
 	return Label(label).Attr("for", id)
 }
+
+// Returns a FieldElement with label, input, and error(span) elements
 func Field(name string, label string, value string) *FieldElement {
 	id := name + "-field"
 	field := &FieldElement{
@@ -66,12 +69,16 @@ func Field(name string, label string, value string) *FieldElement {
 	)
 	return field
 }
+
+// Returns a checkbox field with the given name and label
 func Checkbox(name string, label string) *FieldElement {
 	field := Field(name, label, "")
 	field.GetInput().Type("checkbox")
 	field.children[FieldCheck] = Span("")
 	return field
 }
+
+// Default function to render an option in a select element
 func defaultRenderOption(opt Option, value string) Element {
 	item := NewElement("option").Value(opt.Value).Text(opt.Label)
 	if value == opt.Value {
@@ -79,6 +86,8 @@ func defaultRenderOption(opt Option, value string) Element {
 	}
 	return item
 }
+
+// Returns a select field with the given name, label, value, and options
 func Select(name string, label string, value string, options []Option, renderOption ...func(Option, string) Element) *FieldElement {
 	renderOpt := defaultRenderOption
 	if len(renderOption) > 0 {
@@ -91,6 +100,8 @@ func Select(name string, label string, value string, options []Option, renderOpt
 	}
 	return field
 }
+
+// Sets the checked value of a checkbox
 func (f *FieldElement) Checked(value ...bool) *FieldElement {
 	if len(value) > 0 && !value[0] {
 		f.GetInput().RemoveAttr("checked")
@@ -99,13 +110,19 @@ func (f *FieldElement) Checked(value ...bool) *FieldElement {
 	}
 	return f
 }
+
+// Returns the input element of the field
 func (f *FieldElement) GetInput() Element {
 	return f.children[FieldInput]
 }
+
+// Sets the input element of the field
 func (f *FieldElement) SetInput(e Element) *FieldElement {
 	f.children[FieldInput] = e
 	return f
 }
+
+// Sets the label text of the field
 func (f *FieldElement) Label(label string) *FieldElement {
 	l := f.GetLabel()
 	// log.Printf("l: %v\n", l)
@@ -126,9 +143,13 @@ func (f *FieldElement) Label(label string) *FieldElement {
 	// log.Printf("l: %v\n", f.children)
 	return f
 }
+
+// Returns the label element of the field
 func (f *FieldElement) GetLabel() Element {
 	return f.children[FieldLabel]
 }
+
+// Sets the label element of the field
 func (f *FieldElement) SetLabel(l Element) *FieldElement {
 	if l == nil {
 		return f
@@ -136,21 +157,30 @@ func (f *FieldElement) SetLabel(l Element) *FieldElement {
 	f.children[FieldLabel] = l
 	return f
 }
+
+// Returns the error element of the field
 func (f *FieldElement) GetError() Element {
 	return f.children[FieldError]
 }
+
+// Sets the error element of the field
 func (f *FieldElement) SetError(e Element) *FieldElement {
 	f.children[FieldError] = e
 	return f
 }
+
+// Sets the type attribute on the input element
 func (f *FieldElement) Type(tipe string) Element {
 	f.GetInput().Type(tipe)
 	return f
 }
 
+// Renders the field to an HTML string
 func (f *FieldElement) Render() string {
 	return f.Renderer(f)
 }
+
+// The default Renderer which renders the field to an HTML string
 func defaultFieldRenderer(f *FieldElement) string {
 	return f.DefaultElement.Render()
 }
@@ -162,6 +192,7 @@ func defaultFieldRenderer(f *FieldElement) string {
 // 	return f
 // }
 
+// Sets the id attribute of the input element, updates the for attribute on the label, and the id on the error span
 func (f *FieldElement) Id(id string) Element {
 	f.GetInput().Id(id)
 	label := f.GetLabel()
@@ -171,24 +202,30 @@ func (f *FieldElement) Id(id string) Element {
 	f.GetError().Id(id + "-error")
 	return f
 }
+
+// Sets the name attribute of the input element. Also updates the id on the field to name + "-field"
 func (f *FieldElement) Name(name string) Element {
 	input := f.GetInput()
 	oldName := input.GetAttr("name")
-	log.Printf("oldName: %v\n", oldName)
-	oldId := input.GetAttr("id")
-	log.Printf("oldId: %v\n", oldId)
-	log.Printf("oldId == oldName: %v\n", oldId == oldName+"-field")
+	// log.Printf("oldName: %v\n", oldName)
+	oldId := input.GetId()
+	// log.Printf("oldId: %v\n", oldId)
+	// log.Printf("oldId == oldName: %v\n", oldId == oldName+"-field")
 	input.Name(name)
 	if oldId == oldName+"-field" {
-		log.Printf("setting id")
+		// log.Printf("setting id")
 		return f.Id(name + "-field")
 	}
 	return f
 }
+
+// Sets the value attribute of the input element
 func (f *FieldElement) Value(value string) Element {
 	f.GetInput().Value(value)
 	return f
 }
+
+// Sets the required and onblur attributes of the input element
 func (f *FieldElement) Required(required ...bool) *FieldElement {
 	if len(required) > 0 && !required[0] {
 		f.GetInput().RemoveAttr("required").RemoveAttr("onblur")
@@ -197,6 +234,9 @@ func (f *FieldElement) Required(required ...bool) *FieldElement {
 	}
 	return f
 }
+
+// Sets the type of the input element to "email" if is_email is not specified or true
+// Sets type to "text" if is_email is false
 func (f *FieldElement) Email(is_email ...bool) *FieldElement {
 	if len(is_email) > 0 && !is_email[0] {
 		f.GetInput().Type("text")
@@ -205,6 +245,9 @@ func (f *FieldElement) Email(is_email ...bool) *FieldElement {
 	}
 	return f
 }
+
+// Sets the type of the input element to "password" if is_password is not specified or true
+// Sets type to "text" if is_password is false
 func (f *FieldElement) Password(is_password ...bool) *FieldElement {
 	if len(is_password) > 0 && !is_password[0] {
 		f.GetInput().Type("text")
@@ -406,15 +449,16 @@ func (f *FieldElement) Password(is_password ...bool) *FieldElement {
 //		f.input = *f.input.Attr("step", step)
 //		return f
 //	}
+
+// Sets the Error message of the element
 func (f *FieldElement) Error(err string) *FieldElement {
 	f.GetError().Text(err)
 	return f
 }
-func (f *FieldElement) GetWrapper() Element {
-	return f
-}
-func (f *FieldElement) Target(value string) Element {
-	f.GetInput().Target(value)
+
+// Sets the hx-target attribute on the input element
+func (f *FieldElement) HXTarget(value string) Element {
+	f.GetInput().HXTarget(value)
 	return f
 }
 
@@ -442,31 +486,39 @@ func (f *FieldElement) Target(value string) Element {
 // 	return f
 // }
 
-func (f *FieldElement) Post(value string) Element {
-	f.GetInput().Post(value)
-	return f
-}
-func (f *FieldElement) Get(value string) Element {
-	f.GetInput().Get(value)
+// Sets the hx-post attribute on the input element
+func (f *FieldElement) HXPost(value string) Element {
+	f.GetInput().HXPost(value)
 	return f
 }
 
-func (f *FieldElement) Put(value string) Element {
-	f.GetInput().Put(value)
+// Sets the hx-get attribute on the input element
+func (f *FieldElement) HXGet(value string) Element {
+	f.GetInput().HXGet(value)
 	return f
 }
 
-func (f *FieldElement) Patch(value string) Element {
-	f.GetInput().Patch(value)
+// Sets the hx-put attribute on the input element
+func (f *FieldElement) HXPut(value string) Element {
+	f.GetInput().HXPut(value)
 	return f
 }
 
-func (f *FieldElement) Delete(value string) Element {
-	f.GetInput().Delete(value)
+// Sets the hx-patch attribute on the input element
+func (f *FieldElement) HXPatch(value string) Element {
+	f.GetInput().HXPatch(value)
 	return f
 }
-func (f *FieldElement) Swap(value string) Element {
-	f.GetInput().Swap(value)
+
+// Sets the hx-delete attribute on the input element
+func (f *FieldElement) HXDelete(value string) Element {
+	f.GetInput().HXDelete(value)
+	return f
+}
+
+// Sets the hx-swap attribute on the input element
+func (f *FieldElement) HXSwap(value string) Element {
+	f.GetInput().HXSwap(value)
 	return f
 }
 

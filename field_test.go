@@ -54,12 +54,12 @@ func TestFieldValue(t *testing.T) {
 	assert.Equalf(t, `<div><label for="name-field">Hello</label><input id="name-field" name="name" type="text" value="hello"><div id="name-field-error"></div></div>`, result, "should match")
 }
 func TestFieldTarget(t *testing.T) {
-	e := Field("name", "Hello", "").Target("hello")
+	e := Field("name", "Hello", "").HXTarget("hello")
 	result := e.Render()
 	assert.Equalf(t, `<div><label for="name-field">Hello</label><input hx-target="hello" id="name-field" name="name" type="text"><div id="name-field-error"></div></div>`, result, "should match")
 }
 func TestFieldSwap(t *testing.T) {
-	e := Field("name", "Hello", "").Swap("hello")
+	e := Field("name", "Hello", "").HXSwap("hello")
 	result := e.Render()
 	assert.Equalf(t, `<div><label for="name-field">Hello</label><input hx-swap="hello" id="name-field" name="name" type="text"><div id="name-field-error"></div></div>`, result, "should match")
 }
@@ -171,25 +171,25 @@ func TestFieldError(t *testing.T) {
 // }
 
 func TestFieldGet(t *testing.T) {
-	e := Field("name", "Hello", "").Get("/url")
+	e := Field("name", "Hello", "").HXGet("/url")
 	result := e.Render()
 	assert.Equalf(t, `<div><label for="name-field">Hello</label><input hx-get="/url" id="name-field" name="name" type="text"><div id="name-field-error"></div></div>`, result, "should match")
 }
 
 func TestFieldPut(t *testing.T) {
-	e := Field("name", "Hello", "").Put("/url")
+	e := Field("name", "Hello", "").HXPut("/url")
 	result := e.Render()
 	assert.Equalf(t, `<div><label for="name-field">Hello</label><input hx-put="/url" id="name-field" name="name" type="text"><div id="name-field-error"></div></div>`, result, "should match")
 }
 
 func TestFieldPatch(t *testing.T) {
-	e := Field("name", "Hello", "").Patch("/url")
+	e := Field("name", "Hello", "").HXPatch("/url")
 	result := e.Render()
 	assert.Equalf(t, `<div><label for="name-field">Hello</label><input hx-patch="/url" id="name-field" name="name" type="text"><div id="name-field-error"></div></div>`, result, "should match")
 }
 
 func TestFieldDelete(t *testing.T) {
-	e := Field("name", "Hello", "").Delete("/url")
+	e := Field("name", "Hello", "").HXDelete("/url")
 	result := e.Render()
 	assert.Equalf(t, `<div><label for="name-field">Hello</label><input hx-delete="/url" id="name-field" name="name" type="text"><div id="name-field-error"></div></div>`, result, "should match")
 }
@@ -285,3 +285,115 @@ func TestCustomFieldRendering(t *testing.T) {
 //		result := e.Render()
 //		assert.Equalf(t, `<div><label for="name-field">Hello</label><textarea id="name-field" name="name" type="text">red`+"\n"+`green</textarea><div id="name-field-error"></div></div>`, result, "should match")
 //	}
+func TestGetOptionLabel(t *testing.T) {
+	opts := []Option{
+		{Label: "Red", Value: "red"},
+		{Label: "Green", Value: "green"},
+		{Label: "Blue", Value: "blue"},
+	}
+
+	result := GetOptionLabel("green", opts)
+	assert.Equal(t, "Green", result)
+}
+
+func TestGetOptionLabelEmptyOptions(t *testing.T) {
+	var opts []Option
+	result := GetOptionLabel("anything", opts)
+	assert.Equal(t, "", result)
+}
+
+func TestGetOptionLabelValueNotFound(t *testing.T) {
+	opts := []Option{
+		{Label: "Red", Value: "red"},
+		{Label: "Green", Value: "green"},
+	}
+	result := GetOptionLabel("yellow", opts)
+	assert.Equal(t, "", result)
+}
+
+func TestGetOptionLabelWithEmptyValue(t *testing.T) {
+	opts := []Option{
+		{Label: "Red", Value: "red"},
+		{Label: "Empty", Value: ""},
+		{Label: "Blue", Value: "blue"},
+	}
+	result := GetOptionLabel("", opts)
+	assert.Equal(t, "Empty", result)
+}
+
+func TestGetOptionLabelWithDuplicateValues(t *testing.T) {
+	opts := []Option{
+		{Label: "First Red", Value: "red"},
+		{Label: "Second Red", Value: "red"},
+	}
+	result := GetOptionLabel("red", opts)
+	assert.Equal(t, "First Red", result)
+}
+func TestSetInput(t *testing.T) {
+	e := Field("name", "Hello", "")
+	e.SetInput(Input("name").Type("number"))
+	result := e.Render()
+	assert.Equalf(t, `<div><label for="name-field">Hello</label><input name="name" type="number"><div id="name-field-error"></div></div>`, result, "should match")
+}
+
+func TestSetInputNil(t *testing.T) {
+	e := Field("name", "Hello", "")
+	e.SetInput(nil)
+	result := e.Render()
+	assert.Equalf(t, `<div><label for="name-field">Hello</label><div id="name-field-error"></div></div>`, result, "should match")
+}
+func TestSetLabel(t *testing.T) {
+	e := Field("name", "Hello", "")
+	e.SetLabel(Label("name-field"))
+	result := e.Render()
+	assert.Equalf(t, `<div><label>name-field</label><input id="name-field" name="name" type="text"><div id="name-field-error"></div></div>`, result, "should match")
+}
+
+func TestSetLabelNil(t *testing.T) {
+	e := Field("name", "Hello", "")
+	originalRender := e.Render()
+	e.SetLabel(nil)
+	result := e.Render()
+	assert.Equalf(t, originalRender, result, "should remain unchanged when setting nil label")
+}
+
+func TestSetLabelCustomElement(t *testing.T) {
+	e := Field("name", "Hello", "")
+	customLabel := Div("").Text("Custom Label").Class("custom-label")
+	e.SetLabel(customLabel)
+	result := e.Render()
+	assert.Equalf(t, `<div><div class="custom-label">Custom Label</div><input id="name-field" name="name" type="text"><div id="name-field-error"></div></div>`, result, "should match")
+}
+func TestSetError(t *testing.T) {
+	e := Field("name", "Hello", "")
+	e.SetError(P("Something isnt right!"))
+	result := e.Render()
+	assert.Equalf(t, `<div><label for="name-field">Hello</label><input id="name-field" name="name" type="text"><p>Something isnt right!</p></div>`, result, "should match")
+}
+
+func TestSetErrorNil(t *testing.T) {
+	e := Field("name", "Hello", "")
+	e.SetError(nil)
+	result := e.Render()
+	assert.Equalf(t, `<div><label for="name-field">Hello</label><input id="name-field" name="name" type="text"></div>`, result, "should match")
+}
+func TestRequired(t *testing.T) {
+	e := Field("name", "Hello", "")
+	e.Required()
+	result := e.Render()
+	assert.Equalf(t, `<div><label for="name-field">Hello</label><input id="name-field" name="name" onblur="doFieldValidation(event)" required="required" type="text"><div id="name-field-error"></div></div>`, result, "should match")
+
+	e.Required(false)
+	result = e.Render()
+	assert.Equalf(t, `<div><label for="name-field">Hello</label><input id="name-field" name="name" type="text"><div id="name-field-error"></div></div>`, result, "should match")
+}
+func TestPassword(t *testing.T) {
+	e := Field("name", "Hello", "")
+	e.Password()
+	result := e.Render()
+	assert.Equalf(t, `<div><label for="name-field">Hello</label><input id="name-field" name="name" type="password"><div id="name-field-error"></div></div>`, result, "should match")
+
+	e.Password(false)
+	result = e.Render()
+	assert.Equalf(t, `<div><label for="name-field">Hello</label><input id="name-field" name="name" type="text"><div id="name-field-error"></div></div>`, result, "should match")
+}

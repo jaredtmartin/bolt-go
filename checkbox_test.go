@@ -62,12 +62,12 @@ func TestCheckboxCheckedFalse(t *testing.T) {
 	assert.Equalf(t, `<div><label for="name-field">Hello</label><input id="name-field" name="name" type="checkbox"><div id="name-field-error"></div><span></span></div>`, result, "should match")
 }
 func TestCheckboxTarget(t *testing.T) {
-	e := Checkbox("name", "Hello").Target("hello")
+	e := Checkbox("name", "Hello").HXTarget("hello")
 	result := e.Render()
 	assert.Equalf(t, `<div><label for="name-field">Hello</label><input hx-target="hello" id="name-field" name="name" type="checkbox"><div id="name-field-error"></div><span></span></div>`, result, "should match")
 }
 func TestCheckboxSwap(t *testing.T) {
-	e := Checkbox("name", "Hello").Swap("hello")
+	e := Checkbox("name", "Hello").HXSwap("hello")
 	result := e.Render()
 	assert.Equalf(t, `<div><label for="name-field">Hello</label><input hx-swap="hello" id="name-field" name="name" type="checkbox"><div id="name-field-error"></div><span></span></div>`, result, "should match")
 }
@@ -125,33 +125,33 @@ func TestCheckboxText(t *testing.T) {
 
 // TestCheckboxPost
 func TestCheckboxPost(t *testing.T) {
-	e := Checkbox("name", "Hello").Post("/url")
+	e := Checkbox("name", "Hello").HXPost("/url")
 	result := e.Render()
 	assert.Equalf(t, `<div><label for="name-field">Hello</label><input hx-post="/url" id="name-field" name="name" type="checkbox"><div id="name-field-error"></div><span></span></div>`, result, "should match")
 }
 
 // TestCheckboxGet
 func TestCheckboxGet(t *testing.T) {
-	e := Checkbox("name", "Hello").Get("/url")
+	e := Checkbox("name", "Hello").HXGet("/url")
 	result := e.Render()
 	assert.Equalf(t, `<div><label for="name-field">Hello</label><input hx-get="/url" id="name-field" name="name" type="checkbox"><div id="name-field-error"></div><span></span></div>`, result, "should match")
 }
 
 // TestCheckboxPut
 func TestCheckboxPut(t *testing.T) {
-	e := Checkbox("name", "Hello").Put("/url")
+	e := Checkbox("name", "Hello").HXPut("/url")
 	result := e.Render()
 	assert.Equalf(t, `<div><label for="name-field">Hello</label><input hx-put="/url" id="name-field" name="name" type="checkbox"><div id="name-field-error"></div><span></span></div>`, result, "should match")
 }
 
 // TestCheckboxPatch
 func TestCheckboxPatch(t *testing.T) {
-	e := Checkbox("name", "Hello").Patch("/url")
+	e := Checkbox("name", "Hello").HXPatch("/url")
 	result := e.Render()
 	assert.Equalf(t, `<div><label for="name-field">Hello</label><input hx-patch="/url" id="name-field" name="name" type="checkbox"><div id="name-field-error"></div><span></span></div>`, result, "should match")
 }
 func TestCheckboxDelete(t *testing.T) {
-	e := Checkbox("name", "Hello").Delete("/url")
+	e := Checkbox("name", "Hello").HXDelete("/url")
 	result := e.Render()
 	assert.Equalf(t, `<div><label for="name-field">Hello</label><input hx-delete="/url" id="name-field" name="name" type="checkbox"><div id="name-field-error"></div><span></span></div>`, result, "should match")
 }

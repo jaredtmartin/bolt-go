@@ -215,3 +215,73 @@ func TestVideoIframe(t *testing.T) {
 		t.Fatalf(`Svg() = %q, expected %q`, result, expected)
 	}
 }
+func TestScript(t *testing.T) {
+	e := Script("console.log('test')").Src("/src/test.js")
+	result := e.Render()
+	expected := `<script src="/src/test.js">console.log('test')</script>`
+	if result != expected {
+		t.Fatalf(`Script() = %q, expected %q`, result, expected)
+	}
+}
+func TestHead(t *testing.T) {
+	// Test empty head
+	e := Head()
+	result := e.Render()
+	expected := "<head></head>"
+	if result != expected {
+		t.Fatalf(`Head() = %q, expected %q`, result, expected)
+	}
+
+	// Test head with single child
+	e = Head(Script("console.log('test')"))
+	result = e.Render()
+	expected = "<head><script>console.log('test')</script></head>"
+	if result != expected {
+		t.Fatalf(`Head() with single child = %q, expected %q`, result, expected)
+	}
+
+	// Test head with multiple children
+	e = Head(
+		Script("console.log('test')"),
+		Html("<meta charset=\"UTF-8\">"),
+		Html("<title>Test Page</title>"),
+	)
+	result = e.Render()
+	expected = "<head><script>console.log('test')</script><meta charset=\"UTF-8\"><title>Test Page</title></head>"
+	if result != expected {
+		t.Fatalf(`Head() with multiple children = %q, expected %q`, result, expected)
+	}
+}
+func TestBody(t *testing.T) {
+	// Test empty body
+	e := Body()
+	result := e.Render()
+	expected := "<body></body>"
+	if result != expected {
+		t.Fatalf(`Body() = %q, expected %q`, result, expected)
+	}
+
+	// Test body with single child
+	e = Body(P("Hello"))
+	result = e.Render()
+	expected = "<body><p>Hello</p></body>"
+	if result != expected {
+		t.Fatalf(`Body() = %q, expected %q`, result, expected)
+	}
+
+	// Test body with multiple children
+	e = Body(H1("Title"), P("Paragraph"), Div("", P("Content")))
+	result = e.Render()
+	expected = "<body><h1>Title</h1><p>Paragraph</p><div><p>Content</p></div></body>"
+	if result != expected {
+		t.Fatalf(`Body() = %q, expected %q`, result, expected)
+	}
+
+	// Test body with nested elements
+	e = Body(Div("", P("Nested")))
+	result = e.Render()
+	expected = "<body><div><p>Nested</p></div></body>"
+	if result != expected {
+		t.Fatalf(`Body() = %q, expected %q`, result, expected)
+	}
+}
