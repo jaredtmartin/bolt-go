@@ -91,7 +91,7 @@ func Svg(path string, width int, height int, vbX int, vbY int) Element {
 		Attr("width", strconv.Itoa(width)).
 		Attr("height", strconv.Itoa(height)).
 		Class("fill-current").
-		Text(path)
+		UnsafeHtml(path)
 }
 func VideoIframe(title string, width int, height int, src string) Element {
 	return NewElement("iframe").

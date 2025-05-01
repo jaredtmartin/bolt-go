@@ -206,6 +206,12 @@ func TestSvg(t *testing.T) {
 	if result != expected {
 		t.Fatalf(`Svg() = %q, expected %q`, result, expected)
 	}
+	e = Svg(`<path d="M15 19l-7-7 7-7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>`, 24, 24, 24, 24).Class("fill-current")
+	result = e.Render()
+	expected = `<svg height="24" version="1.1" viewBox="0 0 24 24" width="24" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg" class="fill-current"><path d="M15 19l-7-7 7-7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>`
+	if result != expected {
+		t.Fatalf(`Svg() = %q, expected %q`, result, expected)
+	}
 }
 func TestVideoIframe(t *testing.T) {
 	e := VideoIframe("Hello", 23, 25, "https://www.youtube.com/embed/dQw4w9WgXcQ")
