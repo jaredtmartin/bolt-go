@@ -175,6 +175,17 @@ func (f *FieldElement) Type(tipe string) Element {
 	return f
 }
 
+// Returns the value of the input field
+func (f *FieldElement) GetValue() string {
+	return f.GetInput().GetAttr("value")
+}
+
+// Returns the wrapper element of the field
+// This is useful because it returns an Element instead of a FieldElement
+func (f *FieldElement) GetWrapper() Element {
+	return f
+}
+
 // Renders the field to an HTML string
 func (f *FieldElement) Render() string {
 	return f.Renderer(f)

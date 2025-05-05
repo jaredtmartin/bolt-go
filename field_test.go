@@ -397,3 +397,16 @@ func TestPassword(t *testing.T) {
 	result = e.Render()
 	assert.Equalf(t, `<div><label for="name-field">Hello</label><input id="name-field" name="name" type="text"><div id="name-field-error"></div></div>`, result, "should match")
 }
+func TestGetWrapper(t *testing.T) {
+	e := Field("name", "Hello", "")
+	wrapper := e.GetWrapper()
+
+	// Test that wrapper is the same instance as the field
+	assert.Equal(t, e, wrapper)
+
+	// Verify wrapper modifications affect the original field
+	wrapper.Class("test-class")
+	result := e.Render()
+	assert.Equalf(t, `<div class="test-class"><label for="name-field">Hello</label><input id="name-field" name="name" type="text"><div id="name-field-error"></div></div>`, result, "should match")
+
+}
