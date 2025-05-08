@@ -42,7 +42,7 @@ type Element interface {
 	// Returns the value of the given attribute key.
 	GetAttr(key string) string
 	// Sets the given attribute key to the given value.
-	Attr(key string, value string) Element
+	Attr(key string, value ...string) Element
 	// Removes the given attribute key from the element.
 	RemoveAttr(key ...string) Element
 	// Returns the children of the element.
@@ -352,8 +352,12 @@ func (e *DefaultElement) GetAttr(key string) string {
 }
 
 // Sets the given attribute key to the given value.
-func (e *DefaultElement) Attr(key string, value string) Element {
-	e.add_attribute(key, value)
+func (e *DefaultElement) Attr(key string, value ...string) Element {
+	v := ""
+	if len(value) > 0 {
+		v = value[0]
+	}
+	e.add_attribute(key, v)
 	return e
 }
 

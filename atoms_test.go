@@ -228,6 +228,13 @@ func TestScript(t *testing.T) {
 	if result != expected {
 		t.Fatalf(`Script() = %q, expected %q`, result, expected)
 	}
+	e = Script(`console.log("<div/>")`).Src("/src/test.js")
+	result = e.Render()
+	expected = `<script src="/src/test.js">console.log("<div/>")</script>`
+	if result != expected {
+		t.Fatalf(`Script() = %q, expected %q`, result, expected)
+	}
+	// We should be able to render a script with special characters
 }
 func TestHead(t *testing.T) {
 	// Test empty head

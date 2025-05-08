@@ -77,8 +77,10 @@ func Template(filename string) Element {
 	}
 	return NewElement("").UnsafeHtml(string(html))
 }
-func Script(text string) Element {
-	return NewElement("script").Text(text) //.Attr("defer", "")
+
+// returns a script tag with the given js code without escaping
+func Script(js string) Element {
+	return NewElement("script").UnsafeHtml(js) //.Attr("defer", "")
 }
 func Svg(path string, width int, height int, vbX int, vbY int) Element {
 	viewBox := fmt.Sprintf("0 0 %d %d", vbX, vbY)

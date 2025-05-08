@@ -90,8 +90,9 @@ func TestAttributes(t *testing.T) {
 	e.Attr("hx-post", "nope")
 	e.Attr("hx-target", "#target")
 	e.Attr("hx-post", "yep")
+	e.Attr("alpha")
 	result := e.Render()
-	expected := "<div hx-post=\"yep\" hx-target=\"#target\" style=\"background: blue; border: 2px sold green; color: red;\" class=\"green yellow\"></div>"
+	expected := "<div alpha hx-post=\"yep\" hx-target=\"#target\" style=\"background: blue; border: 2px sold green; color: red;\" class=\"green yellow\"></div>"
 	if result != expected {
 		t.Fatalf(`Attributes() = %q, expected %q`, result, expected)
 	}
