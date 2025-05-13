@@ -82,6 +82,9 @@ func Template(filename string) Element {
 func Script(js string) Element {
 	return NewElement("script").UnsafeHtml(js) //.Attr("defer", "")
 }
+func Stylesheet(url string) Element {
+	return NewElement("link").Href(url).Tag("link").Attr("rel", "stylesheet")
+}
 func Svg(path string, width int, height int, vbX int, vbY int) Element {
 	viewBox := fmt.Sprintf("0 0 %d %d", vbX, vbY)
 	return NewElement("svg").

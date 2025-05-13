@@ -298,3 +298,12 @@ func TestBody(t *testing.T) {
 		t.Fatalf(`Body() = %q, expected %q`, result, expected)
 	}
 }
+func TestStylesheet(t *testing.T) {
+	// Test basic stylesheet
+	e := Stylesheet("/styles/main.css")
+	result := e.Render()
+	expected := `<link href="/styles/main.css" rel="stylesheet">`
+	if result != expected {
+		t.Fatalf(`Stylesheet("/styles/main.css") = %q, expected %q`, result, expected)
+	}
+}
