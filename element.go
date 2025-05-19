@@ -149,6 +149,8 @@ type Element interface {
 	XShow(condition string) Element
 	// Sets x-init attribute for alpine.js
 	XInit(value string) Element
+	// Sets x-ref attribute for alpine.js
+	XRef(value string) Element
 	// Sets x-cloak attribute for alpine.js
 	XCloak() Element
 
@@ -742,6 +744,12 @@ func (e *DefaultElement) XInit(value string) Element {
 // Sets x-cloak attribute for alpine.js
 func (e *DefaultElement) XCloak() Element {
 	e.add_attribute("x-cloak", "")
+	return e
+}
+
+// Sets x-ref attribute for alpine.js
+func (e *DefaultElement) XRef(value string) Element {
+	e.add_attribute("x-ref", value)
 	return e
 }
 

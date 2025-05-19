@@ -564,6 +564,14 @@ func TestXInit(t *testing.T) {
 		t.Fatalf(`result = %q, expected %q`, result, expected)
 	}
 }
+func TestXRef(t *testing.T) {
+	e := NewElement("div").XRef("handle")
+	result := e.Render()
+	expected := "<div x-ref=\"handle\"></div>"
+	if result != expected {
+		t.Fatalf(`result = %q, expected %q`, result, expected)
+	}
+}
 func TestXCloak(t *testing.T) {
 	e := NewElement("div").XCloak()
 	result := e.Render()
