@@ -78,12 +78,17 @@ func Template(filename string) Element {
 	return NewElement("").UnsafeHtml(string(html))
 }
 
-// returns a script tag with the given js code without escaping
+// returns a script tag with the given js code WITHOUT ESCAPING
 func Script(js string) Element {
 	return NewElement("script").UnsafeHtml(js) //.Attr("defer", "")
 }
 func Stylesheet(url string) Element {
 	return NewElement("link").Href(url).Tag("link").Attr("rel", "stylesheet")
+}
+
+// returns a style tag with the given css code WITHOUT ESCAPING
+func Style(css string) Element {
+	return NewElement("style").UnsafeHtml(css)
 }
 func Svg(path string, width int, height int, vbX int, vbY int) Element {
 	viewBox := fmt.Sprintf("0 0 %d %d", vbX, vbY)
