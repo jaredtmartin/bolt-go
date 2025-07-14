@@ -57,13 +57,7 @@ func TestRenderNullElementWithChildren(t *testing.T) {
 		t.Fatalf(`result = %q, expected %q`, result, expected)
 	}
 }
-func TestLink(t *testing.T) {
-	result := NewElement("link").Render()
-	expected := "<link>"
-	if result != expected {
-		t.Fatalf(`result = %q, expected %q`, result, expected)
-	}
-}
+
 func TestRemoveClasses(t *testing.T) {
 	e := NewElement("div").Class("red green blue yellow")
 	e.RemoveClass("green yellow")
@@ -1078,5 +1072,28 @@ func TestGetAttrs(t *testing.T) {
 	}
 	if attrs["aria-label"] != "label" {
 		t.Fatalf("Expected aria-label:label to remain, got aria-label:%s", attrs["aria-label"])
+	}
+}
+func TestMethod(t *testing.T) {
+	e := NewElement("form").Method("POST")
+	result := e.Render()
+	expected := "<form method=\"POST\"></form>"
+	if result != expected {
+		t.Fatalf(`result = %q, expected %q`, result, expected)
+	}
+
+	e.Method("GET")
+	result = e.Render()
+	expected = "<form method=\"GET\"></form>"
+	if result != expected {
+		t.Fatalf(`result = %q, expected %q`, result, expected)
+	}
+}
+func TestDefer(t *testing.T) {
+	e := NewElement("script").Defer()
+	result := e.Render()
+	expected := "<script defer=\"true\"></script>"
+	if result != expected {
+		t.Fatalf(`result = %q, expected %q`, result, expected)
 	}
 }

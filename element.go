@@ -14,7 +14,8 @@ type Element interface {
 	GetTag() string
 	// Sets the HTML tag name of the element.
 	Tag(tag string) Element
-
+	// Sets the defer attribute of the element.
+	Defer(value ...bool) Element
 	// Returns the id of the element.
 	GetId() string
 	// Returns the first child element with the given id recursively.
@@ -104,6 +105,9 @@ type Element interface {
 
 	// Sets the type attribute to "submit".
 	Submit() Element
+
+	// Sets the method attribute of the element to the given string.
+	Method(method string) Element
 
 	// Sets the src attribute of the element.
 	Src(src string) Element
@@ -687,6 +691,20 @@ func (e *DefaultElement) HXBoost(boost ...bool) Element {
 	return e
 }
 
+// Sets the defer attribute of the element.
+func (e *DefaultElement) Defer(value ...bool) Element {
+	if len(value) > 0 {
+		if value[0] {
+			e.add_attribute("defer", "true")
+		} else {
+			delete(e.attributes, "defer")
+		}
+	} else {
+		e.add_attribute("defer", "true")
+	}
+	return e
+}
+
 // Sets x-data attribute for alpine.js
 func (e *DefaultElement) XData(data string) Element {
 	e.add_attribute("x-data", data)
@@ -791,6 +809,12 @@ func (e *DefaultElement) Render() string {
 func (e *DefaultElement) Send(w http.ResponseWriter) {
 	w.Header().Set("Content-Type", "text/html; charset=utf-8")
 	w.Write([]byte(e.Render()))
+}
+
+// Sets the method attribute of the element to the given string.
+func (e *DefaultElement) Method(method string) Element {
+	e.add_attribute("method", method)
+	return e
 }
 
 // func (e *DefaultElement) Replace(key string, value string) Element {

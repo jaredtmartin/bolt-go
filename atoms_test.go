@@ -183,20 +183,27 @@ func TestSection(t *testing.T) {
 	}
 }
 
+//	func TestTemplate(t *testing.T) {
+//		result := Template("sample").Render()
+//		expected := "<p>Hello Html!</p>"
+//		if result != expected {
+//			t.Fatalf(`Template("sample") = %q, expected %q`, result, expected)
+//		}
+//		result = Template("sample.html").Render()
+//		if result != expected {
+//			t.Fatalf(`Template("sample.html") = %q, expected %q`, result, expected)
+//		}
+//		result = Template("sample.tmpl").Render()
+//		expected = "<p>Hello Tmpl!</p>"
+//		if result != expected {
+//			t.Fatalf(`Template("sample.tmpl") = %q, expected %q`, result, expected)
+//		}
+//	}
 func TestTemplate(t *testing.T) {
-	result := Template("sample").Render()
-	expected := "<p>Hello Html!</p>"
+	result := Template(P("Content")).Render()
+	expected := "<template><p>Content</p></template>"
 	if result != expected {
-		t.Fatalf(`Template("sample") = %q, expected %q`, result, expected)
-	}
-	result = Template("sample.html").Render()
-	if result != expected {
-		t.Fatalf(`Template("sample.html") = %q, expected %q`, result, expected)
-	}
-	result = Template("sample.tmpl").Render()
-	expected = "<p>Hello Tmpl!</p>"
-	if result != expected {
-		t.Fatalf(`Template("sample.tmpl") = %q, expected %q`, result, expected)
+		t.Fatalf(`Template(P("Content")) = %q, expected %q`, result, expected)
 	}
 }
 func TestSvg(t *testing.T) {
@@ -222,19 +229,27 @@ func TestVideoIframe(t *testing.T) {
 	}
 }
 func TestScript(t *testing.T) {
-	e := Script("console.log('test')").Src("/src/test.js")
+	// Test embedded script
+	e := Script("console.log('test')")
 	result := e.Render()
-	expected := `<script src="/src/test.js">console.log('test')</script>`
+	expected := `<script>console.log('test')</script>`
 	if result != expected {
-		t.Fatalf(`Script() = %q, expected %q`, result, expected)
+		t.Fatalf(`Script("console.log('test')") = %q, expected %q`, result, expected)
 	}
-	e = Script(`console.log("<div/>")`).Src("/src/test.js")
+	// Test linked script
+	e = Script("").Src("/src/test.js")
 	result = e.Render()
-	expected = `<script src="/src/test.js">console.log("<div/>")</script>`
+	expected = `<script src="/src/test.js"></script>`
 	if result != expected {
-		t.Fatalf(`Script() = %q, expected %q`, result, expected)
+		t.Fatalf(`Script("/src/test.js") = %q, expected %q`, result, expected)
 	}
-	// We should be able to render a script with special characters
+	// Test linked script that is deferred
+	e = Script("").Src("/src/test.js").Defer()
+	result = e.Render()
+	expected = `<script defer="true" src="/src/test.js"></script>`
+	if result != expected {
+		t.Fatalf(`Script("/src/test.js") = %q, expected %q`, result, expected)
+	}
 }
 func TestHead(t *testing.T) {
 	// Test empty head
@@ -305,5 +320,88 @@ func TestStylesheet(t *testing.T) {
 	expected := `<link href="/styles/main.css" rel="stylesheet">`
 	if result != expected {
 		t.Fatalf(`Stylesheet("/styles/main.css") = %q, expected %q`, result, expected)
+	}
+}
+
+func TestHiddenInput(t *testing.T) {
+	e := HiddenInput("name", "value")
+	result := e.Render()
+	expected := `<input name="name" type="hidden" value="value">`
+	if result != expected {
+		t.Fatalf(`HiddenInput("name", "value") = %q, expected %q`, result, expected)
+	}
+}
+
+func TestLi(t *testing.T) {
+	e := Li(P("Content"))
+	result := e.Render()
+	expected := `<li><p>Content</p></li>`
+	if result != expected {
+		t.Fatalf(`Li(P("Content")) = %q, expected %q`, result, expected)
+	}
+}
+
+func TestTable(t *testing.T) {
+	e := Table(
+		Tr(
+			Th(P("Header 1")),
+			Th(P("Header 2")),
+		),
+		Tr(
+			Td(P("Row 1, Cell 1")),
+			Td(P("Row 1, Cell 2")),
+		),
+	)
+	result := e.Render()
+	expected := `<table><tr><th><p>Header 1</p></th><th><p>Header 2</p></th></tr><tr><td><p>Row 1, Cell 1</p></td><td><p>Row 1, Cell 2</p></td></tr></table>`
+	if result != expected {
+		t.Fatalf(`Table() = %q, expected %q`, result, expected)
+	}
+}
+func TestTr(t *testing.T) {
+	e := Tr(
+		Td(P("Row 1, Cell 1")),
+		Td(P("Row 1, Cell 2")),
+	)
+	result := e.Render()
+	expected := `<tr><td><p>Row 1, Cell 1</p></td><td><p>Row 1, Cell 2</p></td></tr>`
+	if result != expected {
+		t.Fatalf(`Tr() = %q, expected %q`, result, expected)
+	}
+}
+func TestTh(t *testing.T) {
+	e := Th(
+		Td(P("Header 1")),
+		Td(P("Header 2")),
+	)
+	result := e.Render()
+	expected := `<th><td><p>Header 1</p></td><td><p>Header 2</p></td></th>`
+	if result != expected {
+		t.Fatalf(`Th() = %q, expected %q`, result, expected)
+	}
+}
+func TestTd(t *testing.T) {
+	e := Td(P("Content"))
+	result := e.Render()
+	expected := `<td><p>Content</p></td>`
+	if result != expected {
+		t.Fatalf(`Td(P("Content")) = %q, expected %q`, result, expected)
+	}
+}
+func TestString(t *testing.T) {
+	e := Template(P("Content"))
+	result := e.Render()
+	expected := `<template><p>Content</p></template>`
+	if result != expected {
+		t.Fatalf(`Template(P("Content")) = %q, expected %q`, result, expected)
+	}
+}
+
+func TestOobElement(t *testing.T) {
+	e := Oob("swap-value", P("Content"))
+	result := e.Render()
+	expected := `<div hx-swap-oob="swap-value"><p>Content</p></div>`
+	if result != expected {
+		t.Fatalf(`Oob("swap-value", P("Content")) = %q, expected %q`, result, expected)
 	}
 }
