@@ -6,7 +6,7 @@ import (
 )
 
 type Handler func(http.ResponseWriter, *http.Request) Element
-type Layout func(string, *http.Request, Element) Element
+type Layout func(string, *http.Request, ...Element) Element
 type HandlerBranch map[string][]Handler
 type UrlType string
 

@@ -13,8 +13,8 @@ func getHandler(w http.ResponseWriter, r *http.Request) Element {
 func postHandler(w http.ResponseWriter, r *http.Request) Element {
 	return String("POST")
 }
-func testlayoutfunc(title string, r *http.Request, e Element) Element {
-	return String(fmt.Sprintf("%s %s", title, e.Render()))
+func testlayoutfunc(title string, r *http.Request, e ...Element) Element {
+	return String(fmt.Sprintf("%s %s", title, e[0].Render()))
 }
 func TestRouteByMethodWithLayout(t *testing.T) {
 	mux := http.NewServeMux()
@@ -43,9 +43,9 @@ func TestRouteByMethodWithLayout(t *testing.T) {
 
 func TestRouteByMethod_NoHandlers(t *testing.T) {
 	mux := http.NewServeMux()
-	layout := func(title string, r *http.Request, e Element) Element {
+	layout := func(title string, r *http.Request, e ...Element) Element {
 		t.Error("layout should not be called")
-		return e
+		return e[0]
 	}
 	RouteByMethod(mux, "/nohandler", "NoHandler", layout)
 	req := httptest.NewRequest(http.MethodGet, "/nohandler", nil)
@@ -59,8 +59,8 @@ func TestRouteByMethod_NoHandlers(t *testing.T) {
 
 func TestRouteByMethod_HandlerIndexBounds(t *testing.T) {
 	mux := http.NewServeMux()
-	layout := func(title string, r *http.Request, e Element) Element {
-		return e
+	layout := func(title string, r *http.Request, e ...Element) Element {
+		return e[0]
 	}
 	onlyHandler := func(w http.ResponseWriter, r *http.Request) Element {
 		return String("ONLY")
