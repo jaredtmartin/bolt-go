@@ -405,3 +405,75 @@ func TestOobElement(t *testing.T) {
 		t.Fatalf(`Oob("swap-value", P("Content")) = %q, expected %q`, result, expected)
 	}
 }
+func TestStyle(t *testing.T) {
+	// Test with simple CSS
+	e := Style("body { background: #fff; }")
+	result := e.Render()
+	expected := `<style>body { background: #fff; }</style>`
+	if result != expected {
+		t.Fatalf(`Style("body { background: #fff; }") = %q, expected %q`, result, expected)
+	}
+
+	// Test with empty CSS
+	e = Style("")
+	result = e.Render()
+	expected = `<style></style>`
+	if result != expected {
+		t.Fatalf(`Style("") = %q, expected %q`, result, expected)
+	}
+
+	// Test with multiline CSS
+	css := `
+body {
+	color: #333;
+}
+h1 {
+	font-size: 2em;
+}`
+	e = Style(css)
+	result = e.Render()
+	expected = `<style>` + css + `</style>`
+	if result != expected {
+		t.Fatalf(`Style(multiline) = %q, expected %q`, result, expected)
+	}
+}
+func TestUl(t *testing.T) {
+	// Test empty ul
+	e := Ul()
+	result := e.Render()
+	expected := "<ul></ul>"
+	if result != expected {
+		t.Fatalf(`Ul() = %q, expected %q`, result, expected)
+	}
+
+	// Test ul with one child
+	e = Ul(Li(P("Item 1")))
+	result = e.Render()
+	expected = "<ul><li><p>Item 1</p></li></ul>"
+	if result != expected {
+		t.Fatalf(`Ul(Li(P("Item 1"))) = %q, expected %q`, result, expected)
+	}
+
+	// Test ul with multiple children
+	e = Ul(
+		Li(P("Item 1")),
+		Li(P("Item 2")),
+		Li(P("Item 3")),
+	)
+	result = e.Render()
+	expected = "<ul><li><p>Item 1</p></li><li><p>Item 2</p></li><li><p>Item 3</p></li></ul>"
+	if result != expected {
+		t.Fatalf(`Ul(...) = %q, expected %q`, result, expected)
+	}
+
+	// Test ul with nested ul
+	e = Ul(
+		Li(P("Item 1")),
+		Li(Ul(Li(P("Subitem 1")), Li(P("Subitem 2")))),
+	)
+	result = e.Render()
+	expected = "<ul><li><p>Item 1</p></li><li><ul><li><p>Subitem 1</p></li><li><p>Subitem 2</p></li></ul></li></ul>"
+	if result != expected {
+		t.Fatalf(`Ul with nested Ul = %q, expected %q`, result, expected)
+	}
+}

@@ -1,6 +1,8 @@
 package bolt
 
 import (
+	"net/http/httptest"
+	"strings"
 	"testing"
 )
 
@@ -1090,10 +1092,73 @@ func TestMethod(t *testing.T) {
 	}
 }
 func TestDefer(t *testing.T) {
+	// Test default (no argument) adds defer="true"
 	e := NewElement("script").Defer()
 	result := e.Render()
 	expected := "<script defer=\"true\"></script>"
 	if result != expected {
-		t.Fatalf(`result = %q, expected %q`, result, expected)
+		t.Fatalf(`Defer() = %q, expected %q`, result, expected)
+	}
+
+	// Test Defer(true) explicitly adds defer="true"
+	e = NewElement("script").Defer(true)
+	result = e.Render()
+	expected = "<script defer=\"true\"></script>"
+	if result != expected {
+		t.Fatalf(`Defer(true) = %q, expected %q`, result, expected)
+	}
+
+	// Test Defer(false) removes the defer attribute
+	e = NewElement("script").Defer(true)
+	e.Defer(false)
+	result = e.Render()
+	expected = "<script></script>"
+	if result != expected {
+		t.Fatalf(`Defer(false) = %q, expected %q`, result, expected)
+	}
+
+	// Test Defer(false) on element without defer does nothing
+	e = NewElement("script").Defer(false)
+	result = e.Render()
+	expected = "<script></script>"
+	if result != expected {
+		t.Fatalf(`Defer(false) on no defer = %q, expected %q`, result, expected)
+	}
+
+	// Test chaining Defer
+	e = NewElement("script").Defer().Defer(false)
+	result = e.Render()
+	expected = "<script></script>"
+	if result != expected {
+		t.Fatalf(`Chained Defer().Defer(false) = %q, expected %q`, result, expected)
+	}
+}
+
+func TestOobOnly(t *testing.T) {
+	e := NewElement("div").Text("Hello OOB")
+
+	rr := httptest.NewRecorder()
+	e.OobOnly(rr)
+
+	resp := rr.Result()
+	defer resp.Body.Close()
+
+	// Check Content-Type header
+	contentType := resp.Header.Get("Content-Type")
+	if contentType != "text/html; charset=utf-8" {
+		t.Fatalf("Content-Type = %q, expected %q", contentType, "text/html; charset=utf-8")
+	}
+
+	// Check HX-Reswap header
+	hxReswap := resp.Header.Get("HX-Reswap")
+	if hxReswap != "none" {
+		t.Fatalf("HX-Reswap = %q, expected %q", hxReswap, "none")
+	}
+
+	// Check body
+	body := rr.Body.String()
+	expected := "<div>Hello OOB</div>"
+	if strings.TrimSpace(body) != expected {
+		t.Fatalf("Body = %q, expected %q", body, expected)
 	}
 }

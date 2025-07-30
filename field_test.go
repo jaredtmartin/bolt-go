@@ -88,6 +88,11 @@ func TestFieldLabel(t *testing.T) {
 	result := e.Render()
 	assert.Equalf(t, `<div><label for="name-field">Green</label><input id="name-field" name="name" type="text"><div id="name-field-error"></div></div>`, result, "should match")
 }
+func TestFieldWithNoLabel(t *testing.T) {
+	e := Field("name", "", "")
+	result := e.Render()
+	assert.Equalf(t, `<div><input id="name-field" name="name" type="text"><div id="name-field-error"></div></div>`, result, "should match")
+}
 func TestFieldId(t *testing.T) {
 	e := Field("name", "Hello", "").Id("name")
 	result := e.Render()
@@ -356,6 +361,11 @@ func TestSetLabelNil(t *testing.T) {
 	result := e.Render()
 	assert.Equalf(t, originalRender, result, "should remain unchanged when setting nil label")
 }
+func TestNoLabel(t *testing.T) {
+	e := Label("")
+	result := e.Render()
+	assert.Equalf(t, `<label></label>`, result, "should match")
+}
 
 func TestSetLabelCustomElement(t *testing.T) {
 	e := Field("name", "Hello", "")
@@ -408,5 +418,17 @@ func TestGetWrapper(t *testing.T) {
 	wrapper.Class("test-class")
 	result := e.Render()
 	assert.Equalf(t, `<div class="test-class"><label for="name-field">Hello</label><input id="name-field" name="name" type="text"><div id="name-field-error"></div></div>`, result, "should match")
+
+}
+func TestRemoveLabel(t *testing.T) {
+	e := Field("hello", "", "").Label("")
+	result := e.Render()
+	assert.Equalf(t, `<div><input id="hello-field" name="hello" type="text"><div id="hello-field-error"></div></div>`, result, "should match")
+}
+
+func TestGetValue(t *testing.T) {
+	e := Field("hello", "Hello", "123")
+	result := e.GetValue()
+	assert.Equalf(t, "123", result, "should match")
 
 }
