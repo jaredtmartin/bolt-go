@@ -16,14 +16,14 @@ type HandlerMethods struct {
 	Put    Handler
 	Patch  Handler
 }
-type CrudType string
+type UrlType string
 
-const ListUrl CrudType = "list"
-const SaveUrl CrudType = "edit"
-const EditUrl CrudType = "edit"
-const NewUrl CrudType = "new"
-const ShowUrl CrudType = "show"
-const DeleteUrl CrudType = "delete"
+const ListUrl UrlType = "list"
+const SaveUrl UrlType = "save"
+const EditUrl UrlType = "edit"
+const NewUrl UrlType = "new"
+const ShowUrl UrlType = "show"
+const DeleteUrl UrlType = "delete"
 
 // Routes requests for a given path based on the HTTP method.
 // mux is the HTTP ServeMux to register the routes with.
