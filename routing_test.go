@@ -7,18 +7,18 @@ import (
 	"testing"
 )
 
-func getHandler(w http.ResponseWriter, r *http.Request) Element {
-	return String("GET")
+func getHandler(w http.ResponseWriter, r *http.Request) (string, Element) {
+	return "Get", String("GET")
 }
-func postHandler(w http.ResponseWriter, r *http.Request) Element {
-	return String("POST")
+func postHandler(w http.ResponseWriter, r *http.Request) (string, Element) {
+	return "Post", String("POST")
 }
 func testlayoutfunc(title string, r *http.Request, e ...Element) Element {
 	return String(fmt.Sprintf("%s %s", title, e[0].Render()))
 }
 func TestRouteByMethodWithLayout(t *testing.T) {
 	mux := http.NewServeMux()
-	RouteByMethod(mux, "/test", "Test", testlayoutfunc, getHandler, postHandler)
+	RouteByMethod(mux, "/test", testlayoutfunc, getHandler, postHandler)
 	tests := []struct {
 		method   string
 		wantBody string
@@ -47,7 +47,7 @@ func TestRouteByMethod_NoHandlers(t *testing.T) {
 		t.Error("layout should not be called")
 		return e[0]
 	}
-	RouteByMethod(mux, "/nohandler", "NoHandler", layout)
+	RouteByMethod(mux, "/nohandler", layout)
 	req := httptest.NewRequest(http.MethodGet, "/nohandler", nil)
 	rr := httptest.NewRecorder()
 	mux.ServeHTTP(rr, req)
@@ -62,10 +62,10 @@ func TestRouteByMethod_HandlerIndexBounds(t *testing.T) {
 	layout := func(title string, r *http.Request, e ...Element) Element {
 		return e[0]
 	}
-	onlyHandler := func(w http.ResponseWriter, r *http.Request) Element {
-		return String("ONLY")
+	onlyHandler := func(w http.ResponseWriter, r *http.Request) (string, Element) {
+		return "Only", String("ONLY")
 	}
-	RouteByMethod(mux, "/one", "One", layout, onlyHandler)
+	RouteByMethod(mux, "/one", layout, onlyHandler)
 
 	// All valid methods should use the only handler
 	methods := []string{http.MethodGet, http.MethodPost, http.MethodDelete, http.MethodPut, http.MethodPatch}
@@ -80,28 +80,28 @@ func TestRouteByMethod_HandlerIndexBounds(t *testing.T) {
 }
 func TestRouteBranch(t *testing.T) {
 	mux := http.NewServeMux()
-	newHandler := func(w http.ResponseWriter, r *http.Request) Element {
-		return String("New")
+	newHandler := func(w http.ResponseWriter, r *http.Request) (string, Element) {
+		return "New", String("New")
 	}
-	createHandler := func(w http.ResponseWriter, r *http.Request) Element {
-		return String("Create")
+	createHandler := func(w http.ResponseWriter, r *http.Request) (string, Element) {
+		return "Create", String("Create")
 	}
-	editHandler := func(w http.ResponseWriter, r *http.Request) Element {
-		return String("Edit")
+	editHandler := func(w http.ResponseWriter, r *http.Request) (string, Element) {
+		return "Edit", String("Edit")
 	}
-	showHandler := func(w http.ResponseWriter, r *http.Request) Element {
-		return String("Show")
+	showHandler := func(w http.ResponseWriter, r *http.Request) (string, Element) {
+		return "Show", String("Show")
 	}
-	listHandler := func(w http.ResponseWriter, r *http.Request) Element {
-		return String("List")
+	listHandler := func(w http.ResponseWriter, r *http.Request) (string, Element) {
+		return "List", String("List")
 	}
-	updateHandler := func(w http.ResponseWriter, r *http.Request) Element {
-		return String("Update")
+	updateHandler := func(w http.ResponseWriter, r *http.Request) (string, Element) {
+		return "Update", String("Update")
 	}
-	deleteHandler := func(w http.ResponseWriter, r *http.Request) Element {
-		return String("Delete")
+	deleteHandler := func(w http.ResponseWriter, r *http.Request) (string, Element) {
+		return "Delete", String("Delete")
 	}
-	RouteBranch("/dogs", mux, "Test", testlayoutfunc, HandlerBranch{
+	RouteBranch("/dogs", mux, testlayoutfunc, HandlerBranch{
 		"":          {listHandler},
 		"/:id":      {showHandler},
 		"/new":      {newHandler, createHandler},
