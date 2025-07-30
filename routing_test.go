@@ -101,7 +101,7 @@ func TestRouteBranch(t *testing.T) {
 	deleteHandler := func(w http.ResponseWriter, r *http.Request) (string, Element) {
 		return "Delete", String("Delete")
 	}
-	RouteBranch("/dogs", mux, testlayoutfunc, HandlerBranch{
+	RouteBranch(mux, "/dogs", testlayoutfunc, HandlerBranch{
 		"":          {listHandler},
 		"/:id":      {showHandler},
 		"/new":      {newHandler, createHandler},

@@ -86,7 +86,7 @@ func Url(id string, base string, action ...UrlType) string {
 func RouteUrl(base string, action ...UrlType) string {
 	return Url("{id}", base, action...)
 }
-func RouteBranch(basePath string, mux *http.ServeMux, layout Layout, paths map[string][]Handler) {
+func RouteBranch(mux *http.ServeMux, basePath string, layout Layout, paths map[string][]Handler) {
 	for path, handlers := range paths {
 		fmt.Println("Mapping ", basePath+path, " to ", handlers)
 		RouteByMethod(mux, basePath+path, layout, handlers...)
