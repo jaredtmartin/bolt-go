@@ -2,6 +2,7 @@ package bolt
 
 import (
 	"fmt"
+	"log"
 	"net/http"
 )
 
@@ -45,6 +46,7 @@ func RouteByMethod(mux *http.ServeMux, path string, layout Layout, handlers ...H
 		// No handlers provided, return without registering
 		return
 	}
+	log.Println(`RouteByMethod path: `, path)
 	mux.HandleFunc(path, func(w http.ResponseWriter, r *http.Request) {
 		handlerIndexToUse, validMethod := methodIndexRequested(r.Method)
 		if !validMethod {
