@@ -159,6 +159,8 @@ type Element interface {
 	XCloak() Element
 
 	Send(w http.ResponseWriter)
+
+	OobOnly(w http.ResponseWriter)
 	// Redirect(w http.ResponseWriter, url string)
 	// Debug(prefix ...string) Element
 }
@@ -807,6 +809,13 @@ func (e *DefaultElement) Render() string {
 
 // Sends the element to the http.ResponseWriter as text/html.
 func (e *DefaultElement) Send(w http.ResponseWriter) {
+	w.Header().Set("Content-Type", "text/html; charset=utf-8")
+	w.Write([]byte(e.Render()))
+}
+
+// Sends the element to the http.ResponseWriter as text/html.
+func (e *DefaultElement) OobOnly(w http.ResponseWriter) {
+	w.Header().Set("HX-Reswap", "none")
 	w.Header().Set("Content-Type", "text/html; charset=utf-8")
 	w.Write([]byte(e.Render()))
 }
