@@ -130,7 +130,7 @@ type Element interface {
 	// Sets the hx-vals attribute of the element.
 	HXVals(json string) Element
 	// Sets the hx-push-url attribute of the element.
-	HXPushUrl(pushUrl ...bool) Element
+	HXPushUrl(pushUrl string) Element
 	// Sets hx-on attribute for htmx
 	HXOn(event string, value string) Element
 	// Sets the hx-boost attribute of the element.
@@ -660,16 +660,12 @@ func (e *DefaultElement) HXVals(json string) Element {
 }
 
 // Sets the hx-push-url attribute of the element.
-func (e *DefaultElement) HXPushUrl(pushUrl ...bool) Element {
-	if len(pushUrl) > 0 {
-		if pushUrl[0] {
-			e.add_attribute("hx-push-url", "true")
-		} else {
-			delete(e.attributes, "hx-push-url")
-		}
-	} else {
-		e.add_attribute("hx-push-url", "true")
+func (e *DefaultElement) HXPushUrl(pushUrl string) Element {
+	if pushUrl == "" {
+		delete(e.attributes, "hx-push-url")
+		return e
 	}
+	e.add_attribute("hx-push-url", pushUrl)
 	return e
 }
 

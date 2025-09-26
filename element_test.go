@@ -412,21 +412,21 @@ func TestSwapOob(t *testing.T) {
 // PushUrl
 
 func TestPushUrl(t *testing.T) {
-	e := NewElement("div").HXPushUrl()
+	e := NewElement("div").HXPushUrl("true")
 	result := e.Render()
 	expected := "<div hx-push-url=\"true\"></div>"
 	if result != expected {
 		t.Fatalf(`result = %q, expected %q`, result, expected)
 	}
-	e.HXPushUrl(false)
+	e.HXPushUrl("")
 	result = e.Render()
 	expected = "<div></div>"
 	if result != expected {
 		t.Fatalf(`result = %q, expected %q`, result, expected)
 	}
-	e.HXPushUrl(true)
+	e.HXPushUrl("/path")
 	result = e.Render()
-	expected = "<div hx-push-url=\"true\"></div>"
+	expected = "<div hx-push-url=\"/path\"></div>"
 	if result != expected {
 		t.Fatalf(`result = %q, expected %q`, result, expected)
 	}
