@@ -78,6 +78,19 @@ func Checkbox(name string, label string) *FieldElement {
 	return field
 }
 
+// Returns a radio field with the given name and label
+func Radio(name string, label string) *FieldElement {
+	field := Field(name, label, "")
+	field.Renderer = func(e *FieldElement) string {
+		renderedLabel := e.GetLabel()
+		renderedInput := e.GetInput()
+		renderedError := e.GetError()
+		return e.RenderWithContent("", renderedLabel, renderedInput, renderedError)
+	}
+	field.GetInput().Type("radio")
+	return field
+}
+
 // Default function to render an option in a select element
 func defaultRenderOption(opt Option, value string) Element {
 	item := NewElement("option").Value(opt.Value).Text(opt.Label)
