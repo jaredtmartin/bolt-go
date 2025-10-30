@@ -681,7 +681,9 @@ func (e *DefaultElement) HXBoost(boost ...bool) Element {
 		if boost[0] {
 			e.add_attribute("hx-boost", "true")
 		} else {
-			delete(e.attributes, "hx-boost")
+			// hx-boost has a false value which is useful.
+			e.add_attribute("hx-boost", "false")
+			// delete(e.attributes, "hx-boost")
 		}
 	} else {
 		e.add_attribute("hx-boost", "true")

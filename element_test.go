@@ -444,7 +444,7 @@ func TestBoost(t *testing.T) {
 
 	e.HXBoost(false)
 	result = e.Render()
-	expected = "<div></div>"
+	expected = "<div hx-boost=\"false\"></div>"
 	if result != expected {
 		t.Fatalf(`result = %q, expected %q`, result, expected)
 	}
