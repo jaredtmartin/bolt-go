@@ -8,7 +8,7 @@ import (
 )
 
 type Handler func(http.ResponseWriter, *http.Request) (Element, error)
-type Layout func(string, *http.Request, ...Element) Element
+type Layout func(*http.Request, ...Element) Element
 type HandlerBranch map[string]HandlerMethods
 type HandlerMethods struct {
 	Get    Handler
