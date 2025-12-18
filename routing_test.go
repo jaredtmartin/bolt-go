@@ -13,14 +13,14 @@ func testlayoutfunc(title string, r *http.Request, e ...Element) Element {
 
 func TestRouteByMethod(t *testing.T) {
 	mux := http.NewServeMux()
-	getHandler := func(w http.ResponseWriter, r *http.Request) (string, Element) {
-		return "Test", String("Get")
+	getHandler := func(w http.ResponseWriter, r *http.Request) (Element, error) {
+		return Div("Get").PageTitle("Test Get"), nil
 	}
-	postHandler := func(w http.ResponseWriter, r *http.Request) (string, Element) {
-		return "Test", String("Post")
+	postHandler := func(w http.ResponseWriter, r *http.Request) (Element, error) {
+		return Div("Post").PageTitle("Test Post"), nil
 	}
-	deleteHandler := func(w http.ResponseWriter, r *http.Request) (string, Element) {
-		return "Test", String("Delete")
+	deleteHandler := func(w http.ResponseWriter, r *http.Request) (Element, error) {
+		return Div("Delete").PageTitle("Test Delete"), nil
 	}
 	RouteByMethod(mux, "/test", testlayoutfunc, HandlerMethods{
 		Get:    getHandler,
@@ -33,9 +33,9 @@ func TestRouteByMethod(t *testing.T) {
 		method   string
 		wantBody string
 	}{
-		{"/test", http.MethodGet, "Test Get"},
-		{"/test", http.MethodPost, "Test Post"},
-		{"/test", http.MethodDelete, "Test Delete"},
+		{"/test", http.MethodGet, ` &lt;div page-title=&quot;Test Get&quot; class=&quot;Get&quot;&gt;&lt;/div&gt;`},
+		{"/test", http.MethodPost, ` &lt;div page-title=&quot;Test Post&quot; class=&quot;Post&quot;&gt;&lt;/div&gt;`},
+		{"/test", http.MethodDelete, ` &lt;div page-title=&quot;Test Delete&quot; class=&quot;Delete&quot;&gt;&lt;/div&gt;`},
 		{"/test", http.MethodPatch, "404 page not found\n"},
 		{"/test", http.MethodPut, "404 page not found\n"},
 	}
@@ -52,26 +52,26 @@ func TestRouteByMethod(t *testing.T) {
 
 func TestRouteBranch(t *testing.T) {
 	mux := http.NewServeMux()
-	newHandler := func(w http.ResponseWriter, r *http.Request) (string, Element) {
-		return "Test", String("New")
+	newHandler := func(w http.ResponseWriter, r *http.Request) (Element, error) {
+		return String("New").PageTitle("Test"), nil
 	}
-	createHandler := func(w http.ResponseWriter, r *http.Request) (string, Element) {
-		return "Test", String("Create")
+	createHandler := func(w http.ResponseWriter, r *http.Request) (Element, error) {
+		return String("Create").PageTitle("Test"), nil
 	}
-	editHandler := func(w http.ResponseWriter, r *http.Request) (string, Element) {
-		return "Test", String("Edit")
+	editHandler := func(w http.ResponseWriter, r *http.Request) (Element, error) {
+		return String("Edit").PageTitle("Test"), nil
 	}
-	showHandler := func(w http.ResponseWriter, r *http.Request) (string, Element) {
-		return "Test", String("Show")
+	showHandler := func(w http.ResponseWriter, r *http.Request) (Element, error) {
+		return String("Show").PageTitle("Test"), nil
 	}
-	listHandler := func(w http.ResponseWriter, r *http.Request) (string, Element) {
-		return "Test", String("List")
+	listHandler := func(w http.ResponseWriter, r *http.Request) (Element, error) {
+		return String("List").PageTitle("Test"), nil
 	}
-	updateHandler := func(w http.ResponseWriter, r *http.Request) (string, Element) {
-		return "Test", String("Update")
+	updateHandler := func(w http.ResponseWriter, r *http.Request) (Element, error) {
+		return String("Update").PageTitle("Test"), nil
 	}
-	deleteHandler := func(w http.ResponseWriter, r *http.Request) (string, Element) {
-		return "Test", String("Delete")
+	deleteHandler := func(w http.ResponseWriter, r *http.Request) (Element, error) {
+		return String("Delete").PageTitle("Test"), nil
 	}
 	RouteBranch(mux, testlayoutfunc, HandlerBranch{
 		"/dogs":          {Get: listHandler},

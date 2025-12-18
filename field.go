@@ -237,8 +237,11 @@ func (f *FieldElement) Name(name string) Element {
 	// log.Printf("oldId == oldName: %v\n", oldId == oldName+"-field")
 	input.Name(name)
 	if oldId == oldName+"-field" {
+		newId := name + "-field"
 		// log.Printf("setting id")
-		return f.Id(name + "-field")
+		input.Id(newId)
+		f.GetLabel().Attr("for", newId)
+		f.GetError().Id(newId + "-error")
 	}
 	return f
 }

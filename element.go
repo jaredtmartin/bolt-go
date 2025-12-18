@@ -2,6 +2,7 @@ package bolt
 
 import (
 	"fmt"
+	"log"
 	"net/http"
 	"regexp"
 	"strings"
@@ -87,6 +88,7 @@ type Element interface {
 	HXConfirm(prompt string) Element
 	// Sets the hx-target attribute of the element.
 	HXTarget(target string) Element
+
 	// Sets the hx-trigger attribute of the element.
 	HXTrigger(trigger string) Element
 	// Sets the hx-swap attribute of the element.
@@ -97,18 +99,18 @@ type Element interface {
 	Id(value string) Element
 	// Sets the name attribute of the element.
 	Name(name string) Element
+	// Sets the title attribute of the element.
+	Title(title string) Element
+	// Sets the page title attribute of the element.
+	PageTitle(title string) Element
 	// Sets the for attribute of the element.
 	For(name string) Element
-
 	// Sets the type attribute of the element.
 	Type(tipe string) Element
-
 	// Sets the type attribute to "submit".
 	Submit() Element
-
 	// Sets the method attribute of the element to the given string.
 	Method(method string) Element
-
 	// Sets the src attribute of the element.
 	Src(src string) Element
 	// Sets the value attribute of the element.
@@ -623,6 +625,19 @@ func (e *DefaultElement) Placeholder(placeholder string) Element {
 	return e
 }
 
+// Sets the title attribute of the element.
+func (e *DefaultElement) Title(title string) Element {
+	e.add_attribute("title", title)
+	return e
+}
+
+// Sets the page-title attribute of the element.
+// Used for setting the title of the page when routing with layouts
+func (e *DefaultElement) PageTitle(pageTitle string) Element {
+	e.add_attribute("page-title", pageTitle)
+	return e
+}
+
 // Sets the alt attribute of the element.
 func (e *DefaultElement) Alt(alt string) Element {
 	e.add_attribute("alt", alt)
@@ -787,10 +802,12 @@ func is_null_element(tag string) bool {
 // Renders the element with the children first and text at the end.
 func (e *DefaultElement) RenderWithContent(text string, children ...Element) string {
 	content := renderElements(children...) + text
+	log.Println(`content: `, content)
 	if e.tag == "" {
 		return content
 	}
 	attr := e.render_attributes()
+	log.Println(`attr: `, attr)
 	if len(attr) > 0 {
 		attr = " " + attr
 	}

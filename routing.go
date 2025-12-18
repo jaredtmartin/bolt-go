@@ -6,7 +6,7 @@ import (
 	"net/http"
 )
 
-type Handler func(http.ResponseWriter, *http.Request) (string, Element)
+type Handler func(http.ResponseWriter, *http.Request) (Element, error)
 type Layout func(string, *http.Request, ...Element) Element
 type HandlerBranch map[string]HandlerMethods
 type HandlerMethods struct {
@@ -52,7 +52,13 @@ func RouteByMethod(mux *http.ServeMux, path string, layout Layout, handlers Hand
 
 		// Handle the request with the appropriate handler
 		fmt.Printf("Handling %s request for %s\n", r.Method, path)
-		title, content := handler(w, r)
+		content, err := handler(w, r)
+		if err != nil {
+			w.WriteHeader(http.StatusBadRequest)
+			w.Write([]byte(err.Error()))
+			return
+		}
+		title := content.GetAttr("title")
 		layout(title, r, content).Send(w)
 	})
 }
