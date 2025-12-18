@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+	"unicode"
 )
 
 type Handler func(http.ResponseWriter, *http.Request) (Element, error)
@@ -24,6 +25,15 @@ const EditUrl UrlType = "edit"
 const NewUrl UrlType = "new"
 const ShowUrl UrlType = "show"
 const DeleteUrl UrlType = "delete"
+
+func capitalizeFirstLetter(s string) string {
+	if s == "" {
+		return ""
+	}
+	runes := []rune(s)
+	runes[0] = unicode.ToUpper(runes[0])
+	return string(runes)
+}
 
 // Routes requests for a given path based on the HTTP method.
 // mux is the HTTP ServeMux to register the routes with.
@@ -55,7 +65,7 @@ func RouteByMethod(mux *http.ServeMux, path string, layout Layout, handlers Hand
 		content, err := handler(w, r)
 		if err != nil {
 			w.WriteHeader(http.StatusBadRequest)
-			w.Write([]byte(err.Error()))
+			w.Write([]byte(capitalizeFirstLetter(err.Error())))
 			return
 		}
 		title := content.GetAttr("title")
