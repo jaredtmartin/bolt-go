@@ -68,9 +68,14 @@ func RouteByMethod(mux *http.ServeMux, path string, layout Layout, handlers Hand
 			w.Write([]byte(capitalizeFirstLetter(err.Error())))
 			return
 		}
-		title := content.GetAttr("title")
-		layout(title, r, content).Send(w)
+		layout(r, content).Send(w)
 	})
+}
+func GetPageTitle(elements ...Element) string {
+	if len(elements) == 0 {
+		return ""
+	}
+	return elements[0].GetAttr("page-title")
 }
 func RouteBranch(mux *http.ServeMux, layout Layout, branch HandlerBranch) {
 	for path, handlers := range branch {

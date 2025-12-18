@@ -7,8 +7,8 @@ import (
 	"testing"
 )
 
-func testlayoutfunc(title string, r *http.Request, e ...Element) Element {
-	return String(fmt.Sprintf("%s %s", title, e[0].Render()))
+func testlayoutfunc(r *http.Request, e ...Element) Element {
+	return String(fmt.Sprintf("%s %s", GetPageTitle(e...), e[0].Render()))
 }
 
 func TestRouteByMethod(t *testing.T) {
