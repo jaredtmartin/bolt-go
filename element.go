@@ -2,7 +2,6 @@ package bolt
 
 import (
 	"fmt"
-	"log"
 	"net/http"
 	"regexp"
 	"strings"
@@ -807,7 +806,7 @@ func (e *DefaultElement) RenderWithContent(text string, children ...Element) str
 		return content
 	}
 	attr := e.render_attributes()
-	log.Println(`attr: `, attr)
+	// log.Println(`attr: `, attr)
 	if len(attr) > 0 {
 		attr = " " + attr
 	}
