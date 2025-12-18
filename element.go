@@ -802,7 +802,7 @@ func is_null_element(tag string) bool {
 // Renders the element with the children first and text at the end.
 func (e *DefaultElement) RenderWithContent(text string, children ...Element) string {
 	content := renderElements(children...) + text
-	log.Println(`content: `, content)
+	// log.Println(`content: `, content)
 	if e.tag == "" {
 		return content
 	}
