@@ -83,3 +83,14 @@ func RouteBranch(mux *http.ServeMux, layout Layout, branch HandlerBranch) {
 		RouteByMethod(mux, path, layout, handlers)
 	}
 }
+func Route(mux *http.ServeMux, path string, layout Layout, handler Handler) {
+	mux.HandleFunc(path, func(w http.ResponseWriter, r *http.Request) {
+		content, err := handler(w, r)
+		if err != nil {
+			w.WriteHeader(http.StatusBadRequest)
+			w.Write([]byte(capitalizeFirstLetter(err.Error())))
+			return
+		}
+		layout(r, content).Send(w)
+	})
+}
