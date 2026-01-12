@@ -132,6 +132,8 @@ type Element interface {
 	HXVals(json string) Element
 	// Sets the hx-push-url attribute of the element.
 	HXPushUrl(pushUrl string) Element
+	// Sets the hx-replace-url attribute of the element.
+	HXReplaceUrl(replaceUrl string) Element
 	// Sets hx-on attribute for htmx
 	HXOn(event string, value string) Element
 	// Sets the hx-boost attribute of the element.
@@ -680,6 +682,26 @@ func (e *DefaultElement) HXPushUrl(pushUrl string) Element {
 		return e
 	}
 	e.add_attribute("hx-push-url", pushUrl)
+	return e
+}
+
+// Sets the hx-replace-url attribute of the element.
+func (e *DefaultElement) HXReplaceUrl(replaceUrl string) Element {
+	if replaceUrl == "" {
+		delete(e.attributes, "hx-replace-url")
+		return e
+	}
+	e.add_attribute("hx-replace-url", replaceUrl)
+	return e
+}
+
+// Sets the hx-replace-url attribute of the element.
+func (e *DefaultElement) HXHistory(value string) Element {
+	if value == "" {
+		delete(e.attributes, "hx-history")
+		return e
+	}
+	e.add_attribute("hx-history", value)
 	return e
 }
 
