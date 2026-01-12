@@ -134,6 +134,8 @@ type Element interface {
 	HXPushUrl(pushUrl string) Element
 	// Sets the hx-replace-url attribute of the element.
 	HXReplaceUrl(replaceUrl string) Element
+	// Sets the hx-history attribute of the element.
+	HXHistory(history string) Element
 	// Sets hx-on attribute for htmx
 	HXOn(event string, value string) Element
 	// Sets the hx-boost attribute of the element.
@@ -696,12 +698,12 @@ func (e *DefaultElement) HXReplaceUrl(replaceUrl string) Element {
 }
 
 // Sets the hx-replace-url attribute of the element.
-func (e *DefaultElement) HXHistory(value string) Element {
-	if value == "" {
+func (e *DefaultElement) HXHistory(history string) Element {
+	if history == "" {
 		delete(e.attributes, "hx-history")
 		return e
 	}
-	e.add_attribute("hx-history", value)
+	e.add_attribute("hx-history", history)
 	return e
 }
 
