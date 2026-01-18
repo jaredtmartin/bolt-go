@@ -560,7 +560,8 @@ func (e *DefaultElement) HXDelete(url string) Element {
 
 // Sets the hx-confirm attribute of the element.
 func (e *DefaultElement) HXConfirm(prompt string) Element {
-	e.add_attribute("hx-confirm", prompt)
+	e.add_attribute("hx-confirm", "true")
+	e.add_attribute("hx-confirm-question", prompt)
 	return e
 }
 
