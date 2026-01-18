@@ -52,6 +52,10 @@ type Element interface {
 	GetChild(idx int) (Element, bool)
 	// Appends the element as a child.
 	AddChild(child Element) Element
+	// Appends the elements as children.
+	Add(children ...Element) Element
+	// Prepends elements as children.
+	Prepend(children ...Element) Element
 	// Prepends the element as a child.
 	PrependChild(child Element) Element
 	// Sets the children of the element.
@@ -394,9 +398,21 @@ func (e *DefaultElement) AddChild(child Element) Element {
 	return e
 }
 
+// Appends the elements as children.
+func (e *DefaultElement) Add(elements ...Element) Element {
+	e.children = append(e.children, elements...)
+	return e
+}
+
 // Prepends the element as a child.
 func (e *DefaultElement) PrependChild(child Element) Element {
 	e.children = append([]Element{child}, e.children...)
+	return e
+}
+
+// Prepends the elements as children.
+func (e *DefaultElement) Prepend(elements ...Element) Element {
+	e.children = append(elements, e.children...)
 	return e
 }
 
@@ -809,7 +825,7 @@ func (e *DefaultElement) XRef(value string) Element {
 }
 
 // list of null elements that normally should not have content
-var null_elements = [...]string{"area", "base", "br", "col", "embed", "hr", "img", "input", "link", "meta", "param", "source", "track", "wbr"}
+var null_elements = [...]string{"area", "base", "br", "col", "embed", "hr", "img", "input", "link", "meta", "param", "source", "track", "wbr", "rect", "circle", "path", "ellipse", "polygon", "line", "polyline", "image", "use", "stop", "marker"}
 
 // Returns true if the element is a null element.
 func is_null_element(tag string) bool {
