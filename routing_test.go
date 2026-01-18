@@ -33,9 +33,9 @@ func TestRouteByMethod(t *testing.T) {
 		method   string
 		wantBody string
 	}{
-		{"/test", http.MethodGet, ` &lt;div page-title=&quot;Test Get&quot; class=&quot;Get&quot;&gt;&lt;/div&gt;`},
-		{"/test", http.MethodPost, ` &lt;div page-title=&quot;Test Post&quot; class=&quot;Post&quot;&gt;&lt;/div&gt;`},
-		{"/test", http.MethodDelete, ` &lt;div page-title=&quot;Test Delete&quot; class=&quot;Delete&quot;&gt;&lt;/div&gt;`},
+		{"/test", http.MethodGet, `Test Get &lt;div page-title=&quot;Test Get&quot; class=&quot;Get&quot;&gt;&lt;/div&gt;`},
+		{"/test", http.MethodPost, `Test Post &lt;div page-title=&quot;Test Post&quot; class=&quot;Post&quot;&gt;&lt;/div&gt;`},
+		{"/test", http.MethodDelete, `Test Delete &lt;div page-title=&quot;Test Delete&quot; class=&quot;Delete&quot;&gt;&lt;/div&gt;`},
 		{"/test", http.MethodPatch, "404 page not found\n"},
 		{"/test", http.MethodPut, "404 page not found\n"},
 	}
