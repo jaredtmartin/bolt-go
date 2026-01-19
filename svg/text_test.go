@@ -7,10 +7,10 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-func TestText(t *testing.T) {
-	text := bolt.Text(100, 100, "Hello, World!")
+func TestSetText(t *testing.T) {
+	text := bolt.Text(100, 100, "Hello, World!").SetText("Hello, Fred!")
 	result := text.Render()
-	expected := `<text x="100" y="100">Hello, World!</text>`
+	expected := `<text x="100" y="100">Hello, Fred!</text>`
 	assert.Equalf(t, expected, result, "should match")
 }
 

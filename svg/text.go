@@ -38,8 +38,8 @@ func (t *SvgText) Dy(dy float64) *SvgText {
 	t.Attr("dy", strconv.FormatFloat(dy, 'f', -1, 64))
 	return t
 }
-func (t *SvgText) Text(text string) *SvgText {
-	t.DefaultElement.Text(text)
+func (t *SvgText) SetText(text string) *SvgText {
+	t.Text(text)
 	return t
 }
 func (t *SvgText) TextAnchor(anchor string) *SvgText {
