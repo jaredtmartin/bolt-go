@@ -826,7 +826,7 @@ func (e *DefaultElement) XRef(value string) Element {
 }
 
 // list of null elements that normally should not have content
-var null_elements = [...]string{"area", "base", "br", "col", "embed", "hr", "img", "input", "link", "meta", "param", "source", "track", "wbr", "rect", "circle", "path", "ellipse", "polygon", "line", "polyline", "image", "use", "stop", "marker"}
+var null_elements = [...]string{"area", "base", "br", "col", "embed", "hr", "img", "input", "link", "meta", "param", "source", "track", "wbr"}
 
 // Returns true if the element is a null element.
 func is_null_element(tag string) bool {
