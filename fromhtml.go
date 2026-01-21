@@ -7,6 +7,7 @@ import (
 	"golang.org/x/net/html"
 )
 
+// Traverses the AST and returns an Element
 func traverseAST(n *html.Node, depth int) Element {
 	// Print indentation based on the node's depth in the tree
 	fmt.Printf("%s", strings.Repeat("  ", depth))
@@ -31,6 +32,8 @@ func traverseAST(n *html.Node, depth int) Element {
 	}
 	return el
 }
+
+// Parses an HTML string into a bolt.Element
 func FromHtml(s string) (Element, error) {
 	// Parse html string into element
 	r := strings.NewReader(s)
