@@ -326,13 +326,14 @@ func (e *DefaultElement) render_styles() string {
 
 // Adds an attribute to the element. If the key is "style" or "class", it will be combined with existing style or class attributes.
 func (e *DefaultElement) add_attribute(key string, value string) {
-	if key == "style" {
+	switch key {
+	case "style":
 		e.styles = make(map[string]string)
 		e.add_styles(value)
-	} else if key == "class" {
+	case "class":
 		e.classes = make(map[string]bool)
 		e.add_classes(value)
-	} else {
+	default:
 		e.attributes[key] = value
 	}
 }

@@ -5,13 +5,14 @@ import (
 	"strconv"
 )
 
-func Svg() *SvgElement {
+func Svg(children ...Element) *SvgElement {
 	svg := &(SvgElement{
 		DefaultElement: NewDefaultElement("svg"),
 	})
 	svg.Version("1.1").
 		Xmlns("http://www.w3.org/2000/svg").
-		XmlnsXlink("http://www.w3.org/1999/xlink")
+		XmlnsXlink("http://www.w3.org/1999/xlink").
+		Children(children...)
 	return svg
 }
 
