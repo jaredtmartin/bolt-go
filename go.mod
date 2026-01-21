@@ -1,10 +1,13 @@
 module github.com/jaredtmartin/bolt-go
 
-go 1.22.2
+go 1.24.0
+
+toolchain go1.24.12
 
 require (
 	github.com/stretchr/testify v1.9.0
 	golang.org/x/exp v0.0.0-20240404231335-c0f41cb1a7a0
+	golang.org/x/net v0.49.0
 )
 
 require (

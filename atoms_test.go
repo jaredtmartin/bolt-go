@@ -397,14 +397,14 @@ func TestString(t *testing.T) {
 	}
 }
 
-func TestOobElement(t *testing.T) {
-	e := Oob("swap-value", P("Content"))
-	result := e.Render()
-	expected := `<div hx-swap-oob="swap-value"><p>Content</p></div>`
-	if result != expected {
-		t.Fatalf(`Oob("swap-value", P("Content")) = %q, expected %q`, result, expected)
-	}
-}
+//	func TestOobElement(t *testing.T) {
+//		e := Oob("swap-value", P("Content"))
+//		result := e.Render()
+//		expected := `<div hx-swap-oob="swap-value"><p>Content</p></div>`
+//		if result != expected {
+//			t.Fatalf(`Oob("swap-value", P("Content")) = %q, expected %q`, result, expected)
+//		}
+//	}
 func TestStyle(t *testing.T) {
 	// Test with simple CSS
 	e := Style("body { background: #fff; }")

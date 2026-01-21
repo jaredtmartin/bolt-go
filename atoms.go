@@ -241,8 +241,3 @@ func Td(children ...Element) Element {
 func String(text string) Element {
 	return NewElement("").Text(text)
 }
-
-// Oob returns a div element with the given value as an HTMX out-of-band (OOB) swap value.
-func Oob(value string, children ...Element) Element {
-	return Div("", children...).HXSwapOob(value)
-}
