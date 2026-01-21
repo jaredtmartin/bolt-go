@@ -1,11 +1,13 @@
-package bolt
+package bolt_test
 
 import (
 	"testing"
+
+	"github.com/jaredtmartin/bolt-go"
 )
 
 func TestDiv(t *testing.T) {
-	e := Div("")
+	e := bolt.Div("")
 	result := e.Render()
 	expected := "<div></div>"
 	if result != expected {
@@ -14,7 +16,7 @@ func TestDiv(t *testing.T) {
 }
 
 func TestSpan(t *testing.T) {
-	e := Span("Hello")
+	e := bolt.Span("Hello")
 	result := e.Render()
 	expected := "<span>Hello</span>"
 	if result != expected {
@@ -23,7 +25,7 @@ func TestSpan(t *testing.T) {
 }
 
 func TestP(t *testing.T) {
-	e := P("Hello")
+	e := bolt.P("Hello")
 	result := e.Render()
 	expected := "<p>Hello</p>"
 	if result != expected {
@@ -32,7 +34,7 @@ func TestP(t *testing.T) {
 }
 
 func TestH1(t *testing.T) {
-	e := H1("Hello")
+	e := bolt.H1("Hello")
 	result := e.Render()
 	expected := "<h1>Hello</h1>"
 	if result != expected {
@@ -41,7 +43,7 @@ func TestH1(t *testing.T) {
 }
 
 func TestH2(t *testing.T) {
-	e := H2("Hello")
+	e := bolt.H2("Hello")
 	result := e.Render()
 	expected := "<h2>Hello</h2>"
 	if result != expected {
@@ -50,7 +52,7 @@ func TestH2(t *testing.T) {
 }
 
 func TestH3(t *testing.T) {
-	e := H3("Hello")
+	e := bolt.H3("Hello")
 	result := e.Render()
 	expected := "<h3>Hello</h3>"
 	if result != expected {
@@ -59,7 +61,7 @@ func TestH3(t *testing.T) {
 }
 
 func TestH4(t *testing.T) {
-	e := H4("Hello")
+	e := bolt.H4("Hello")
 	result := e.Render()
 	expected := "<h4>Hello</h4>"
 	if result != expected {
@@ -68,7 +70,7 @@ func TestH4(t *testing.T) {
 }
 
 func TestH5(t *testing.T) {
-	e := H5("Hello")
+	e := bolt.H5("Hello")
 	result := e.Render()
 	expected := "<h5>Hello</h5>"
 	if result != expected {
@@ -77,7 +79,7 @@ func TestH5(t *testing.T) {
 }
 
 func TestH6(t *testing.T) {
-	e := H6("Hello")
+	e := bolt.H6("Hello")
 	result := e.Render()
 	expected := "<h6>Hello</h6>"
 	if result != expected {
@@ -87,7 +89,7 @@ func TestH6(t *testing.T) {
 
 // Img
 func TestImg(t *testing.T) {
-	e := Img("src")
+	e := bolt.Img("src")
 	result := e.Render()
 	expected := "<img src=\"src\">"
 	if result != expected {
@@ -97,7 +99,7 @@ func TestImg(t *testing.T) {
 
 // Button
 func TestButton(t *testing.T) {
-	e := Button("Hello")
+	e := bolt.Button("Hello")
 	result := e.Render()
 	expected := "<button type=\"button\">Hello</button>"
 	if result != expected {
@@ -107,7 +109,7 @@ func TestButton(t *testing.T) {
 
 // Label
 func TestLabel(t *testing.T) {
-	e := Label("Hello")
+	e := bolt.Label("Hello")
 	result := e.Render()
 	expected := "<label>Hello</label>"
 	if result != expected {
@@ -117,7 +119,7 @@ func TestLabel(t *testing.T) {
 
 // Input
 func TestInput(t *testing.T) {
-	e := Input("first_name")
+	e := bolt.Input("first_name")
 	result := e.Render()
 	expected := "<input name=\"first_name\" type=\"text\">"
 	if result != expected {
@@ -127,7 +129,7 @@ func TestInput(t *testing.T) {
 
 // Form
 func TestForm(t *testing.T) {
-	e := Form().Children(Input("name"))
+	e := bolt.Form().Children(bolt.Input("name"))
 	result := e.Render()
 	expected := "<form><input name=\"name\" type=\"text\"></form>"
 	if result != expected {
@@ -137,7 +139,7 @@ func TestForm(t *testing.T) {
 
 // A
 func TestA(t *testing.T) {
-	e := A("www.google.com", Html("Hello"))
+	e := bolt.A("www.google.com", bolt.Html("Hello"))
 	result := e.Render()
 	expected := "<a href=\"www.google.com\">Hello</a>"
 	if result != expected {
@@ -147,7 +149,7 @@ func TestA(t *testing.T) {
 
 // None
 func TestNone(t *testing.T) {
-	e := None()
+	e := bolt.None()
 	result := e.Render()
 	expected := ""
 	if result != expected {
@@ -157,7 +159,7 @@ func TestNone(t *testing.T) {
 
 // Fragment
 func TestFragment(t *testing.T) {
-	e := Fragment()
+	e := bolt.Fragment()
 	result := e.Render()
 	expected := ""
 	if result != expected {
@@ -167,7 +169,7 @@ func TestFragment(t *testing.T) {
 
 // Html
 func TestUnsafeHtmlElement(t *testing.T) {
-	e := Html("<div>Hello</div>")
+	e := bolt.Html("<div>Hello</div>")
 	result := e.Render()
 	expected := "<div>Hello</div>"
 	if result != expected {
@@ -175,7 +177,7 @@ func TestUnsafeHtmlElement(t *testing.T) {
 	}
 }
 func TestSection(t *testing.T) {
-	e := Section(P("Hello"))
+	e := bolt.Section(bolt.P("Hello"))
 	result := e.Render()
 	expected := "<section><p>Hello</p></section>"
 	if result != expected {
@@ -200,20 +202,24 @@ func TestSection(t *testing.T) {
 //		}
 //	}
 func TestTemplate(t *testing.T) {
-	result := Template(P("Content")).Render()
+	result := bolt.Template(bolt.P("Content")).Render()
 	expected := "<template><p>Content</p></template>"
 	if result != expected {
 		t.Fatalf(`Template(P("Content")) = %q, expected %q`, result, expected)
 	}
 }
 func TestSvg(t *testing.T) {
-	e := Svg("M10 10 H 90 V 90 H 10 Z", 100, 100, 100, 100)
+	e := bolt.Svg().ViewBox(0, 0, 100, 100).Height(100).Width(100).Class("fill-current").Children(
+		bolt.Path().D("M10 10 H 90 V 90 H 10 Z"),
+	)
 	result := e.Render()
-	expected := `<svg height="100" version="1.1" viewBox="0 0 100 100" width="100" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg" class="fill-current">M10 10 H 90 V 90 H 10 Z</svg>`
+	expected := `<svg height="100" version="1.1" viewBox="0 0 100 100" width="100" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg" class="fill-current"><path d="M10 10 H 90 V 90 H 10 Z"></path></svg>`
+
 	if result != expected {
 		t.Fatalf(`Svg() = %q, expected %q`, result, expected)
 	}
-	e = Svg(`<path d="M15 19l-7-7 7-7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>`, 24, 24, 24, 24).Class("fill-current")
+	e = bolt.Svg().ViewBox(24, 24, 24, 24)
+	e.Class("fill-current").Text(`<path d="M15 19l-7-7 7-7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>`)
 	result = e.Render()
 	expected = `<svg height="24" version="1.1" viewBox="0 0 24 24" width="24" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg" class="fill-current"><path d="M15 19l-7-7 7-7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>`
 	if result != expected {
@@ -221,7 +227,7 @@ func TestSvg(t *testing.T) {
 	}
 }
 func TestVideoIframe(t *testing.T) {
-	e := VideoIframe("Hello", 23, 25, "https://www.youtube.com/embed/dQw4w9WgXcQ")
+	e := bolt.VideoIframe("Hello", 23, 25, "https://www.youtube.com/embed/dQw4w9WgXcQ")
 	result := e.Render()
 	expected := `<iframe allow="autoplay; fullscreen; picture-in-picture; clipboard-write" data-ready="true" frameborder="0" height="25" src="https://www.youtube.com/embed/dQw4w9WgXcQ" title="Hello" width="23" class="h-full w-full"></iframe>`
 	if result != expected {
@@ -230,21 +236,21 @@ func TestVideoIframe(t *testing.T) {
 }
 func TestScript(t *testing.T) {
 	// Test embedded script
-	e := Script("console.log('test')")
+	e := bolt.Script("console.log('test')")
 	result := e.Render()
 	expected := `<script>console.log('test')</script>`
 	if result != expected {
 		t.Fatalf(`Script("console.log('test')") = %q, expected %q`, result, expected)
 	}
 	// Test linked script
-	e = Script("").Src("/src/test.js")
+	e = bolt.Script("").Src("/src/test.js")
 	result = e.Render()
 	expected = `<script src="/src/test.js"></script>`
 	if result != expected {
 		t.Fatalf(`Script("/src/test.js") = %q, expected %q`, result, expected)
 	}
 	// Test linked script that is deferred
-	e = Script("").Src("/src/test.js").Defer()
+	e = bolt.Script("").Src("/src/test.js").Defer()
 	result = e.Render()
 	expected = `<script defer="true" src="/src/test.js"></script>`
 	if result != expected {
@@ -253,7 +259,7 @@ func TestScript(t *testing.T) {
 }
 func TestHead(t *testing.T) {
 	// Test empty head
-	e := Head()
+	e := bolt.Head()
 	result := e.Render()
 	expected := "<head></head>"
 	if result != expected {
@@ -261,7 +267,7 @@ func TestHead(t *testing.T) {
 	}
 
 	// Test head with single child
-	e = Head(Script("console.log('test')"))
+	e = bolt.Head(bolt.Script("console.log('test')"))
 	result = e.Render()
 	expected = "<head><script>console.log('test')</script></head>"
 	if result != expected {
@@ -269,10 +275,10 @@ func TestHead(t *testing.T) {
 	}
 
 	// Test head with multiple children
-	e = Head(
-		Script("console.log('test')"),
-		Html("<meta charset=\"UTF-8\">"),
-		Html("<title>Test Page</title>"),
+	e = bolt.Head(
+		bolt.Script("console.log('test')"),
+		bolt.Html("<meta charset=\"UTF-8\">"),
+		bolt.Html("<title>Test Page</title>"),
 	)
 	result = e.Render()
 	expected = "<head><script>console.log('test')</script><meta charset=\"UTF-8\"><title>Test Page</title></head>"
@@ -282,7 +288,7 @@ func TestHead(t *testing.T) {
 }
 func TestBody(t *testing.T) {
 	// Test empty body
-	e := Body()
+	e := bolt.Body()
 	result := e.Render()
 	expected := "<body></body>"
 	if result != expected {
@@ -290,7 +296,7 @@ func TestBody(t *testing.T) {
 	}
 
 	// Test body with single child
-	e = Body(P("Hello"))
+	e = bolt.Body(bolt.P("Hello"))
 	result = e.Render()
 	expected = "<body><p>Hello</p></body>"
 	if result != expected {
@@ -298,7 +304,7 @@ func TestBody(t *testing.T) {
 	}
 
 	// Test body with multiple children
-	e = Body(H1("Title"), P("Paragraph"), Div("", P("Content")))
+	e = bolt.Body(bolt.H1("Title"), bolt.P("Paragraph"), bolt.Div("", bolt.P("Content")))
 	result = e.Render()
 	expected = "<body><h1>Title</h1><p>Paragraph</p><div><p>Content</p></div></body>"
 	if result != expected {
@@ -306,7 +312,7 @@ func TestBody(t *testing.T) {
 	}
 
 	// Test body with nested elements
-	e = Body(Div("", P("Nested")))
+	e = bolt.Body(bolt.Div("", bolt.P("Nested")))
 	result = e.Render()
 	expected = "<body><div><p>Nested</p></div></body>"
 	if result != expected {
@@ -315,7 +321,7 @@ func TestBody(t *testing.T) {
 }
 func TestStylesheet(t *testing.T) {
 	// Test basic stylesheet
-	e := Stylesheet("/styles/main.css")
+	e := bolt.Stylesheet("/styles/main.css")
 	result := e.Render()
 	expected := `<link href="/styles/main.css" rel="stylesheet">`
 	if result != expected {
@@ -324,7 +330,7 @@ func TestStylesheet(t *testing.T) {
 }
 
 func TestHiddenInput(t *testing.T) {
-	e := HiddenInput("name", "value")
+	e := bolt.HiddenInput("name", "value")
 	result := e.Render()
 	expected := `<input name="name" type="hidden" value="value">`
 	if result != expected {
@@ -333,7 +339,7 @@ func TestHiddenInput(t *testing.T) {
 }
 
 func TestLi(t *testing.T) {
-	e := Li(P("Content"))
+	e := bolt.Li(bolt.P("Content"))
 	result := e.Render()
 	expected := `<li><p>Content</p></li>`
 	if result != expected {
@@ -342,14 +348,14 @@ func TestLi(t *testing.T) {
 }
 
 func TestTable(t *testing.T) {
-	e := Table(
-		Tr(
-			Th(P("Header 1")),
-			Th(P("Header 2")),
+	e := bolt.Table(
+		bolt.Tr(
+			bolt.Th(bolt.P("Header 1")),
+			bolt.Th(bolt.P("Header 2")),
 		),
-		Tr(
-			Td(P("Row 1, Cell 1")),
-			Td(P("Row 1, Cell 2")),
+		bolt.Tr(
+			bolt.Td(bolt.P("Row 1, Cell 1")),
+			bolt.Td(bolt.P("Row 1, Cell 2")),
 		),
 	)
 	result := e.Render()
@@ -359,9 +365,9 @@ func TestTable(t *testing.T) {
 	}
 }
 func TestTr(t *testing.T) {
-	e := Tr(
-		Td(P("Row 1, Cell 1")),
-		Td(P("Row 1, Cell 2")),
+	e := bolt.Tr(
+		bolt.Td(bolt.P("Row 1, Cell 1")),
+		bolt.Td(bolt.P("Row 1, Cell 2")),
 	)
 	result := e.Render()
 	expected := `<tr><td><p>Row 1, Cell 1</p></td><td><p>Row 1, Cell 2</p></td></tr>`
@@ -370,9 +376,9 @@ func TestTr(t *testing.T) {
 	}
 }
 func TestTh(t *testing.T) {
-	e := Th(
-		Td(P("Header 1")),
-		Td(P("Header 2")),
+	e := bolt.Th(
+		bolt.Td(bolt.P("Header 1")),
+		bolt.Td(bolt.P("Header 2")),
 	)
 	result := e.Render()
 	expected := `<th><td><p>Header 1</p></td><td><p>Header 2</p></td></th>`
@@ -381,7 +387,7 @@ func TestTh(t *testing.T) {
 	}
 }
 func TestTd(t *testing.T) {
-	e := Td(P("Content"))
+	e := bolt.Td(bolt.P("Content"))
 	result := e.Render()
 	expected := `<td><p>Content</p></td>`
 	if result != expected {
@@ -389,7 +395,7 @@ func TestTd(t *testing.T) {
 	}
 }
 func TestString(t *testing.T) {
-	e := Template(P("Content"))
+	e := bolt.Template(bolt.P("Content"))
 	result := e.Render()
 	expected := `<template><p>Content</p></template>`
 	if result != expected {
@@ -397,17 +403,9 @@ func TestString(t *testing.T) {
 	}
 }
 
-//	func TestOobElement(t *testing.T) {
-//		e := Oob("swap-value", P("Content"))
-//		result := e.Render()
-//		expected := `<div hx-swap-oob="swap-value"><p>Content</p></div>`
-//		if result != expected {
-//			t.Fatalf(`Oob("swap-value", P("Content")) = %q, expected %q`, result, expected)
-//		}
-//	}
 func TestStyle(t *testing.T) {
 	// Test with simple CSS
-	e := Style("body { background: #fff; }")
+	e := bolt.Style("body { background: #fff; }")
 	result := e.Render()
 	expected := `<style>body { background: #fff; }</style>`
 	if result != expected {
@@ -415,7 +413,7 @@ func TestStyle(t *testing.T) {
 	}
 
 	// Test with empty CSS
-	e = Style("")
+	e = bolt.Style("")
 	result = e.Render()
 	expected = `<style></style>`
 	if result != expected {
@@ -430,7 +428,7 @@ body {
 h1 {
 	font-size: 2em;
 }`
-	e = Style(css)
+	e = bolt.Style(css)
 	result = e.Render()
 	expected = `<style>` + css + `</style>`
 	if result != expected {
@@ -439,7 +437,7 @@ h1 {
 }
 func TestUl(t *testing.T) {
 	// Test empty ul
-	e := Ul()
+	e := bolt.Ul()
 	result := e.Render()
 	expected := "<ul></ul>"
 	if result != expected {
@@ -447,7 +445,7 @@ func TestUl(t *testing.T) {
 	}
 
 	// Test ul with one child
-	e = Ul(Li(P("Item 1")))
+	e = bolt.Ul(bolt.Li(bolt.P("Item 1")))
 	result = e.Render()
 	expected = "<ul><li><p>Item 1</p></li></ul>"
 	if result != expected {
@@ -455,10 +453,10 @@ func TestUl(t *testing.T) {
 	}
 
 	// Test ul with multiple children
-	e = Ul(
-		Li(P("Item 1")),
-		Li(P("Item 2")),
-		Li(P("Item 3")),
+	e = bolt.Ul(
+		bolt.Li(bolt.P("Item 1")),
+		bolt.Li(bolt.P("Item 2")),
+		bolt.Li(bolt.P("Item 3")),
 	)
 	result = e.Render()
 	expected = "<ul><li><p>Item 1</p></li><li><p>Item 2</p></li><li><p>Item 3</p></li></ul>"
@@ -467,9 +465,9 @@ func TestUl(t *testing.T) {
 	}
 
 	// Test ul with nested ul
-	e = Ul(
-		Li(P("Item 1")),
-		Li(Ul(Li(P("Subitem 1")), Li(P("Subitem 2")))),
+	e = bolt.Ul(
+		bolt.Li(bolt.P("Item 1")),
+		bolt.Li(bolt.Ul(bolt.Li(bolt.P("Subitem 1")), bolt.Li(bolt.P("Subitem 2")))),
 	)
 	result = e.Render()
 	expected = "<ul><li><p>Item 1</p></li><li><ul><li><p>Subitem 1</p></li><li><p>Subitem 2</p></li></ul></li></ul>"

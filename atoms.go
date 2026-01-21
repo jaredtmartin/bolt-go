@@ -1,7 +1,6 @@
 package bolt
 
 import (
-	"fmt"
 	"strconv"
 )
 
@@ -142,24 +141,6 @@ func Stylesheet(url string) Element {
 // returns a style tag with the given css code WITHOUT ESCAPING
 func Style(css string) Element {
 	return NewElement("style").UnsafeHtml(css)
-}
-
-// returns an svg tag
-// The path parameter should be the SVG content as a string.
-// The width and height parameters specify the dimensions of the SVG.
-// The vbX and vbY parameters specify the viewBox dimensions.
-func Svg(path string, width int, height int, vbX int, vbY int) Element {
-	viewBox := fmt.Sprintf("0 0 %d %d", vbX, vbY)
-	return NewElement("svg").
-		Attr("viewBox", viewBox).
-		Attr("version", "1.1").
-		Attr("xmlns", "http://www.w3.org/2000/svg").
-		Attr("xmlns:xlink", "http://www.w3.org/1999/xlink").
-		Attr("version", "1.1").
-		Attr("width", strconv.Itoa(width)).
-		Attr("height", strconv.Itoa(height)).
-		Class("fill-current").
-		UnsafeHtml(path)
 }
 
 // returns a list item (li) tag
