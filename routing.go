@@ -91,6 +91,9 @@ func Route(mux *http.ServeMux, path string, layout Layout, handler Handler) {
 			w.Write([]byte(capitalizeFirstLetter(err.Error())))
 			return
 		}
+		if content == nil {
+			content = None()
+		}
 		layout(r, content).Send(w)
 	})
 }
