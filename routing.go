@@ -72,7 +72,7 @@ func RouteByMethod(mux *http.ServeMux, path string, layout Layout, handlers Hand
 	})
 }
 func GetPageTitle(elements ...Element) string {
-	if len(elements) == 0 {
+	if len(elements) == 0 || elements[0] == nil {
 		return ""
 	}
 	return elements[0].GetAttr("page-title")
