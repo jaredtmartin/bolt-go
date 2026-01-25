@@ -32,8 +32,8 @@ func Input(name string) Element {
 }
 
 // Returns a new form element
-func Form() Element {
-	return NewElement("form")
+func Form(children ...Element) Element {
+	return NewElement("form").Children(children...)
 }
 
 // Returns a new span element
