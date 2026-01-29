@@ -36,7 +36,11 @@ func Checkbox(name, label, value string) *Field {
 	field.Add(field.Check)
 	return field
 }
-
+func Textarea(name, label, value string) *Field {
+	field := NewField(name, label, "", "")
+	field.Input.Text(value).Tag("textarea").RemoveAttr("type")
+	return field
+}
 func Select[T any](name, label, value string, options []T, renderOption ...func(T, string) Element) *Field {
 	field := NewField(name, label, value, "select")
 	renderOpt := defaultRenderOption[T]

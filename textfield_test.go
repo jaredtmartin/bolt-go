@@ -225,10 +225,9 @@ func TestPassword(t *testing.T) {
 	result = e.Render()
 	assert.Equalf(t, `<div><label for="name-field">Hello</label><input id="name-field" name="name" type="text"><div id="name-field-error"></div></div>`, result, "should match")
 }
-
-// func TestGetValue(t *testing.T) {
-// 	e := TextField("hello", "Hello", "123")
-// 	result := e.GetValue()
-// 	assert.Equalf(t, "123", result, "should match")
-
-// }
+func TestTextarea(t *testing.T) {
+	e := Textarea("name", "Message", "This is a test. Hello World!")
+	result := e.Render()
+	expected := `<div><label for="name-field">Message</label><textarea id="name-field" name="name">This is a test. Hello World!</textarea><div id="name-field-error"></div></div>`
+	assert.Equalf(t, expected, result, "should match")
+}
