@@ -49,10 +49,11 @@ func Select[T any](name, label, value string, options []T, renderOption ...func(
 	field.Input.Tag("select").RemoveAttr("type")
 	return field
 }
-func (t *Field) Value(value string) *Field {
-	t.Input.Value(value)
-	return t
-}
+
+// func (t *Field) Value(value string) *Field {
+// 	t.Input.Value(value)
+// 	return t
+// }
 
 // Sets the required and onblur attributes of the input element
 func (t *Field) Required(required ...bool) *Field {

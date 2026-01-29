@@ -24,15 +24,6 @@ func TestFieldAttr(t *testing.T) {
 	result := e.Render()
 	assert.Equalf(t, `<div><label for="name-field">Hello</label><input hx-post="/url" id="name-field" name="name" type="text"><div id="name-field-error"></div></div>`, result, "should match")
 }
-func TestFieldValue(t *testing.T) {
-	e := TextField("name", "Hello", "first")
-	result := e.Render()
-	assert.Equalf(t, `<div><label for="name-field">Hello</label><input id="name-field" name="name" type="text" value="first"><div id="name-field-error"></div></div>`, result, "should match")
-	e.Value("hello")
-	result = e.Render()
-	assert.Equalf(t, `<div><label for="name-field">Hello</label><input id="name-field" name="name" type="text" value="hello"><div id="name-field-error"></div></div>`, result, "should match")
-}
-
 func TestFieldText(t *testing.T) {
 	e := TextField("name", "Hello", "").Text("hello")
 	result := e.Render()
