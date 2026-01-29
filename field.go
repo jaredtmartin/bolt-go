@@ -54,18 +54,6 @@ func (t *Field) Value(value string) *Field {
 	return t
 }
 
-// Sets the name attribute of the input element, updates the for attribute on the label, and the id on the error span
-func (t *Field) Name(name string) *Field {
-	updateName(t.Input, t.Label, t.Error, name)
-	return t
-}
-
-// Sets the type attribute of the input element
-func (t *Field) Type(tipe string) *Field {
-	t.Input = t.Input.Type(tipe)
-	return t
-}
-
 // Sets the required and onblur attributes of the input element
 func (t *Field) Required(required ...bool) *Field {
 	if len(required) > 0 && !required[0] {
@@ -122,24 +110,6 @@ func initializeElement(name, label, value string) (Element, Element, Element) {
 	}
 	errorEl = Div("").Id(id + "-error")
 	return labelEl, inputEl, errorEl
-}
-
-// general use function to update name and possibly the id
-func updateName(input, label, err Element, name string) {
-	oldName := input.GetAttr("name")
-	oldId := input.GetId()
-	input.Name(name)
-	if oldId == oldName+"-field" {
-		newId := name + "-field"
-		updateId(input, label, err, newId)
-	}
-}
-
-// general use function to update id and for attributes
-func updateId(input, label, err Element, id string) {
-	label.For(id)
-	input.Id(id)
-	err.Id(id + "-error")
 }
 
 // Default function to render an option in a select element

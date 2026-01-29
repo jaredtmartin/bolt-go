@@ -26,11 +26,6 @@ func TestRadioLabel(t *testing.T) {
 	result := radio.Render()
 	assert.Equalf(t, `<div><label for="name-field">goodbye</label><input id="name-field" name="name" type="radio"><div id="name-field-error"></div></div>`, result, "should match")
 }
-func TestRadioName(t *testing.T) {
-	e := Radio("name", "Hello", "").Name("hello")
-	result := e.Render()
-	assert.Equalf(t, `<div><label for="hello-field">Hello</label><input id="hello-field" name="hello" type="radio"><div id="hello-field-error"></div></div>`, result, "should match")
-}
 func TestRadioValue(t *testing.T) {
 	e := Radio("name", "Hello", "").Value("ispublic")
 	result := e.Render()

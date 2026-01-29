@@ -20,11 +20,6 @@ func TestCheckboxAttr(t *testing.T) {
 	result := e.Render()
 	assert.Equalf(t, `<div><label for="name-field">Hello</label><input hx-post="/url" id="name-field" name="name" type="checkbox" value="name"><div id="name-field-error"></div><span></span></div>`, result, "should match")
 }
-func TestCheckboxName(t *testing.T) {
-	e := Checkbox("name", "Hello", "name").Name("hello")
-	result := e.Render()
-	assert.Equalf(t, `<div><label for="hello-field">Hello</label><input id="hello-field" name="hello" type="checkbox" value="name"><div id="hello-field-error"></div><span></span></div>`, result, "should match")
-}
 
 func TestCheckboxChecked(t *testing.T) {
 	e := Checkbox("name", "Hello", "name").Checked()

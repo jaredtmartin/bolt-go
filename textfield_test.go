@@ -33,20 +33,10 @@ func TestFieldValue(t *testing.T) {
 	assert.Equalf(t, `<div><label for="name-field">Hello</label><input id="name-field" name="name" type="text" value="hello"><div id="name-field-error"></div></div>`, result, "should match")
 }
 
-func TestFieldType(t *testing.T) {
-	e := TextField("name", "Hello", "").Type("email")
-	result := e.Render()
-	assert.Equalf(t, `<div><label for="name-field">Hello</label><input id="name-field" name="name" type="email"><div id="name-field-error"></div></div>`, result, "should match")
-}
 func TestFieldText(t *testing.T) {
 	e := TextField("name", "Hello", "").Text("hello")
 	result := e.Render()
 	assert.Equalf(t, `<div><label for="name-field">Hello</label><input id="name-field" name="name" type="text"><div id="name-field-error"></div>hello</div>`, result, "should match")
-}
-func TestFieldName(t *testing.T) {
-	e := TextField("name", "Hello", "").Name("name")
-	result := e.Render()
-	assert.Equalf(t, `<div><label for="name-field">Hello</label><input id="name-field" name="name" type="text"><div id="name-field-error"></div></div>`, result, "should match")
 }
 func TestFieldWithNoLabel(t *testing.T) {
 	e := TextField("name", "", "")
