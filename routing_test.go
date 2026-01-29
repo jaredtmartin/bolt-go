@@ -7,7 +7,7 @@ import (
 	"testing"
 )
 
-func testlayoutfunc(r *http.Request, e ...Element) Element {
+func testlayoutfunc(w http.ResponseWriter, r *http.Request, e ...Element) Element {
 	return String(fmt.Sprintf("%s %s", GetPageTitle(e...), e[0].Render()))
 }
 

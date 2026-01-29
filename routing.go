@@ -8,7 +8,7 @@ import (
 )
 
 type Handler func(http.ResponseWriter, *http.Request) (Element, error)
-type Layout func(*http.Request, ...Element) Element
+type Layout func(http.ResponseWriter, *http.Request, ...Element) Element
 type HandlerBranch map[string]HandlerMethods
 type HandlerMethods struct {
 	Get    Handler
@@ -68,7 +68,7 @@ func RouteByMethod(mux *http.ServeMux, path string, layout Layout, handlers Hand
 			w.Write([]byte(capitalizeFirstLetter(err.Error())))
 			return
 		}
-		layout(r, content).Send(w)
+		layout(w, r, content).Send(w)
 	})
 }
 func GetPageTitle(elements ...Element) string {
@@ -94,6 +94,6 @@ func Route(mux *http.ServeMux, path string, layout Layout, handler Handler) {
 		if content == nil {
 			content = None()
 		}
-		layout(r, content).Send(w)
+		layout(w, r, content).Send(w)
 	})
 }
