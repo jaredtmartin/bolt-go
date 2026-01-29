@@ -889,7 +889,7 @@ func TestGetStyle(t *testing.T) {
 	}
 }
 
-func TestSelect(t *testing.T) {
+func TestHXSelect(t *testing.T) {
 	e := NewElement("div").HXSelect("#target")
 	result := e.Render()
 	expected := "<div hx-select=\"#target\"></div>"
