@@ -31,17 +31,6 @@ func TestRadioName(t *testing.T) {
 	result := e.Render()
 	assert.Equalf(t, `<div><label for="hello-field">Hello</label><input id="hello-field" name="hello" type="radio"><div id="hello-field-error"></div></div>`, result, "should match")
 }
-func TestRadioNameWithExistingId(t *testing.T) {
-	e := Radio("name", "Hello", "").Id("blue").Name("hello")
-	result := e.Render()
-	assert.Equalf(t, `<div><label for="blue">Hello</label><input id="blue" name="hello" type="radio"><div id="blue-error"></div></div>`, result, "should match")
-}
-func TestRadioId(t *testing.T) {
-	e := Radio("name", "Hello", "").Id("hello")
-	result := e.Render()
-	assert.Equalf(t, `<div><label for="hello">Hello</label><input id="hello" name="name" type="radio"><div id="hello-error"></div></div>`, result, "should match")
-}
-
 func TestRadioValue(t *testing.T) {
 	e := Radio("name", "Hello", "").Value("ispublic")
 	result := e.Render()

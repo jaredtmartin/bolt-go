@@ -14,7 +14,6 @@ type Field struct {
 
 func NewField(name, label, value, tipe string) *Field {
 	labelEl, inputEl, errorEl := initializeElement(name, label, value)
-
 	field := Field{
 		DefaultElement: NewDefaultElement("div"),
 		Label:          labelEl,
@@ -49,12 +48,6 @@ func Select[T any](name, label, value string, options []T, renderOption ...func(
 	}
 	field.Input.Tag("select").RemoveAttr("type")
 	return field
-}
-
-// Sets the id attribute of the input element, updates the for attribute on the label, and the id on the error span
-func (t *Field) Id(id string) *Field {
-	updateId(t.Input, t.Label, t.Error, id)
-	return t
 }
 func (t *Field) Value(value string) *Field {
 	t.Input.Value(value)

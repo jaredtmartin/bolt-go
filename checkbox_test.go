@@ -25,16 +25,6 @@ func TestCheckboxName(t *testing.T) {
 	result := e.Render()
 	assert.Equalf(t, `<div><label for="hello-field">Hello</label><input id="hello-field" name="hello" type="checkbox" value="name"><div id="hello-field-error"></div><span></span></div>`, result, "should match")
 }
-func TestCheckboxNameWithExistingId(t *testing.T) {
-	e := Checkbox("name", "Hello", "name").Id("blue").Name("hello")
-	result := e.Render()
-	assert.Equalf(t, `<div><label for="blue">Hello</label><input id="blue" name="hello" type="checkbox" value="name"><div id="blue-error"></div><span></span></div>`, result, "should match")
-}
-func TestCheckboxId(t *testing.T) {
-	e := Checkbox("name", "Hello", "name").Id("hello")
-	result := e.Render()
-	assert.Equalf(t, `<div><label for="hello">Hello</label><input id="hello" name="name" type="checkbox" value="name"><div id="hello-error"></div><span></span></div>`, result, "should match")
-}
 
 func TestCheckboxChecked(t *testing.T) {
 	e := Checkbox("name", "Hello", "name").Checked()

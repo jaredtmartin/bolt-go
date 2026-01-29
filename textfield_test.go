@@ -48,20 +48,10 @@ func TestFieldName(t *testing.T) {
 	result := e.Render()
 	assert.Equalf(t, `<div><label for="name-field">Hello</label><input id="name-field" name="name" type="text"><div id="name-field-error"></div></div>`, result, "should match")
 }
-func TestFieldNameExistingId(t *testing.T) {
-	e := TextField("name", "Hello", "").Id("sup").Name("name")
-	result := e.Render()
-	assert.Equalf(t, `<div><label for="sup">Hello</label><input id="sup" name="name" type="text"><div id="sup-error"></div></div>`, result, "should match")
-}
 func TestFieldWithNoLabel(t *testing.T) {
 	e := TextField("name", "", "")
 	result := e.Render()
 	assert.Equalf(t, `<div><input id="name-field" name="name" type="text"><div id="name-field-error"></div></div>`, result, "should match")
-}
-func TestFieldId(t *testing.T) {
-	e := TextField("name", "Hello", "").Id("name")
-	result := e.Render()
-	assert.Equalf(t, `<div><label for="name">Hello</label><input id="name" name="name" type="text"><div id="name-error"></div></div>`, result, "should match")
 }
 
 // func TestFieldRange(t *testing.T) {
