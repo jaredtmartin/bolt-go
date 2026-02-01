@@ -35,6 +35,7 @@ func capitalizeFirstLetter(s string) string {
 	return string(runes)
 }
 
+// DEPRECATED: Use github.com/jaredtmartin/route instead
 // Routes requests for a given path based on the HTTP method.
 // mux is the HTTP ServeMux to register the routes with.
 // path is the base path for the routes.
@@ -64,8 +65,9 @@ func RouteByMethod(mux *http.ServeMux, path string, layout Layout, handlers Hand
 		fmt.Printf("Handling %s request for %s\n", r.Method, path)
 		content, err := handler(w, r)
 		if err != nil {
-			w.WriteHeader(http.StatusBadRequest)
-			w.Write([]byte(capitalizeFirstLetter(err.Error())))
+			// w.WriteHeader(http.StatusBadRequest)
+			// w.Write([]byte(capitalizeFirstLetter(err.Error())))
+			http.Error(w, capitalizeFirstLetter(err.Error()), http.StatusBadRequest)
 			return
 		}
 		layout(w, r, content).Send(w)
@@ -77,12 +79,16 @@ func GetPageTitle(elements ...Element) string {
 	}
 	return elements[0].GetAttr("page-title")
 }
+
+// DEPRECATED: Use github.com/jaredtmartin/route instead
 func RouteBranch(mux *http.ServeMux, layout Layout, branch HandlerBranch) {
 	for path, handlers := range branch {
 		fmt.Println("Mapping ", path, " to ", handlers)
 		RouteByMethod(mux, path, layout, handlers)
 	}
 }
+
+// DEPRECATED: Use github.com/jaredtmartin/route instead
 func Route(mux *http.ServeMux, path string, layout Layout, handler Handler) {
 	mux.HandleFunc(path, func(w http.ResponseWriter, r *http.Request) {
 		content, err := handler(w, r)
