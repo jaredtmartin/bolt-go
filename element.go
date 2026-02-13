@@ -104,8 +104,6 @@ type Element interface {
 	Name(name string) Element
 	// Sets the title attribute of the element.
 	Title(title string) Element
-	// Sets the page title attribute of the element.
-	PageTitle(title string) Element
 	// Sets the for attribute of the element.
 	For(name string) Element
 	// Sets the type attribute of the element.
@@ -648,13 +646,6 @@ func (e *DefaultElement) Placeholder(placeholder string) Element {
 // Sets the title attribute of the element.
 func (e *DefaultElement) Title(title string) Element {
 	e.add_attribute("title", title)
-	return e
-}
-
-// Sets the page-title attribute of the element.
-// Used for setting the title of the page when routing with layouts
-func (e *DefaultElement) PageTitle(pageTitle string) Element {
-	e.add_attribute("page-title", pageTitle)
 	return e
 }
 

@@ -219,9 +219,9 @@ func TestSvg(t *testing.T) {
 		t.Fatalf(`Svg() = %q, expected %q`, result, expected)
 	}
 	e = bolt.Svg().ViewBox(24, 24, 24, 24)
-	e.Class("fill-current").Text(`<path d="M15 19l-7-7 7-7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>`)
+	e.Class("fill-current").UnsafeHtml(`<path d="M15 19l-7-7 7-7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>`)
 	result = e.Render()
-	expected = `<svg height="24" version="1.1" viewBox="0 0 24 24" width="24" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg" class="fill-current"><path d="M15 19l-7-7 7-7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>`
+	expected = `<svg version="1.1" viewBox="24 24 24 24" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg" class="fill-current"><path d="M15 19l-7-7 7-7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>`
 	if result != expected {
 		t.Fatalf(`Svg() = %q, expected %q`, result, expected)
 	}

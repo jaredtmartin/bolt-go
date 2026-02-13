@@ -222,3 +222,9 @@ func Td(children ...Element) Element {
 func String(text string) Element {
 	return NewElement("").Text(text)
 }
+
+// Returns a new title element with the given text.
+// This is typically used for the title of an HTML document.
+func Title(text string) Element {
+	return NewElement("title").Text(text)
+}
