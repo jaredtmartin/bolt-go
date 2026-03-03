@@ -12,10 +12,10 @@ type Option struct {
 	Value string
 }
 
-func OptionStrings(options []string) []Option {
+func OptionStrings[T ~string](options []T) []Option {
 	var opts []Option
 	for _, opt := range options {
-		opts = append(opts, Option{Label: opt, Value: opt})
+		opts = append(opts, Option{Label: string(opt), Value: string(opt)})
 	}
 	return opts
 }
