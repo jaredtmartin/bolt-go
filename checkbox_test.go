@@ -82,3 +82,10 @@ func TestCheckboxWrapperStyle(t *testing.T) {
 	result := e.Render()
 	assert.Equalf(t, `<div style="color: red;"><label for="name-field">Hello</label><input id="name-field" name="name" type="checkbox" value="name"><div id="name-field-error"></div><span></span></div>`, result, "should match")
 }
+
+func TestCheckboxGroup(t *testing.T) {
+	flavors := []string{"chocolate", "vanilla", "strawberry"}
+	e := CheckboxGroup("flavors", "Flavors", OptionStrings(flavors)).Style("color: red")
+	result := e.Render()
+	assert.Equalf(t, `<div style="color: red;"><div><label for="chocolate-field">flavors</label><input id="chocolate-field" name="chocolate" type="checkbox" value="chocolate"><div id="chocolate-field-error"></div><span></span></div><div><label for="vanilla-field">flavors</label><input id="vanilla-field" name="vanilla" type="checkbox" value="vanilla"><div id="vanilla-field-error"></div><span></span></div><div><label for="strawberry-field">flavors</label><input id="strawberry-field" name="strawberry" type="checkbox" value="strawberry"><div id="strawberry-field-error"></div><span></span></div></div>`, result, "should match")
+}

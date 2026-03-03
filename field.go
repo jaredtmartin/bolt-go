@@ -1,15 +1,23 @@
 package bolt
 
-import (
-	"fmt"
-)
-
 type Field struct {
 	DefaultElement
 	Label Element
 	Input Element
 	Error Element
 	Check Element
+}
+type Option struct {
+	Label string
+	Value string
+}
+
+func OptionStrings(options []string) []Option {
+	var opts []Option
+	for _, opt := range options {
+		opts = append(opts, Option{Label: opt, Value: opt})
+	}
+	return opts
 }
 
 func NewField(name, label, value, tipe string) *Field {
@@ -30,20 +38,39 @@ func Radio(name, label, value string) *Field {
 	field := NewField(name, label, value, "radio")
 	return field
 }
+
+func RadioGroup(name string, value string, options []Option) Element {
+	group := Div("")
+	for _, opt := range options {
+		group.AddChild(
+			Radio(opt.Label, name, opt.Value).Checked(opt.Value == value),
+		)
+	}
+	return group
+}
 func Checkbox(name, label, value string) *Field {
 	field := NewField(name, label, value, "checkbox")
 	field.Check = Span("")
 	field.Add(field.Check)
 	return field
 }
+func CheckboxGroup(name string, value string, options []Option) Element {
+	group := Div("")
+	for _, opt := range options {
+		group.AddChild(
+			Checkbox(opt.Label, name, opt.Value).Checked(opt.Value == value),
+		)
+	}
+	return group
+}
 func Textarea(name, label, value string) *Field {
 	field := NewField(name, label, "", "")
 	field.Input.Text(value).Tag("textarea").RemoveAttr("type")
 	return field
 }
-func Select[T any](name, label, value string, options []T, renderOption ...func(T, string) Element) *Field {
+func Select(name, label, value string, options []Option, renderOption ...func(option Option, value string) Element) *Field {
 	field := NewField(name, label, value, "select")
-	renderOpt := defaultRenderOption[T]
+	renderOpt := defaultRenderOption
 	if len(renderOption) > 0 {
 		renderOpt = renderOption[0]
 	}
@@ -118,10 +145,9 @@ func initializeElement(name, label, value string) (Element, Element, Element) {
 }
 
 // Default function to render an option in a select element
-func defaultRenderOption[T any](opt T, value string) Element {
-	str := fmt.Sprintf("%v", opt)
-	item := NewElement("option").Value(str).Text(str)
-	if value == str {
+func defaultRenderOption(opt Option, value string) Element {
+	item := NewElement("option").Value(opt.Value).Text(opt.Label)
+	if value == opt.Value {
 		item.Attr("selected", "true")
 	}
 	return item

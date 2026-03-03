@@ -87,3 +87,9 @@ func TestRadioWrapperStyle(t *testing.T) {
 	result := e.Render()
 	assert.Equalf(t, `<div style="color: red;"><label for="name-field">Hello</label><input id="name-field" name="name" type="radio"><div id="name-field-error"></div></div>`, result, "should match")
 }
+func TestRadioGroup(t *testing.T) {
+	flavors := []string{"chocolate", "vanilla", "strawberry"}
+	e := RadioGroup("flavors", "Flavors", OptionStrings(flavors)).Style("color: red")
+	result := e.Render()
+	assert.Equalf(t, `<div style="color: red;"><div><label for="chocolate-field">flavors</label><input id="chocolate-field" name="chocolate" type="radio" value="chocolate"><div id="chocolate-field-error"></div></div><div><label for="vanilla-field">flavors</label><input id="vanilla-field" name="vanilla" type="radio" value="vanilla"><div id="vanilla-field-error"></div></div><div><label for="strawberry-field">flavors</label><input id="strawberry-field" name="strawberry" type="radio" value="strawberry"><div id="strawberry-field-error"></div></div></div>`, result, "should match")
+}
