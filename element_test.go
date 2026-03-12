@@ -282,7 +282,7 @@ func TestName(t *testing.T) {
 
 // For
 
-func TestFor(t *testing.T) {
+func TestForAttr(t *testing.T) {
 	e := NewElement("div").For("target")
 	result := e.Render()
 	expected := "<div for=\"target\"></div>"
