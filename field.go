@@ -34,6 +34,15 @@ func NewField(name, label, value, tipe string) *Field {
 func TextField(name, label, value string) *Field {
 	return NewField(name, label, value, "text")
 }
+func HiddenField(name, label, value string) *Field {
+	inputEl := HiddenInput(name, value)
+	field := &Field{
+		DefaultElement: NewDefaultElement(""),
+		Input:          inputEl,
+	}
+	field.Children(inputEl)
+	return field
+}
 func Radio(name, label, value string) *Field {
 	field := NewField(name, label, value, "radio")
 	return field
